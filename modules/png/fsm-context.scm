@@ -9,6 +9,7 @@
   #:use-module (png fsm-chunk-context)
   #:use-module (png core chunk)
   #:use-module (png fsm-chunk)
+  #:use-module (png image)
   #:re-export (guard:#t
                action:no-op)
   #:export (<png-context>
@@ -28,6 +29,7 @@
             guard:phys-chunk?
             guard:time-chunk?
             guard:text-chunk?
+            guard:sbit-chunk?
 
             header-error
             chunk-type-error
@@ -153,6 +155,10 @@
 (define (guard:text-chunk? ctx chunk-context)
   (let ((chunk (png-context-current-chunk ctx)))
     (equal? (png-chunk-type/name chunk) 'tEXT)))
+
+(define (guard:sbit-chunk? ctx chunk-context)
+  (let ((chunk (png-context-current-chunk ctx)))
+    (equal? (png-chunk-type/name chunk) 'sBIT)))
 
 
 

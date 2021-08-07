@@ -26,6 +26,7 @@ read_chunk --> handle_iccp_chunk: guard:iccp-chunk?
 read_chunk --> handle_phys_chunk: guard:phys-chunk?
 read_chunk --> handle_time_chunk: guard:time-chunk?
 read_chunk --> handle_text_chunk: guard:text-chunk?
+read_chunk --> handle_sbit_chunk: guard:sbit-chunk?
 read_chunk --> chunk_type_error
 
 handle_ihdr_chunk: entry-action: store-chunk
@@ -54,6 +55,9 @@ handle_time_chunk -> read_chunk
 
 handle_text_chunk: entry-action: store-chunk
 handle_text_chunk -> read_chunk
+
+handle_sbit_chunk: entry-action: store-chunk
+handle_sbit_chunk -> read_chunk
 
 chunk_type_error: exit-action: chunk-type-error
 chunk_type_error --> [*]
