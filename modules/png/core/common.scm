@@ -1,5 +1,5 @@
 (define-module (png core common)
-  #:export (vector->int32)
+  #:export (vector->int32))
 
 (define-method (vector->int32 (v <vector>))
   (logior (ash (vector-ref v 0) 24)
