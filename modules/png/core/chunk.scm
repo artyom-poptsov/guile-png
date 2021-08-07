@@ -2,7 +2,9 @@
 
 
 (define-module (png core chunk)
+  #:use-module (srfi srfi-43)
   #:use-module (oop goops)
+  #:use-module (png core common)
   #:export (<png-chunk>
             png-chunk-length
             png-chunk-length-set!
@@ -24,8 +26,10 @@
             %png-chunk-type-bytes
             %png-chunk-crc-bytes
 
+            png-chunk->typed-chunk
+
             ;; Decoded chunks.
-            <png-chunk-ihdr>))
+            <png-chunk:ihdr>))
 
 
 (define %png-chunk-length-bytes 4)
@@ -132,7 +136,9 @@
          (list-ref type 2))))
 
 
-(define-class <png-chunk-ihdr> (<png-chunk>)
+;;; IHDR chunk.
+
+(define-class <png-chunk:ihdr> (<png-chunk>)
   (width
    #:init-keyword #:width
    #:getter       png-chunk-ihdr-width
@@ -167,5 +173,69 @@
    #:init-keyword #:interlace-method
    #:getter       png-chunk-interlace-method
    #:setter       png-chunk-interlace-method-set!))
+
+(define-method (%display (chunk <png-chunk:ihdr>) (port <port>))
+  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+    (format port "#<png-chunk:ihdr ~a ~a>"
+            (list-ref type 2)
+            (object-address/hex-string chunk))))
+
+(define-method (display (chunk <png-chunk:ihdr>) (port <port>))
+  (%display chunk port))
+
+(define-method (write (chunk <png-chunk:ihdr>) (port <port>))
+  (%display chunk port))
+
+
+(define-method (data:width (data <vector>))
+  (vector->int32 (vector-copy data 0 4)))
+
+(define-method (data:heigth (data <vector>))
+  (vector->int32 (vector-copy data 4 8)))
+
+(define-method (data:bit-depth (data <vector>))
+  (vector-ref data 8))
+
+(define-method (data:colour-type (data <vector>))
+  (vector-ref data 9))
+
+(define-method (data:compression-method (data <vector>))
+  (vector-ref data 10))
+
+(define-method (data:filter-method (data <vector>))
+  (vector-ref data 11))
+
+(define-method (data:interlace-method (data <vector>))
+  (vector-ref data 12))
+
+
+(define-method (png-chunk->png-chunk:ihdr (chunk <png-chunk>))
+  (let ((data (png-chunk-data chunk)))
+    (make <png-chunk:ihdr>
+      #:length             (png-chunk-length chunk)
+      #:type               (png-chunk-type chunk)
+      #:data               (png-chunk-data chunk)
+      #:crc                (png-chunk-crc chunk)
+      #:width              (data:width data)
+      #:height             (data:heigth data)
+      #:bit-depth          (data:bit-depth data)
+      #:colour-type        (data:colour-type data)
+      #:compression-method (data:compression-method data)
+      #:filter-method      (data:filter-method data)
+      #:interlace-method   (data:interlace-method data))))
+
+
+(define %converters-to-typed
+  `((IHDR                  . ,png-chunk->png-chunk:ihdr)))
+
+(define-method (png-chunk->typed-chunk (chunk <png-chunk>))
+  (let ((type (png-chunk-type/name chunk)))
+    (if type
+        (let ((converter (assoc-ref %converters-to-typed type)))
+          (if converter
+              (converter chunk)
+              chunk))
+        (error "Unknown chunk type" type chunk))))
+
 
 ;;; png-chunk.scm ends here.
