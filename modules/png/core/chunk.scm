@@ -2,7 +2,6 @@
 
 
 (define-module (png core chunk)
-  #:use-module (srfi srfi-43)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:export (<png-chunk>
@@ -24,19 +23,7 @@
             ;; Constants.
             %png-chunk-length-bytes
             %png-chunk-type-bytes
-            %png-chunk-crc-bytes
-
-            png-chunk->typed-chunk
-
-            ;; Decoded chunks.
-            <png-chunk:ihdr>
-            data:width
-            data:heigth
-            data:bit-depth
-            data:colour-type
-            data:compression-method
-            data:filter-method
-            data:interlace-method))
+            %png-chunk-crc-bytes))
 
 
 (define %png-chunk-length-bytes 4)
@@ -113,8 +100,6 @@
    #:setter       png-chunk-crc-set!))
 
 
-(define (object-address/hex-string object)
-  (number->string (object-address object) 16))
 
 (define-method (%display (chunk <png-chunk>) (port <port>))
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
@@ -141,78 +126,5 @@
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
     (and type
          (list-ref type 2))))
-
-
-;;; IHDR chunk.
-
-(define-class <png-chunk:ihdr> (<png-chunk>)
-  (width
-   #:init-keyword #:width
-   #:getter       png-chunk-ihdr-width
-   #:setter       png-chunk-ihdr-width-set!)
-
-  (height
-   #:init-keyword #:height
-   #:getter       png-chunk-ihdr-height
-   #:setter       png-chunk-ihdr-height-set!)
-
-  (bit-depth
-   #:init-keyword #:bit-depth
-   #:getter       png-chunk-ihdr-bit-depth
-   #:setter       png-chunk-ihdr-bit-depth-set!)
-
-  (colour-type
-   #:init-keyword #:colour-type
-   #:getter       png-chunk-colour-type
-   #:setter       png-chunk-colour-type-set!)
-
-  (compression-method
-   #:init-keyword #:compression-method
-   #:getter       png-chunk-compression-method
-   #:setter       png-chunk-compression-method-set!)
-
-  (filter-method
-   #:init-keyword #:filter-method
-   #:getter       png-chunk-filter-method
-   #:setter       png-chunk-filter-method-set!)
-
-  (interlace-method
-   #:init-keyword #:interlace-method
-   #:getter       png-chunk-interlace-method
-   #:setter       png-chunk-interlace-method-set!))
-
-(define-method (%display (chunk <png-chunk:ihdr>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (format port "#<png-chunk:ihdr ~a ~a>"
-            (list-ref type 2)
-            (object-address/hex-string chunk))))
-
-(define-method (display (chunk <png-chunk:ihdr>) (port <port>))
-  (%display chunk port))
-
-(define-method (write (chunk <png-chunk:ihdr>) (port <port>))
-  (%display chunk port))
-
-
-(define-method (data:width (data <vector>))
-  (vector->int32 (vector-copy data 0 4)))
-
-(define-method (data:heigth (data <vector>))
-  (vector->int32 (vector-copy data 4 8)))
-
-(define-method (data:bit-depth (data <vector>))
-  (vector-ref data 8))
-
-(define-method (data:colour-type (data <vector>))
-  (vector-ref data 9))
-
-(define-method (data:compression-method (data <vector>))
-  (vector-ref data 10))
-
-(define-method (data:filter-method (data <vector>))
-  (vector-ref data 11))
-
-(define-method (data:interlace-method (data <vector>))
-  (vector-ref data 12))
 
 ;;; png-chunk.scm ends here.

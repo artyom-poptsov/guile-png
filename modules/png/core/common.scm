@@ -1,7 +1,13 @@
 (define-module (png core common)
   #:use-module (oop goops)
-  #:export (vector->int32))
+  #:export (object-address/hex-string
+            vector->int32))
 
+
+(define (object-address/hex-string object)
+  (number->string (object-address object) 16))
+
+
 (define-method (vector->int32 (v <vector>))
   (logior (ash (vector-ref v 0) 24)
           (ash (vector-ref v 1) 16)

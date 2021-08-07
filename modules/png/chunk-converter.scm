@@ -1,6 +1,7 @@
 (define-module (png chunk-converter)
   #:use-module (oop goops)
   #:use-module (png core chunk)
+  #:use-module (png core chunk-ihdr)
   #:export (png-chunk->png-chunk:ihdr
             png-chunk->typed-chunk))
 
