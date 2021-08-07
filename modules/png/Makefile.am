@@ -27,6 +27,7 @@ SOURCES = \
 	fsm-signature.scm	\
 	fsm-chunk.scm		\
 	fsm.scm			\
+	chunk-converter.scm	\
 	image.scm
 
 EXTRA_DIST = \

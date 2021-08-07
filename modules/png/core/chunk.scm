@@ -29,7 +29,14 @@
             png-chunk->typed-chunk
 
             ;; Decoded chunks.
-            <png-chunk:ihdr>))
+            <png-chunk:ihdr>
+            data:width
+            data:heigth
+            data:bit-depth
+            data:colour-type
+            data:compression-method
+            data:filter-method
+            data:interlace-method))
 
 
 (define %png-chunk-length-bytes 4)
@@ -207,35 +214,5 @@
 
 (define-method (data:interlace-method (data <vector>))
   (vector-ref data 12))
-
-
-(define-method (png-chunk->png-chunk:ihdr (chunk <png-chunk>))
-  (let ((data (png-chunk-data chunk)))
-    (make <png-chunk:ihdr>
-      #:length             (png-chunk-length chunk)
-      #:type               (png-chunk-type chunk)
-      #:data               (png-chunk-data chunk)
-      #:crc                (png-chunk-crc chunk)
-      #:width              (data:width data)
-      #:height             (data:heigth data)
-      #:bit-depth          (data:bit-depth data)
-      #:colour-type        (data:colour-type data)
-      #:compression-method (data:compression-method data)
-      #:filter-method      (data:filter-method data)
-      #:interlace-method   (data:interlace-method data))))
-
-
-(define %converters-to-typed
-  `((IHDR                  . ,png-chunk->png-chunk:ihdr)))
-
-(define-method (png-chunk->typed-chunk (chunk <png-chunk>))
-  (let ((type (png-chunk-type/name chunk)))
-    (if type
-        (let ((converter (assoc-ref %converters-to-typed type)))
-          (if converter
-              (converter chunk)
-              chunk))
-        (error "Unknown chunk type" type chunk))))
-
 
 ;;; png-chunk.scm ends here.

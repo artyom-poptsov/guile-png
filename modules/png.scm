@@ -6,6 +6,7 @@
   #:use-module (png fsm-context)
   #:use-module (png fsm)
   #:use-module (png core chunk)
+  #:use-module (png chunk-converter)
   #:export (png->scm))
 
 
