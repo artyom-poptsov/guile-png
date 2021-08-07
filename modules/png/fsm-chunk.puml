@@ -1,0 +1,21 @@
+@startuml
+
+[*] ---> read_length
+
+read_length --> read_type: guard:length-read? -> action:store-length
+read_length -> read_length: guard:#t -> action:store
+
+read_type --> check_type: guard:type-read? -> action:store-type
+read_type -> read_type: guard:#t -> action:store
+
+check_type: event-source: event-source:no-op
+check_type --> [*]: guard:iend-chunk?
+check_type --> read_data
+
+read_data --> read_crc: guard:data-read? -> action:store-data
+read_data -> read_data: guard:#t -> action:store
+
+read_crc ---> [*]: guard:crc-read? -> action:store-crc
+read_crc -> read_crc: guard:#t -> action:store
+
+@enduml

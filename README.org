@@ -1,0 +1,14 @@
+* Guile-PNG
+
+  PNG format parser for GNU Guile.
+
+** License
+    Guile-PNG is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.  Please see =COPYING= file for the terms of GNU General
+    Public License.
+
+** Requirements
+   - [[https://www.gnu.org/software/guile/][GNU Guile]] 2.2+
+   - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]]
