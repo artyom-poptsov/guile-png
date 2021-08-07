@@ -17,29 +17,44 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 
-ACLOCAL_AMFLAGS = -I build-aux
+include $(top_srcdir)/build-aux/am/guilec
 
-SUBDIRS = build-aux modules tests
+SUBDIRS = png
 
-EXTRA_DIST = \
-	.dir-locals.el
+SOURCES = \
+	png.scm
 
-gen-ChangeLog:
-	if test -d .git; then				\
-	  $(top_srcdir)/build-aux/gitlog-to-changelog	\
-	    2bea8c70..HEAD > $(distdir)/cl-t;		\
-	  rm -f $(distdir)/ChangeLog;			\
-	  mv $(distdir)/cl-t $(distdir)/ChangeLog;	\
-	fi
+GOBJECTS = $(SOURCES:%.scm=%.go)
 
-dist-hook: gen-ChangeLog
-.PHONY: gen-ChangeLog
+moddir=$(guilesitedir)/
+nobase_dist_mod_DATA = $(SOURCES)
+
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache
+nobase_nodist_ccache_DATA = $(GOBJECTS)
+
+# Make sure source files are installed first, so that the mtime of
+# installed compiled files is greater than that of installed source
+# files.  See
+# <http://lists.gnu.org/archive/html/guile-devel/2010-07/msg00125.html>
+# for details.
+guile_smc_install_go_files = install-nobase_dist_ccacheDATA
+$(guile_smc_install_go_files): install-nobase_dist_modDATA
+
+GUILE_WARNINGS = -Wunbound-variable -Warity-mismatch -Wformat
+SUFFIXES = .scm .go
+
+guilec_opts = --load-path=$(abs_top_srcdir)/modules/
+.scm.go:
+	$(AM_V_GUILEC)$(guilec_env) $(GUILEC) $(guilec_opts) \
+	--output=$@ $<
 
 clean-go:
 	-$(RM) $(GOBJECTS)
+
 .PHONY: clean-go
+
 
 CLEANFILES = \
 	$(GOBJECTS)
 
-# Makefile.am ends here
+### Makefile.am ends here.
