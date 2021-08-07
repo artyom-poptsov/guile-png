@@ -2,6 +2,7 @@
   #:use-module (ice-9 binary-ports)
   #:use-module (oop goops)
   #:use-module (smc context context)
+  #:use-module (png core common)
   #:use-module (png core chunk)
   #:re-export (guard:#t
                action:no-op)
@@ -53,12 +54,6 @@
   (fsm-chunk-context-buffer-index-set! ctx 0)
   (fsm-chunk-context-buffer-set! ctx (make-vector bytes)))
 
-(define-method (%buffer->number (buffer <vector>))
-  (logior (ash (vector-ref buffer 0) 24)
-          (ash (vector-ref buffer 1) 16)
-          (ash (vector-ref buffer 2) 8)
-          (vector-ref buffer 3)))
-
 
 ;; Event source.
 (define (event-source ctx)
@@ -101,7 +96,7 @@
   (action:store ctx byte)
   (let ((chunk (fsm-chunk-context-chunk ctx))
         (data  (fsm-chunk-context-buffer ctx)))
-    (png-chunk-length-set! chunk (%buffer->number data))
+    (png-chunk-length-set! chunk (vector->int32 data))
     (%buffer-reset! ctx %png-chunk-type-bytes)
     ctx))
 
