@@ -26,7 +26,8 @@ SOURCES = \
 	fsm-signature-context.scm \
 	fsm-signature.scm	\
 	fsm-chunk.scm		\
-	fsm.scm
+	fsm.scm			\
+	image.scm
 
 EXTRA_DIST = \
 	fsm-signature.puml	\
