@@ -22,7 +22,8 @@ include $(top_srcdir)/build-aux/am/guilec
 SOURCES = \
 	common.scm	\
 	chunk.scm	\
-	chunk-ihdr.scm
+	chunk-ihdr.scm	\
+	chunk-plte.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

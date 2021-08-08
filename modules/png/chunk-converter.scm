@@ -2,6 +2,7 @@
   #:use-module (oop goops)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
+  #:use-module (png core chunk-plte)
   #:export (png-chunk->png-chunk:ihdr
             png-chunk->typed-chunk))
 
@@ -20,9 +21,21 @@
       #:filter-method      (data:filter-method data)
       #:interlace-method   (data:interlace-method data))))
 
+(define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
+  (let ((data (png-chunk-data chunk)))
+    (unless (zero? (remainder (vector-length data) 3))
+      (error "Invalid PLTE chunk: data length not divisible by 3" chunk))
+    (make <png-chunk:PLTE>
+      #:length             (png-chunk-length chunk)
+      #:type               (png-chunk-type chunk)
+      #:data               (png-chunk-data chunk)
+      #:crc                (png-chunk-crc chunk)
+      #:palette-entries    (vector->PLTE-palette-entries data))))
+
 
 (define %converters-to-typed
-  `((IHDR                  . ,png-chunk->png-chunk:ihdr)))
+  `((IHDR                  . ,png-chunk->png-chunk:ihdr)
+    (PLTE                  . ,png-chunk->png-chunk:PLTE)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
