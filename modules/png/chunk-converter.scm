@@ -8,7 +8,7 @@
 
 (define-method (png-chunk->png-chunk:ihdr (chunk <png-chunk>))
   (let ((data (png-chunk-data chunk)))
-    (make <png-chunk:ihdr>
+    (make <png-chunk:IHDR>
       #:length             (png-chunk-length chunk)
       #:type               (png-chunk-type chunk)
       #:data               (png-chunk-data chunk)

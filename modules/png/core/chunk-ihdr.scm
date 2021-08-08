@@ -3,21 +3,21 @@
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
-  #:export (<png-chunk:ihdr>
-            png-chunk:ihdr-width
-            png-chunk:ihdr-width-set!
-            png-chunk:ihdr-height
-            png-chunk:ihdr-height-set!
-            png-chunk:ihdr-bit-depth
-            png-chunk:ihdr-bit-depth-set!
-            png-chunk:ihdr-colour-type
-            png-chunk:ihdr-colour-type-set!
-            png-chunk:ihdr-compression-method
-            png-chunk:ihdr-compression-method-set!
-            png-chunk:ihdr-filter-method
-            png-chunk:ihdr-filter-method-set!
-            png-chunk:ihdr-interlace-method
-            png-chunk:ihdr-interlace-method-set!
+  #:export (<png-chunk:IHDR>
+            png-chunk:IHDR-width
+            png-chunk:IHDR-width-set!
+            png-chunk:IHDR-height
+            png-chunk:IHDR-height-set!
+            png-chunk:IHDR-bit-depth
+            png-chunk:IHDR-bit-depth-set!
+            png-chunk:IHDR-colour-type
+            png-chunk:IHDR-colour-type-set!
+            png-chunk:IHDR-compression-method
+            png-chunk:IHDR-compression-method-set!
+            png-chunk:IHDR-filter-method
+            png-chunk:IHDR-filter-method-set!
+            png-chunk:IHDR-interlace-method
+            png-chunk:IHDR-interlace-method-set!
             data:width
             data:heigth
             data:bit-depth
@@ -27,54 +27,54 @@
             data:interlace-method))
 
 
-(define-class <png-chunk:ihdr> (<png-chunk>)
+(define-class <png-chunk:IHDR> (<png-chunk>)
   (width
    #:init-keyword #:width
-   #:getter       png-chunk:ihdr-width
-   #:setter       png-chunk:ihdr-width-set!)
+   #:getter       png-chunk:IHDR-width
+   #:setter       png-chunk:IHDR-width-set!)
 
   (height
    #:init-keyword #:height
-   #:getter       png-chunk:ihdr-height
-   #:setter       png-chunk:ihdr-height-set!)
+   #:getter       png-chunk:IHDR-height
+   #:setter       png-chunk:IHDR-height-set!)
 
   (bit-depth
    #:init-keyword #:bit-depth
-   #:getter       png-chunk:ihdr-bit-depth
-   #:setter       png-chunk:ihdr-bit-depth-set!)
+   #:getter       png-chunk:IHDR-bit-depth
+   #:setter       png-chunk:IHDR-bit-depth-set!)
 
   (colour-type
    #:init-keyword #:colour-type
-   #:getter       png-chunk:ihdr-colour-type
-   #:setter       png-chunk:ihdr-colour-type-set!)
+   #:getter       png-chunk:IHDR-colour-type
+   #:setter       png-chunk:IHDR-colour-type-set!)
 
   (compression-method
    #:init-keyword #:compression-method
-   #:getter       png-chunk:ihdr-compression-method
-   #:setter       png-chunk:ihdr-compression-method-set!)
+   #:getter       png-chunk:IHDR-compression-method
+   #:setter       png-chunk:IHDR-compression-method-set!)
 
   (filter-method
    #:init-keyword #:filter-method
-   #:getter       png-chunk:ihdr-filter-method
-   #:setter       png-chunk:ihdr-filter-method-set!)
+   #:getter       png-chunk:IHDR-filter-method
+   #:setter       png-chunk:IHDR-filter-method-set!)
 
   (interlace-method
    #:init-keyword #:interlace-method
-   #:getter       png-chunk:ihdr-interlace-method
-   #:setter       png-chunk:ihdr-interlace-method-set!))
+   #:getter       png-chunk:IHDR-interlace-method
+   #:setter       png-chunk:IHDR-interlace-method-set!))
 
 
 
-(define-method (%display (chunk <png-chunk:ihdr>) (port <port>))
+(define-method (%display (chunk <png-chunk:IHDR>) (port <port>))
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (format port "#<png-chunk:ihdr ~a ~a>"
+    (format port "#<png-chunk:IHDR ~a ~a>"
             (list-ref type 2)
             (object-address/hex-string chunk))))
 
-(define-method (display (chunk <png-chunk:ihdr>) (port <port>))
+(define-method (display (chunk <png-chunk:IHDR>) (port <port>))
   (%display chunk port))
 
-(define-method (write (chunk <png-chunk:ihdr>) (port <port>))
+(define-method (write (chunk <png-chunk:IHDR>) (port <port>))
   (%display chunk port))
 
 
