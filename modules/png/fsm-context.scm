@@ -20,16 +20,8 @@
 
             ;; Guards
             guard:context-has-errors?
-            guard:ihdr-chunk?
-            guard:plte-chunk?
-            guard:idat-chunk?
+            guard:known-chunk?
             guard:iend-chunk?
-            guard:ztxt-chunk?
-            guard:iccp-chunk?
-            guard:phys-chunk?
-            guard:time-chunk?
-            guard:text-chunk?
-            guard:sbit-chunk?
 
             header-error
             chunk-type-error
@@ -120,45 +112,13 @@
 (define (guard:context-has-errors? ctx event)
   (png-context-has-errors? ctx))
 
-(define (guard:ihdr-chunk? ctx event)
+(define (guard:known-chunk? ctx event)
   (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'IHDR)))
-
-(define (guard:plte-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'PLTE)))
-
-(define (guard:idat-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'IDAT)))
+    (png-chunk-type chunk)))
 
 (define (guard:iend-chunk? ctx chunk-context)
   (let ((chunk (png-context-current-chunk ctx)))
     (equal? (png-chunk-type/name chunk) 'IEND)))
-
-(define (guard:ztxt-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'zTXt)))
-
-(define (guard:iccp-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'iCCP)))
-
-(define (guard:phys-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'pHYs)))
-
-(define (guard:time-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'tIME)))
-
-(define (guard:text-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'tEXT)))
-
-(define (guard:sbit-chunk? ctx chunk-context)
-  (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'sBIT)))
 
 
 

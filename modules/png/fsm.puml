@@ -17,47 +17,12 @@ read_chunk: Read a PNG chunk.
 read_chunk:
 read_chunk: entry-action: read-chunk
 read_chunk --> chunk_error: guard:context-has-errors?
-read_chunk --> handle_ihdr_chunk: guard:ihdr-chunk?
-read_chunk --> handle_plte_chunk: guard:plte-chunk?
-read_chunk --> handle_idat_chunk: guard:idat-chunk?
-read_chunk --> handle_iend_chunk: guard:iend-chunk?
-read_chunk --> handle_ztxt_chunk: guard:ztxt-chunk?
-read_chunk --> handle_iccp_chunk: guard:iccp-chunk?
-read_chunk --> handle_phys_chunk: guard:phys-chunk?
-read_chunk --> handle_time_chunk: guard:time-chunk?
-read_chunk --> handle_text_chunk: guard:text-chunk?
-read_chunk --> handle_sbit_chunk: guard:sbit-chunk?
+read_chunk --> handle_chunk: guard:known-chunk?
 read_chunk --> chunk_type_error
 
-handle_ihdr_chunk: entry-action: store-chunk
-handle_ihdr_chunk -> read_chunk
-
-handle_plte_chunk: entry-action: store-chunk
-handle_plte_chunk -> read_chunk
-
-handle_idat_chunk: entry-action: store-chunk
-handle_idat_chunk -> read_chunk
-
-handle_ztxt_chunk: entry-action: store-chunk
-handle_idat_chunk -> read_chunk
-
-handle_iend_chunk: entry-action: store-chunk
-handle_iend_chunk --> [*]
-
-handle_iccp_chunk: entry-action: store-chunk
-handle_iccp_chunk -> read_chunk
-
-handle_phys_chunk: entry-action: store-chunk
-handle_phys_chunk -> read_chunk
-
-handle_time_chunk: entry-action: store-chunk
-handle_time_chunk -> read_chunk
-
-handle_text_chunk: entry-action: store-chunk
-handle_text_chunk -> read_chunk
-
-handle_sbit_chunk: entry-action: store-chunk
-handle_sbit_chunk -> read_chunk
+handle_chunk: entry-action: store-chunk
+handle_chunk --> [*]: guard:iend-chunk?
+handle_chunk --> read_chunk
 
 chunk_type_error: exit-action: chunk-type-error
 chunk_type_error --> [*]
