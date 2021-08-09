@@ -5,10 +5,12 @@
   #:use-module (png core chunk-plte)
   #:use-module (png core chunk-iend)
   #:use-module (png core chunk-chrm)
+  #:use-module (png core chunk-ztxt)
   #:export (png-chunk->png-chunk:IHDR
             png-chunk->png-chunk:PLTE
             png-chunk->png-chunk:IEND
             png-chunk->png-chunk:cHRM
+            png-chunk->png-chunk:zTXt
             png-chunk->typed-chunk))
 
 (define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
@@ -58,12 +60,19 @@
       #:blue-x             (data:blue-x data)
       #:blue-y             (data:blue-y data))))
 
+(define-method (png-chunk->png-chunk:zTXt (chunk <png-chunk>))
+  (data->png-chunk:zTXt (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
+
 
 (define %converters-to-typed
   `((IHDR                  . ,png-chunk->png-chunk:IHDR)
     (PLTE                  . ,png-chunk->png-chunk:PLTE)
     (IEND                  . ,png-chunk->png-chunk:IEND)
-    (cHRM                  . ,png-chunk->png-chunk:cHRM)))
+    (cHRM                  . ,png-chunk->png-chunk:cHRM)
+    (zTXt                  . ,png-chunk->png-chunk:zTXt)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
