@@ -1,6 +1,8 @@
 (define-module (png image)
   #:use-module (oop goops)
+  #:use-module (png core common)
   #:use-module (png core chunk)
+  #:use-module (png core chunk-ihdr)
   #:export (<png-image>
             png-image-chunks
             png-image-chunks-query
@@ -13,6 +15,21 @@
    #:init-value   '()
    #:init-keyword #:chunks
    #:getter       png-image-chunks))
+
+
+
+(define-method (%display (image <png-image>) (port <port>))
+  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
+    (format port "#<png-image ~ax~a ~a>"
+            (png-chunk:IHDR-width ihdr)
+            (png-chunk:IHDR-height ihdr)
+            (object-address/hex-string image))))
+
+(define-method (display (image <png-image>) (port <port>))
+  (%display image port))
+
+(define-method (write (image <png-image>) (port <port>))
+  (%display image port))
 
 
 (define-method (png-image-chunks-filter (image <png-image>) (predicate <procedure>))
