@@ -4,9 +4,11 @@
   #:use-module (png core chunk-ihdr)
   #:use-module (png core chunk-plte)
   #:use-module (png core chunk-iend)
+  #:use-module (png core chunk-chrm)
   #:export (png-chunk->png-chunk:IHDR
             png-chunk->png-chunk:PLTE
             png-chunk->png-chunk:IEND
+            png-chunk->png-chunk:cHRM
             png-chunk->typed-chunk))
 
 (define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
@@ -40,11 +42,28 @@
     #:length             (png-chunk-length chunk)
     #:type               (png-chunk-type chunk)))
 
+(define-method (png-chunk->png-chunk:cHRM (chunk <png-chunk>))
+  (let ((data (png-chunk-data chunk)))
+    (make <png-chunk:cHRM>
+      #:length             (png-chunk-length chunk)
+      #:type               (png-chunk-type chunk)
+      #:data               (png-chunk-data chunk)
+      #:crc                (png-chunk-crc chunk)
+      #:white-point-x      (data:white-point-x data)
+      #:white-point-y      (data:white-point-y data)
+      #:red-x              (data:red-x data)
+      #:red-y              (data:red-y data)
+      #:green-x            (data:green-x data)
+      #:green-y            (data:green-y data)
+      #:blue-x             (data:blue-x data)
+      #:blue-y             (data:blue-y data))))
+
 
 (define %converters-to-typed
   `((IHDR                  . ,png-chunk->png-chunk:IHDR)
     (PLTE                  . ,png-chunk->png-chunk:PLTE)
-    (IEND                  . ,png-chunk->png-chunk:IEND)))
+    (IEND                  . ,png-chunk->png-chunk:IEND)
+    (cHRM                  . ,png-chunk->png-chunk:cHRM)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
