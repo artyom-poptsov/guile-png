@@ -6,11 +6,13 @@
   #:use-module (png core chunk-iend)
   #:use-module (png core chunk-chrm)
   #:use-module (png core chunk-ztxt)
+  #:use-module (png core chunk-time)
   #:export (png-chunk->png-chunk:IHDR
             png-chunk->png-chunk:PLTE
             png-chunk->png-chunk:IEND
             png-chunk->png-chunk:cHRM
             png-chunk->png-chunk:zTXt
+            png-chunk->png-chunk:tIME
             png-chunk->typed-chunk))
 
 (define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
@@ -66,13 +68,20 @@
                         (png-chunk-length chunk)
                         (png-chunk-crc    chunk)))
 
+(define-method (png-chunk->png-chunk:tIME (chunk <png-chunk>))
+  (data->png-chunk:tIME (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
+
 
 (define %converters-to-typed
   `((IHDR                  . ,png-chunk->png-chunk:IHDR)
     (PLTE                  . ,png-chunk->png-chunk:PLTE)
     (IEND                  . ,png-chunk->png-chunk:IEND)
     (cHRM                  . ,png-chunk->png-chunk:cHRM)
-    (zTXt                  . ,png-chunk->png-chunk:zTXt)))
+    (zTXt                  . ,png-chunk->png-chunk:zTXt)
+    (tIME                  . ,png-chunk->png-chunk:tIME)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))

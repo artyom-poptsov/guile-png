@@ -26,7 +26,8 @@ SOURCES = \
 	chunk-plte.scm	\
 	chunk-iend.scm	\
 	chunk-chrm.scm	\
-	chunk-ztxt.scm
+	chunk-ztxt.scm	\
+	chunk-time.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
