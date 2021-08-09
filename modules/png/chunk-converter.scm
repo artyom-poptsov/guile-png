@@ -6,7 +6,7 @@
   #:export (png-chunk->png-chunk:ihdr
             png-chunk->typed-chunk))
 
-(define-method (png-chunk->png-chunk:ihdr (chunk <png-chunk>))
+(define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
   (let ((data (png-chunk-data chunk)))
     (make <png-chunk:IHDR>
       #:length             (png-chunk-length chunk)
@@ -34,7 +34,7 @@
 
 
 (define %converters-to-typed
-  `((IHDR                  . ,png-chunk->png-chunk:ihdr)
+  `((IHDR                  . ,png-chunk->png-chunk:IHDR)
     (PLTE                  . ,png-chunk->png-chunk:PLTE)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
