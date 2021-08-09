@@ -23,7 +23,8 @@ SOURCES = \
 	common.scm	\
 	chunk.scm	\
 	chunk-ihdr.scm	\
-	chunk-plte.scm
+	chunk-plte.scm	\
+	chunk-iend.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

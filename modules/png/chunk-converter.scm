@@ -3,6 +3,7 @@
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
   #:use-module (png core chunk-plte)
+  #:use-module (png core chunk-iend)
   #:export (png-chunk->png-chunk:ihdr
             png-chunk->typed-chunk))
 
@@ -32,10 +33,16 @@
       #:crc                (png-chunk-crc chunk)
       #:palette-entries    (vector->PLTE-palette-entries data))))
 
+(define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
+  (make <png-chunk:IEND>
+    #:length             (png-chunk-length chunk)
+    #:type               (png-chunk-type chunk)))
+
 
 (define %converters-to-typed
   `((IHDR                  . ,png-chunk->png-chunk:IHDR)
-    (PLTE                  . ,png-chunk->png-chunk:PLTE)))
+    (PLTE                  . ,png-chunk->png-chunk:PLTE)
+    (IEND                  . ,png-chunk->png-chunk:IEND)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
