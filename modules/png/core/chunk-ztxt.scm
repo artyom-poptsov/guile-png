@@ -29,8 +29,9 @@
 
 (define-method (%display (chunk <png-chunk:zTXt>) (port <port>))
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (format port "#<png-chunk:zTXt ~a ~a>"
+    (format port "#<png-chunk:zTXt ~a: ~a ~a>"
             (list-ref type 2)
+            (png-chunk:zTXt-keyword chunk)
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk:zTXt>) (port <port>))
