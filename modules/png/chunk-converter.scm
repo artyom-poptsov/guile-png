@@ -4,7 +4,9 @@
   #:use-module (png core chunk-ihdr)
   #:use-module (png core chunk-plte)
   #:use-module (png core chunk-iend)
-  #:export (png-chunk->png-chunk:ihdr
+  #:export (png-chunk->png-chunk:IHDR
+            png-chunk->png-chunk:PLTE
+            png-chunk->png-chunk:IEND
             png-chunk->typed-chunk))
 
 (define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
