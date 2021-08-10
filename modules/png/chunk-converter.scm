@@ -8,6 +8,7 @@
   #:use-module (png core chunk-ztxt)
   #:use-module (png core chunk-time)
   #:use-module (png core chunk-iccp)
+  #:use-module (png core chunk-phys)
   #:export (png-chunk->png-chunk:IHDR
             png-chunk->png-chunk:PLTE
             png-chunk->png-chunk:IEND
@@ -82,6 +83,12 @@
                         (png-chunk-length chunk)
                         (png-chunk-crc    chunk)))
 
+(define-method (png-chunk->png-chunk:pHYs (chunk <png-chunk>))
+  (data->png-chunk:pHYs (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
+
 
 (define %converters-to-typed
   `((IHDR                  . ,png-chunk->png-chunk:IHDR)
@@ -90,7 +97,8 @@
     (cHRM                  . ,png-chunk->png-chunk:cHRM)
     (zTXt                  . ,png-chunk->png-chunk:zTXt)
     (tIME                  . ,png-chunk->png-chunk:tIME)
-    (iCCP                  . ,png-chunk->png-chunk:iCCP)))
+    (iCCP                  . ,png-chunk->png-chunk:iCCP)
+    (pHYs                  . ,png-chunk->png-chunk:pHYs)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
