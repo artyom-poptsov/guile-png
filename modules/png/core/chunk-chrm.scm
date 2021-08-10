@@ -20,7 +20,9 @@
             data:green-x
             data:green-y
             data:blue-x
-            data:blue-y))
+            data:blue-y
+
+            data->png-chunk:cHRM))
 
 
 
@@ -94,5 +96,23 @@
 
 (define-method (data:blue-y (vec <vector>))
   (vector->int32 (vector-copy vec 28 32)))
+
+(define-method (data->png-chunk:cHRM (data   <vector>)
+                                     (type   <vector>)
+                                     (length <number>)
+                                     (crc    <vector>))
+  (make <png-chunk:cHRM>
+    #:length             length
+    #:type               type
+    #:data               data
+    #:crc                crc
+    #:white-point-x      (data:white-point-x data)
+    #:white-point-y      (data:white-point-y data)
+    #:red-x              (data:red-x data)
+    #:red-y              (data:red-y data)
+    #:green-x            (data:green-x data)
+    #:green-y            (data:green-y data)
+    #:blue-x             (data:blue-x data)
+    #:blue-y             (data:blue-y data)))
 
 ;;; chunk-iend.scm ends here.
