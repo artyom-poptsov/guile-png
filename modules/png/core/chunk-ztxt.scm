@@ -42,14 +42,6 @@
 
 
 
-(define-method (data:keyword (vec <vector>))
-  (let loop ((keyword '())
-             (index   0))
-    (if (zero? (vector-ref vec index))
-        (list->string keyword)
-        (loop (append keyword (list (integer->char (vector-ref vec index))))
-              (+ index 1)))))
-
 (define-method (data->png-chunk:zTXt (data   <vector>)
                                      (type   <vector>)
                                      (length <number>)
