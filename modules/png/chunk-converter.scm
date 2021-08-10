@@ -9,79 +9,27 @@
   #:use-module (png core chunk-time)
   #:use-module (png core chunk-iccp)
   #:use-module (png core chunk-phys)
-  #:export (png-chunk->png-chunk:IHDR
-            png-chunk->png-chunk:PLTE
-            png-chunk->png-chunk:IEND
-            png-chunk->png-chunk:cHRM
-            png-chunk->png-chunk:zTXt
-            png-chunk->png-chunk:tIME
-            png-chunk->png-chunk:iCCP
-            png-chunk->typed-chunk))
-
-(define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
-  (data->png-chunk:IHDR (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
-  (data->png-chunk:PLTE (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
-  (data->png-chunk:IEND (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:cHRM (chunk <png-chunk>))
-  (data->png-chunk:cHRM (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:zTXt (chunk <png-chunk>))
-  (data->png-chunk:zTXt (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:tIME (chunk <png-chunk>))
-  (data->png-chunk:tIME (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:iCCP (chunk <png-chunk>))
-  (data->png-chunk:iCCP (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
-
-(define-method (png-chunk->png-chunk:pHYs (chunk <png-chunk>))
-  (data->png-chunk:pHYs (png-chunk-data   chunk)
-                        (png-chunk-type   chunk)
-                        (png-chunk-length chunk)
-                        (png-chunk-crc    chunk)))
+  #:export (png-chunk->typed-chunk))
 
 
 (define %converters-to-typed
-  `((IHDR                  . ,png-chunk->png-chunk:IHDR)
-    (PLTE                  . ,png-chunk->png-chunk:PLTE)
-    (IEND                  . ,png-chunk->png-chunk:IEND)
-    (cHRM                  . ,png-chunk->png-chunk:cHRM)
-    (zTXt                  . ,png-chunk->png-chunk:zTXt)
-    (tIME                  . ,png-chunk->png-chunk:tIME)
-    (iCCP                  . ,png-chunk->png-chunk:iCCP)
-    (pHYs                  . ,png-chunk->png-chunk:pHYs)))
+  `((IHDR . ,data->png-chunk:IHDR)
+    (PLTE . ,data->png-chunk:PLTE)
+    (IEND . ,data->png-chunk:IEND)
+    (cHRM . ,data->png-chunk:cHRM)
+    (zTXt . ,data->png-chunk:zTXt)
+    (tIME . ,data->png-chunk:tIME)
+    (iCCP . ,data->png-chunk:iCCP)
+    (pHYs . ,data->png-chunk:pHYs)))
 
 (define-method (png-chunk->typed-chunk (chunk <png-chunk>))
   (let ((type (png-chunk-type/name chunk)))
     (if type
         (let ((converter (assoc-ref %converters-to-typed type)))
           (if converter
-              (converter chunk)
+              (converter (png-chunk-data   chunk)
+                         (png-chunk-type   chunk)
+                         (png-chunk-length chunk)
+                         (png-chunk-crc    chunk))
               chunk))
         (error "Unknown chunk type" type chunk))))
