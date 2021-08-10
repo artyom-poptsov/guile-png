@@ -2,7 +2,8 @@
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
-  #:export (<png-chunk:IEND>))
+  #:export (<png-chunk:IEND>
+            data->png-chunk:IEND))
 
 
 
@@ -19,5 +20,15 @@
 
 (define-method (write (chunk <png-chunk:IEND>) (port <port>))
   (%display chunk port))
+
+
+
+(define-method (data->png-chunk:IEND (data   <vector>)
+                                     (type   <vector>)
+                                     (length <number>)
+                                     (crc    <vector>))
+  (make <png-chunk:IEND>
+    #:length             length
+    #:type               type))
 
 ;;; chunk-iend.scm ends here.

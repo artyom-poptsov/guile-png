@@ -45,9 +45,10 @@
       #:palette-entries    (vector->PLTE-palette-entries data))))
 
 (define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
-  (make <png-chunk:IEND>
-    #:length             (png-chunk-length chunk)
-    #:type               (png-chunk-type chunk)))
+  (data->png-chunk:IEND (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
 
 (define-method (png-chunk->png-chunk:cHRM (chunk <png-chunk>))
   (data->png-chunk:cHRM (png-chunk-data   chunk)
