@@ -10,7 +10,8 @@
             palette:red
             palette:green
             palette:blue
-            vector->PLTE-palette-entries))
+            vector->PLTE-palette-entries
+            data->png-chunk:PLTE))
 
 
 
@@ -73,6 +74,19 @@
                               (vector-ref vec (+ 2 offset)))
                       result))
           (list->vector (reverse result))))))
+
+(define-method (data->png-chunk:PLTE  (data   <vector>)
+                                      (type   <vector>)
+                                      (length <number>)
+                                      (crc    <vector>))
+  (unless (zero? (remainder (vector-length data) 3))
+    (error "Invalid PLTE chunk: data length not divisible by 3" data))
+  (make <png-chunk:PLTE>
+    #:length             length
+    #:type               type
+    #:data               data
+    #:crc                crc
+    #:palette-entries    (vector->PLTE-palette-entries data)))
 
 ;;; chunk-plte.scm ends here.
 

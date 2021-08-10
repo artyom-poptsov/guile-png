@@ -34,15 +34,10 @@
       #:interlace-method   (data:interlace-method data))))
 
 (define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
-  (let ((data (png-chunk-data chunk)))
-    (unless (zero? (remainder (vector-length data) 3))
-      (error "Invalid PLTE chunk: data length not divisible by 3" chunk))
-    (make <png-chunk:PLTE>
-      #:length             (png-chunk-length chunk)
-      #:type               (png-chunk-type chunk)
-      #:data               (png-chunk-data chunk)
-      #:crc                (png-chunk-crc chunk)
-      #:palette-entries    (vector->PLTE-palette-entries data))))
+  (data->png-chunk:PLTE (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
 
 (define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
   (data->png-chunk:IEND (png-chunk-data   chunk)
