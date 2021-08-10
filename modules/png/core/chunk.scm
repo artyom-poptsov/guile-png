@@ -74,27 +74,31 @@
   (list-ref (member %chunk-types type) 1))
 
   
-  (define-class <png-chunk> ()
+(define-class <png-chunk> ()
     ;; <number>
   (length
+   #:init-value   0
    #:init-keyword #:length
    #:getter       png-chunk-length
    #:setter       png-chunk-length-set!)
 
   ;; <vector>
   (type
+   #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:type
    #:getter       png-chunk-type
    #:setter       png-chunk-type-set!)
 
   ;; <vector>
   (data
+   #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:data
    #:getter       png-chunk-data
    #:setter       png-chunk-data-set!)
 
   ;; <vector>
   (crc
+   #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:crc
    #:getter       png-chunk-crc
    #:setter       png-chunk-crc-set!))
