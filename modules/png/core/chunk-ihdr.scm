@@ -24,7 +24,8 @@
             data:colour-type
             data:compression-method
             data:filter-method
-            data:interlace-method))
+            data:interlace-method
+            data->png-chunk:IHDR))
 
 
 (define-class <png-chunk:IHDR> (<png-chunk>)
@@ -98,5 +99,24 @@
 
 (define-method (data:interlace-method (data <vector>))
   (vector-ref data 12))
+
+
+
+(define-method (data->png-chunk:IHDR (data   <vector>)
+                                     (type   <vector>)
+                                     (length <number>)
+                                     (crc    <vector>))
+  (make <png-chunk:IHDR>
+    #:length             length
+    #:type               type
+    #:data               data
+    #:crc                crc
+    #:width              (data:width data)
+    #:height             (data:heigth data)
+    #:bit-depth          (data:bit-depth data)
+    #:colour-type        (data:colour-type data)
+    #:compression-method (data:compression-method data)
+    #:filter-method      (data:filter-method data)
+    #:interlace-method   (data:interlace-method data)))
 
 ;;; chunk-ihdr.scm ends here.

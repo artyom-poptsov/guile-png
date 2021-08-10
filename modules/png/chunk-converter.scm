@@ -19,19 +19,10 @@
             png-chunk->typed-chunk))
 
 (define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
-  (let ((data (png-chunk-data chunk)))
-    (make <png-chunk:IHDR>
-      #:length             (png-chunk-length chunk)
-      #:type               (png-chunk-type chunk)
-      #:data               (png-chunk-data chunk)
-      #:crc                (png-chunk-crc chunk)
-      #:width              (data:width data)
-      #:height             (data:heigth data)
-      #:bit-depth          (data:bit-depth data)
-      #:colour-type        (data:colour-type data)
-      #:compression-method (data:compression-method data)
-      #:filter-method      (data:filter-method data)
-      #:interlace-method   (data:interlace-method data))))
+  (data->png-chunk:IHDR (png-chunk-data   chunk)
+                        (png-chunk-type   chunk)
+                        (png-chunk-length chunk)
+                        (png-chunk-crc    chunk)))
 
 (define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
   (data->png-chunk:PLTE (png-chunk-data   chunk)
