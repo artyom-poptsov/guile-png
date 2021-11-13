@@ -31,6 +31,12 @@
 (define-method (write (image <png-image>) (port <port>))
   (%display image port))
 
+(define-method (display (image <png-image>)
+  (%display image (current-output-port)))
+
+(define-method (write (image <png-image>))
+  (%display image (current-output-port)))
+
 
 (define-method (png-image-chunks-filter (image <png-image>) (predicate <procedure>))
   (filter predicate (png-image-chunks image)))
