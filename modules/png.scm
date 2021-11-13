@@ -21,10 +21,13 @@
     (let ((context (fsm-run! fsm (make <png-context>
                                    #:debug-mode? debug-mode?
                                    #:port        port))))
-      (make <png-image>
-        #:chunks (if raw?
-                     (reverse (png-context-chunks context))
-                     (map png-chunk->typed-chunk
-                          (reverse (png-context-chunks context))))))))
+      (let ((image (make <png-image>
+                     #:chunks (reverse (png-context-chunks context)))))
+        (if raw?
+            image
+            (make <png-image>
+              #:chunks (map (lambda (chunk)
+                              (png-chunk->typed-chunk image chunk))
+                            (png-image-chunks image))))))))
 
 ;;; png.scm ends here.
