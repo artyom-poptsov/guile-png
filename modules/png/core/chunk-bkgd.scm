@@ -75,7 +75,7 @@
                                      (colour-type <number>))
   (case colour-type
     ((0 4)
-     (make <png-chunk:PLTE>
+     (make <png-chunk:bKGD>>
        #:length             length
        #:type               type
        #:data               data
@@ -83,7 +83,7 @@
        #:colour-type        colour-type
        #:greyscale          (vector->int16 data)))
     ((2 6)
-     (make <png-chunk:PLTE>
+     (make <png-chunk:bKGD>
        #:length             length
        #:type               type
        #:data               data
@@ -93,7 +93,7 @@
        #:green              (vector->int16 (vector-copy data 2 4))
        #:blue               (vector->int16 (vector-copy data 4 6))))
     ((3)
-     (make <png-chunk:PLTE>
+     (make <png-chunk:bKGD>
        #:length             length
        #:type               type
        #:data               data
