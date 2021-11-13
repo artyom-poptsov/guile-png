@@ -75,7 +75,7 @@
                                      (colour-type <number>))
   (case colour-type
     ((0 4)
-     (make <png-chunk:bKGD>>
+     (make <png-chunk:bKGD>
        #:length             length
        #:type               type
        #:data               data
