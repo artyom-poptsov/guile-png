@@ -31,7 +31,7 @@
 (define-method (write (image <png-image>) (port <port>))
   (%display image port))
 
-(define-method (display (image <png-image>)
+(define-method (display (image <png-image>))
   (%display image (current-output-port)))
 
 (define-method (write (image <png-image>))
