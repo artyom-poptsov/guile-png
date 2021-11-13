@@ -3,20 +3,15 @@
 !#
 
 (use-modules (oop goops)
-             (smc fsm)
              (smc core log)
-             (smc core state)
-             (png fsm-context)
-             (png fsm))
+             (png image)
+             (png))
 
 (define (main args)
-  (let ((fsm (make <fsm-png>)))
-    (fsm-debug-mode-set! fsm #t)
-    (log-use-stderr! #t)
-    (let ((context (fsm-run! fsm (make <png-context>
-                                   #:debug-mode? #t
-                                   #:port (current-input-port)))))
-      (display "PNG chunks:\n")
-      (for-each (lambda (chunk)
-                  (format #t "  ~a~%" chunk))
-                (reverse (png-context-chunks context))))))
+  (let ((image (png->scm (current-input-port)
+                         #:debug-mode? #t
+                         #:raw?        #f)))
+    (display "PNG chunks:\n")
+    (for-each (lambda (chunk)
+                (format #t "  ~a~%" chunk))
+              (png-image-chunks image))))
