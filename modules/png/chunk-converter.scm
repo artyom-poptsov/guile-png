@@ -31,12 +31,26 @@
     (iCCP . ,(make-converter data->png-chunk:iCCP))
     (pHYs . ,(make-converter data->png-chunk:pHYs))
     (bKGD . ,(lambda (image chunk)
-               (data->png-chunk:bKGD (png-chunk-data   chunk)
-                                     (png-chunk-type   chunk)
-                                     (png-chunk-length chunk)
-                                     (png-chunk-crc    chunk)
-                                     (png-chunk:IHDR-colour-type
-                                      (car (png-image-chunks-query image 'IHDR))))))))
+               (let ((result (png-image-chunks-query image
+                                                     'IHDR)))
+                 (unless result
+                   (error "Could not find IHDR chunk"))
+                 (let* ((data     (png-chunk-data   chunk))
+                        (type     (png-chunk-type   chunk))
+                        (length   (png-chunk-length chunk))
+                        (crc      (png-chunk-crc    chunk))
+                        (ihdr-raw (car result))
+                        (ihdr     (data->png-chunk:IHDR
+                                   (png-chunk-data   ihdr-raw)
+                                   (png-chunk-type   ihdr-raw)
+                                   (png-chunk-length ihdr-raw)
+                                   (png-chunk-crc    ihdr-raw)))
+                        (ctype   (png-chunk:IHDR-colour-type ihdr)))
+                   (data->png-chunk:bKGD data
+                                         type
+                                         length
+                                         crc
+                                         ctype)))))))
 
 
 
