@@ -94,7 +94,7 @@ signature-parser.scm: context.go signature-context.go signature-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_SIGNATURE_PARSER_ARGS) signature-parser.puml > $@
 
-# stream-context.scm: content-line-parser.scm
+png-context.scm: signature-parser.go
 
 chunk-parser.scm: context.go signature-parser.scm chunk-context.go chunk-parser.puml
 	@echo "  SMC      $@"
