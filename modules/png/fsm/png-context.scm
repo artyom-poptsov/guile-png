@@ -3,11 +3,11 @@
   #:use-module (oop goops)
   #:use-module (smc context context)
   #:use-module (smc fsm)
-  #:use-module (png fsm-signature)
-  #:use-module (png fsm-signature-context)
-  #:use-module (png fsm-chunk-context)
+  #:use-module (png fsm signature-parser)
+  #:use-module (png fsm signature-context)
+  #:use-module (png fsm chunk-context)
+  #:use-module (png fsm chunk-parser)
   #:use-module (png core chunk)
-  #:use-module (png fsm-chunk)
   #:use-module (png image)
   #:re-export (guard:#t
                action:no-op)
@@ -79,7 +79,7 @@
   #t)
 
 (define-method (read-header (ctx <png-context>))
-  (let ((fsm (make <fsm-signature>)))
+  (let ((fsm (make <signature-parser>)))
     (catch #t
       (lambda ()
         (fsm-run! fsm (make <fsm-signature-context>
@@ -90,7 +90,7 @@
     ctx))
 
 (define-method (read-chunk (ctx <png-context>))
-  (let ((fsm (make <fsm-chunk>)))
+  (let ((fsm (make <chunk-parser>)))
     (catch #t
       (lambda ()
         (let ((chunk-ctx (fsm-run! fsm (make <fsm-chunk-context>
