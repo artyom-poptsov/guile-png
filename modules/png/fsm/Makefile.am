@@ -48,7 +48,7 @@ GUILE_SMC_SIGNATURE_PARSER_ARGS = \
 	--log-driver file \
 	--log-opt "file=signature-parser.log" \
 	-L $(abs_top_srcdir)/modules:$(abs_top_builddir)/modules \
-	--fsm-name content-line-parser \
+	--fsm-name signature-parser \
 	--fsm-module "(png fsm signature-parser)" \
 	-U "((png fsm context) (png fsm signature-context))" \
 	--validate
@@ -57,7 +57,7 @@ GUILE_SMC_CHUNK_PARSER_ARGS = \
 	--log-driver file \
 	--log-opt "file=chunk-parser.log" \
 	-L $(abs_top_srcdir)/modules:$(abs_top_builddir)/modules \
-	--fsm-name stream-parser \
+	--fsm-name chunk-parser \
 	--fsm-module "(png fsm chunk-parser)" \
 	-U "((png fsm context) (png fsm chunk-context))" \
 	--validate
@@ -66,7 +66,7 @@ GUILE_SMC_PNG_PARSER_ARGS = \
 	--log-driver file \
 	--log-opt "file=png-parser.log" \
 	-L $(abs_top_srcdir)/modules:$(abs_top_builddir)/modules \
-	--fsm-name stream-parser \
+	--fsm-name png-parser \
 	--fsm-module "(png fsm png-parser)" \
 	-U "((png fsm context) (png fsm png-context))" \
 	--validate
