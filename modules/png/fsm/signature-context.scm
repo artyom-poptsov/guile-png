@@ -4,7 +4,7 @@
   #:use-module (smc context context)
   #:re-export (guard:#t
                action:no-op)
-  #:export (<fsm-signature-context>
+  #:export (<signature-context>
             guard:correct-first-byte?
             guard:letter-P?
             guard:letter-N?
@@ -18,7 +18,7 @@
             action:unexpected-eof-error
             action:unexpected-byte-error))
 
-(define-class <fsm-signature-context> ()
+(define-class <signature-context> ()
   (port
    #:init-value   #f
    #:init-keyword #:port

@@ -82,7 +82,7 @@
   (let ((fsm (make <signature-parser>)))
     (catch #t
       (lambda ()
-        (fsm-run! fsm (make <fsm-signature-context>
+        (fsm-run! fsm (make <signature-context>
                         #:port        (png-context-port ctx)
                         #:debug-mode? (png-context-debug-mode? ctx))))
       (lambda (key . args)
