@@ -84,7 +84,7 @@ endif
 
 GUILE_SMC_ENV = GUILE_AUTO_COMPILE=0
 
-all: context.scm
+all: context.scm png-parser.scm
 
 context.scm:
 	@echo "  SMC      $@"
