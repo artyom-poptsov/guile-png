@@ -1,4 +1,4 @@
-(define-module (png fsm-context)
+(define-module (png fsm png-context)
   #:use-module (ice-9 binary-ports)
   #:use-module (oop goops)
   #:use-module (smc core stack)

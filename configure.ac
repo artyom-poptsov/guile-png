@@ -43,6 +43,25 @@ AC_ARG_WITH([guilesitedir],
              esac],
              [guilesitedir=""])
 
+dnl ----------------------------------------------------------------------
+dnl Guile-SMC standalone mode.
+AC_ARG_ENABLE(
+  [standalonemode],
+  [AS_HELP_STRING(
+    [--enable-standalonemode],
+    [Use the standalone mode for the Guile state machine compiler (Guile-SMC)])])
+
+AS_IF(
+  [test "x$enable_standalonemode" = "xyes"],
+  [AC_MSG_NOTICE([Guile-SMC standalone mode enabled])
+    AC_DEFINE(SMC_STANDALONE_MODE, 1, [Guile-SMC standalone mode enabled])],
+  [AC_DEFINE(SMC_STANDALONE_MODE, 0, [Guile-SMC standalone mode disabled])]
+)
+
+AM_CONDITIONAL([ENABLE_SMC_STANDALONE_MODE], [test "x$enable_standalonemode" = "xyes"])
+dnl ----------------------------------------------------------------------
+
+
 GUILE_PKG([3.0 2.2])
 GUILE_PROGS
 GUILE_SITE_DIR
@@ -62,6 +81,7 @@ AC_CONFIG_FILES([
         modules/Makefile
         modules/png/Makefile
         modules/png/core/Makefile
+        modules/png/fsm/Makefile
         tests/Makefile
 ])
 

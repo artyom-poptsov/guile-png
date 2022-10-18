@@ -1,4 +1,4 @@
-(define-module (png fsm-signature-context)
+(define-module (png fsm signature-context)
   #:use-module (oop goops)
   #:use-module (ice-9 binary-ports)
   #:use-module (smc context context)
