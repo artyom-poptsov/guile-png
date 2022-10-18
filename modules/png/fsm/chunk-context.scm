@@ -1,7 +1,7 @@
 (define-module (png fsm chunk-context)
   #:use-module (ice-9 binary-ports)
   #:use-module (oop goops)
-  #:use-module (smc context context)
+  #:use-module (png fsm context)
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:re-export (guard:#t

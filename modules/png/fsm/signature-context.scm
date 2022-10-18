@@ -1,7 +1,7 @@
 (define-module (png fsm signature-context)
   #:use-module (oop goops)
   #:use-module (ice-9 binary-ports)
-  #:use-module (smc context context)
+  #:use-module (png fsm context)
   #:re-export (guard:#t
                action:no-op)
   #:export (<signature-context>
