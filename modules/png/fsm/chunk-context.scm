@@ -6,7 +6,7 @@
   #:use-module (png core chunk)
   #:re-export (guard:#t
                action:no-op)
-  #:export (<fsm-chunk-context>
+  #:export (<chunk-context>
             event-source
             event-source:no-op
             fsm-chunk-context-chunk
@@ -23,7 +23,7 @@
 
 
 
-(define-class <fsm-chunk-context> ()
+(define-class <chunk-context> ()
   (port
    #:init-keyword #:port
    #:getter       fsm-chunk-context-port)
@@ -50,7 +50,7 @@
   (fsm-chunk-context-buffer-index-set! ctx
                                        (+ (fsm-chunk-context-buffer-index ctx) 1)))
 
-(define-method (%buffer-reset! (ctx <fsm-chunk-context>) (bytes <number>))
+(define-method (%buffer-reset! (ctx <chunk-context>) (bytes <number>))
   (fsm-chunk-context-buffer-index-set! ctx 0)
   (fsm-chunk-context-buffer-set! ctx (make-vector bytes)))
 

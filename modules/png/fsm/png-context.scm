@@ -93,7 +93,7 @@
   (let ((fsm (make <chunk-parser>)))
     (catch #t
       (lambda ()
-        (let ((chunk-ctx (fsm-run! fsm (make <fsm-chunk-context>
+        (let ((chunk-ctx (fsm-run! fsm (make <chunk-context>
                                          #:port        (png-context-port ctx)
                                          #:debug-mode? (png-context-debug-mode? ctx)))))
           (png-context-current-chunk-set! ctx (fsm-chunk-context-chunk chunk-ctx))))
