@@ -24,17 +24,8 @@ SUBDIRS = \
 	fsm
 
 SOURCES = \
-	fsm-signature-context.scm \
-	fsm-signature.scm	\
-	fsm-chunk.scm		\
-	fsm.scm			\
 	chunk-converter.scm	\
 	image.scm
-
-EXTRA_DIST = \
-	fsm-signature.puml	\
-	fsm-chunk.puml		\
-	fsm.puml
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
@@ -62,18 +53,6 @@ guilec_opts = --load-path=$(abs_top_srcdir)/modules/
 	$(AM_V_GUILEC)$(guilec_env) $(GUILEC) $(guilec_opts) \
 	--output=$@ $<
 
-fsm-signature.scm: fsm-signature.puml
-	@echo "  SMC      $<"
-	@cat $< | smc compile -L $(top_srcdir)/modules/ -U "((png fsm-signature-context))" --fsm-name fsm-signature --fsm-module "(png fsm-signature)" --validate > $@
-
-fsm-chunk.scm: fsm-chunk.puml
-	@echo "  SMC      $<"
-	@cat $< | smc compile -L $(top_srcdir)/modules/ -U "((png fsm-chunk-context))" --fsm-name fsm-chunk --fsm-module "(png fsm-chunk)" --validate > $@
-
-fsm.scm: fsm.puml fsm-chunk.scm fsm-signature.scm
-	@echo "  SMC      $<"
-	@cat fsm.puml | smc compile -L $(top_srcdir)/modules/ -U "((png fsm-context))" --fsm-name fsm-png --fsm-module "(png fsm)" --validate > $@
-
 clean-go:
 	-$(RM) $(GOBJECTS)
 
@@ -81,9 +60,6 @@ clean-go:
 
 
 CLEANFILES = \
-	fsm-signature.scm	\
-	fsm-chunk.scm		\
-	fsm.scm			\
 	$(GOBJECTS)
 
 ### Makefile.am ends here.
