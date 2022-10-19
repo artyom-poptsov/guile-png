@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2021-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -19,7 +19,9 @@
 
 include $(top_srcdir)/build-aux/am/guilec
 
-SUBDIRS = png
+SUBDIRS = \
+	png	\
+	.
 
 SOURCES = \
 	png.scm
