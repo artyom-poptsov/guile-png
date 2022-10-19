@@ -27,8 +27,6 @@
 
 (define-module (png)
   #:use-module (oop goops)
-  #:use-module (smc core log)
-  #:use-module (smc fsm)
   #:use-module (png image)
   #:use-module (png fsm context)
   #:use-module (png fsm png-context)
