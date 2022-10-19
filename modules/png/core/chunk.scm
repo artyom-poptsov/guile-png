@@ -75,13 +75,21 @@
 
   
 (define-class <png-chunk> ()
-    ;; <number>
+  ;; A 4-byte unsigned integer giving the number of bytes in the chunk's data
+  ;; field. The length counts only the data field, not itself, the chunk type
+  ;; code, or the CRC.  Zero is a valid length.  The value must not exceed
+  ;; (2^31)-1 bytes.
+  ;;
+  ;; <number>
   (length
    #:init-value   0
    #:init-keyword #:length
    #:getter       png-chunk-length
    #:setter       png-chunk-length-set!)
 
+  ;; A 4-byte chunk type code.  For convenience in description and in
+  ;; examining PNG files, type codes are restricted to consist of uppercase
+  ;; and lowercase ASCII letters (A-Z and a-z, or 65-90 and 97-122 decimal).
   ;; <vector>
   (type
    #:init-thunk   (lambda () (make-vector 0))
@@ -89,6 +97,8 @@
    #:getter       png-chunk-type
    #:setter       png-chunk-type-set!)
 
+  ;; The chunk data.  This part can be of zero length.
+  ;;
   ;; <vector>
   (data
    #:init-thunk   (lambda () (make-vector 0))
@@ -96,12 +106,19 @@
    #:getter       png-chunk-data
    #:setter       png-chunk-data-set!)
 
+  ;; 4-byte CRC Cyclic Redundancy Check) calculated on the preceding bytes in
+  ;; the chunk, including the chunk type code and chunk data fields, but not
+  ;; including the length field.  The CRC is always present, even for chunks
+  ;; containing no data.
+  ;;
   ;; <vector>
   (crc
    #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:crc
    #:getter       png-chunk-crc
-   #:setter       png-chunk-crc-set!))
+   #:setter       png-chunk-crc-set!)
+
+  #:metaclass <redefinable-class>)
 
 
 
