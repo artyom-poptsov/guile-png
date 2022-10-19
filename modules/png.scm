@@ -42,7 +42,6 @@
                    (debug-mode? #f)
                    (raw?        #f))
   (let ((fsm (make <png-parser>)))
-    (fsm-debug-mode-set! fsm debug-mode?)
     (log-use-stderr! debug-mode?)
     (let ((context (fsm-run! fsm (make <png-context>
                                    #:debug-mode? debug-mode?
