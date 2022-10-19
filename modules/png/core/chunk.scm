@@ -4,6 +4,7 @@
 (define-module (png core chunk)
   #:use-module (oop goops)
   #:use-module (png core common)
+  #:use-module (srfi srfi-1)
   #:export (<png-chunk>
             png-chunk-length
             png-chunk-length-set!
@@ -71,7 +72,9 @@
             (loop (cdr types))))))
 
 (define-method (chunk-type->vector (type <symbol>))
-  (list-ref (member %chunk-types type) 1))
+  (cadr (find (lambda (t)
+                (equal? (car t) type))
+              %chunk-types)))
 
   
 (define-class <png-chunk> ()
