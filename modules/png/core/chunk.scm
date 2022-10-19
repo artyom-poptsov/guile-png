@@ -124,8 +124,7 @@
 
 (define-method (%display (chunk <png-chunk>) (port <port>))
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (format port "#<png-chunk ~a ~a: ~a ~a>"
-            (png-chunk-type chunk)
+    (format port "#<png-chunk:~a ~a ~a>"
             (list-ref type 0)
             (list-ref type 2)
             (object-address/hex-string chunk))))
