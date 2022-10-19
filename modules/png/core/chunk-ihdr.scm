@@ -29,36 +29,92 @@
 
 
 (define-class <png-chunk:IHDR> (<png-chunk>)
+  ;; Image width in pixels.
+  ;;
+  ;; <number>
   (width
    #:init-keyword #:width
    #:getter       png-chunk:IHDR-width
    #:setter       png-chunk:IHDR-width-set!)
 
+  ;; Image height in pixels.
+  ;;
+  ;; <number>
   (height
    #:init-keyword #:height
    #:getter       png-chunk:IHDR-height
    #:setter       png-chunk:IHDR-height-set!)
 
+  ;; Single-byte integer giving the number of bits per sample or per palette
+  ;; index (not per pixel).  Valid values are 1, 2, 4, 8, and 16, although not
+  ;; all values are allowed for all color types.
+  ;;
+  ;; <number>
   (bit-depth
    #:init-keyword #:bit-depth
    #:getter       png-chunk:IHDR-bit-depth
    #:setter       png-chunk:IHDR-bit-depth-set!)
 
+  ;; Single-byte integer that describes the interpretation of the image data.
+  ;; Color type codes represent sums of the following values: 1 (palette
+  ;; used), 2 (color used), and 4 (alpha channel used).  Valid values are 0,
+  ;; 2, 3, 4, and 6.
+  ;;
+  ;; Bit depth restrictions for each color type are imposed to simplify
+  ;; implementations and to prohibit combinations that do not compress well.
+  ;; Decoders must support all legal combinations of bit depth and color type.
+  ;; The allowed combinations are:
+  ;;
+  ;; Color    Allowed    Interpretation
+  ;; Type    Bit Depths
+  ;;
+  ;; 0       1,2,4,8,16  Each pixel is a grayscale sample.
+  ;;
+  ;; 2       8,16        Each pixel is an R,G,B triple.
+  ;;
+  ;; 3       1,2,4,8     Each pixel is a palette index;
+  ;;                     a PLTE chunk must appear.
+  ;;
+  ;; 4       8,16        Each pixel is a grayscale sample,
+  ;;                     followed by an alpha sample.
+  ;;
+  ;; 6       8,16        Each pixel is an R,G,B triple,
+  ;;                     followed by an alpha sample.
+  ;;
+  ;; <number>
   (colour-type
    #:init-keyword #:colour-type
    #:getter       png-chunk:IHDR-colour-type
    #:setter       png-chunk:IHDR-colour-type-set!)
 
+  ;; Compression method is a single-byte integer that indicates the method
+  ;; used to compress the image data.  At present, only compression method 0
+  ;; (deflate/inflate compression with a 32K sliding window) is defined.  All
+  ;; standard PNG images must be compressed with this scheme.
+  ;;
+  ;; <number>
   (compression-method
    #:init-keyword #:compression-method
    #:getter       png-chunk:IHDR-compression-method
    #:setter       png-chunk:IHDR-compression-method-set!)
 
+  ;; Filter method is a single-byte integer that indicates the preprocessing
+  ;; method applied to the image data before compression.  At present, only
+  ;; filter method 0 (adaptive filtering with five basic filter types) is
+  ;; defined.  As with the compression method field, decoders must check this
+  ;; byte and report an error if it holds an unrecognized code.
+  ;;
+  ;; <number>
   (filter-method
    #:init-keyword #:filter-method
    #:getter       png-chunk:IHDR-filter-method
    #:setter       png-chunk:IHDR-filter-method-set!)
 
+  ;; Interlace method is a single-byte integer that indicates the transmission
+  ;; order of the image data.  Two values are currently defined: 0 (no
+  ;; interlace) or 1 (Adam7 interlace).
+  ;;
+  ;; <number>
   (interlace-method
    #:init-keyword #:interlace-method
    #:getter       png-chunk:IHDR-interlace-method
