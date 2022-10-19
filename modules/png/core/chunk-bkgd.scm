@@ -22,7 +22,7 @@
    #:getter       png-chunk:bKGD-colour-type)
 
   ;; <number>
-  (greyscale
+  (grayscale
    #:init-keyword #:greyscale
    #:init-value   0
    #:getter       png-chunk:bKGD-grayscale)
