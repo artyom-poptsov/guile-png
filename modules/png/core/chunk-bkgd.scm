@@ -1,3 +1,32 @@
+;;; chunk-bkgd.scm -- bKGD chunk.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; The bKGD chunk specifies a default background color to present
+;; the image against.  Note that viewers are not bound to honor
+;; this chunk; a viewer can choose to use a different background.
+;;
+;; https://www.rfc-editor.org/rfc/rfc2083#page-19
+
+
+;;; Code:
+
 (define-module (png core chunk-bkgd)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
@@ -45,6 +74,8 @@
    #:init-value   0
    #:getter       png-chunk:bKGD-blue)
 
+  ;; Palette index of the color to be used as background.
+  ;;
   ;; <number>
   (palette-index
    #:init-keyword #:palette-index
@@ -72,6 +103,7 @@
                                      (length      <number>)
                                      (crc         <vector>)
                                      (colour-type <number>))
+  "Convert a PNG chunk data to a bKGD chunk instance."
   (case colour-type
     ((0 4)
      (make <png-chunk:bKGD>
