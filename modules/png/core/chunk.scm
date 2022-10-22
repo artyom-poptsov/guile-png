@@ -64,6 +64,8 @@
     ))
 
 (define-method (vector->chunk-type (vec <vector>))
+  "Convert a vector VEC with PNG chunk type to a PNG chunk type list.  Return
+the list."
   (let loop ((types %chunk-types))
     (if (null? types)
         #f
@@ -72,6 +74,7 @@
             (loop (cdr types))))))
 
 (define-method (chunk-type->vector (type <symbol>))
+  "Convert a PNG chunk TYPE to a vector.  Return the vector."
   (cadr (find (lambda (t)
                 (equal? (car t) type))
               %chunk-types)))
@@ -141,11 +144,14 @@
 
 
 (define-method (png-chunk-type/name (chunk <png-chunk>))
+  "Get the name of the PNG CHUNK type.  Return the type name as a string."
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
     (and type
          (list-ref type 0))))
 
 (define-method (png-chunk-type/description (chunk <png-chunk>))
+  "Get the description of the PNG CHUNK type.  Return the description as a
+string."
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
     (and type
          (list-ref type 2))))
