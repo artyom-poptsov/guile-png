@@ -11,7 +11,20 @@
             png-image-height
             png-image-bit-depth
             png-image-color-type
-            png-image-data))
+            png-image-data
+
+            %png-image-signature))
+
+
+;; PNG image signature.
+;;
+;; (decimal)              137  80  78  71  13  10  26  10
+;; (hexadecimal)           89  50  4e  47  0d  0a  1a  0a
+;; (ASCII C notation)    \211   P   N   G  \r  \n \032 \n
+;;
+;; <https://www.rfc-editor.org/rfc/rfc2083#page-77>
+(define %png-image-signature
+  #(137 80 78 71 13 10 26 10))
 
 
 (define-class <png-image> ()
