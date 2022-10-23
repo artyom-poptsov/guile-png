@@ -98,10 +98,10 @@
 
 
 
-(define-method (data->png-chunk:bKGD (data        <vector>)
-                                     (type        <vector>)
+(define-method (data->png-chunk:bKGD (data        <bytevector>)
+                                     (type        <bytevector>)
                                      (length      <number>)
-                                     (crc         <vector>)
+                                     (crc         <bytevector>)
                                      (color-type <number>))
   "Convert a PNG chunk data to a bKGD chunk instance."
   (case color-type
@@ -112,7 +112,7 @@
        #:data               data
        #:crc                crc
        #:color-type        color-type
-       #:greyscale          (vector->int16 data)))
+       #:greyscale          (vector-int16 data)))
     ((2 6)
      (make <png-chunk:bKGD>
        #:length             length
@@ -120,9 +120,9 @@
        #:data               data
        #:crc                crc
        #:color-type        color-type
-       #:red                (vector->int16 (vector-copy data 0 2))
-       #:green              (vector->int16 (vector-copy data 2 4))
-       #:blue               (vector->int16 (vector-copy data 4 6))))
+       #:red                (vector->int16 (bytevector-copy/part data 0 2))
+       #:green              (vector->int16 (bytevector-copy/part data 2 2))
+       #:blue               (vector->int16 (bytevector-copy/part data 4 2))))
     ((3)
      (make <png-chunk:bKGD>
        #:length             length

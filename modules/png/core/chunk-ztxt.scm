@@ -1,5 +1,6 @@
 (define-module (png core chunk-ztxt)
   #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -42,14 +43,14 @@
 
 
 
-(define-method (data->png-chunk:zTXt (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:zTXt (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (define (read-text index output)
     (let loop ((text '())
                (idx  index))
-      (if (= idx (vector-length data))
+      (if (= idx (bytevector-length data))
           (make <png-chunk:zTXt>
             #:length  length
             #:type    type
@@ -58,15 +59,15 @@
             #:keyword            (assoc-ref output 'keyword)
             #:compression-method (assoc-ref output 'compression-method)
             ;; TODO: Decompress the datastream.
-            #:text               (list->vector text))
-          (loop (append text (list (vector-ref data idx)))
+            #:text               (u8-list->bytevector text))
+          (loop (append text (list (bytevector-u8-ref data idx)))
                 (+ idx 1)))))
 
 
   (define (read-compression-method index output)
     (read-text (+ index 1)
                (acons 'compression-method
-                      (vector-ref data index)
+                      (bytevector-u8-ref data index)
                       output)))
 
   (define (read-keyword)
@@ -74,7 +75,7 @@
                (index   0))
       (if (zero? (vector-ref data index))
           (read-compression-method index `((keyword . ,(list->string keyword))))
-          (loop (append keyword (list (integer->char (vector-ref data index))))
+          (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
                 (+ index 1)))))
 
   (read-keyword))

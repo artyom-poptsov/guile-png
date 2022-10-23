@@ -1,5 +1,6 @@
-(define-module (png core chunk-phys)
+  (define-module (png core chunk-phys)
   #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -46,17 +47,17 @@
 (define-method (write (chunk <png-chunk:pHYs>) (port <port>))
   (%display chunk port))
 
-(define-method (data->png-chunk:pHYs (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:pHYs (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (make <png-chunk:pHYs>
     #:length length
     #:type   type
     #:data   data
     #:crc    crc
-    #:pixels-per-unit-x-axis (vector->int32 (vector-copy data 0 4))
-    #:pixels-per-unit-y-axis (vector->int32 (vector-copy data 4 8))
-    #:unit-specifier         (vector-ref data 8)))
+    #:pixels-per-unit-x-axis (vector->int32 (bytevector-copy/part data 0 4))
+    #:pixels-per-unit-y-axis (vector->int32 (bytevector-copy/part data 4 4))
+    #:unit-specifier         (bytevector-u8-ref data 8)))
 
 

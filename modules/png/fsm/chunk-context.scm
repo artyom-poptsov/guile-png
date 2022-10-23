@@ -1,5 +1,6 @@
 (define-module (png fsm chunk-context)
   #:use-module (ice-9 binary-ports)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png fsm context)
   #:use-module (png core common)
@@ -28,9 +29,9 @@
    #:init-keyword #:port
    #:getter       fsm-chunk-context-port)
 
-  ;; <vector>
+  ;; <bytevector>
   (buffer
-   #:init-thunk   (lambda () (make-vector %png-chunk-length-bytes))
+   #:init-thunk   (lambda () (make-bytevector %png-chunk-length-bytes 0))
    #:getter       fsm-chunk-context-buffer
    #:setter       fsm-chunk-context-buffer-set!)
 
@@ -52,7 +53,7 @@
 
 (define-method (%buffer-reset! (ctx <chunk-context>) (bytes <number>))
   (fsm-chunk-context-buffer-index-set! ctx 0)
-  (fsm-chunk-context-buffer-set! ctx (make-vector bytes)))
+  (fsm-chunk-context-buffer-set! ctx (make-bytevector bytes 0)))
 
 
 ;; Event source.
@@ -88,7 +89,7 @@
 (define (action:store ctx byte)
   ;; (format (current-error-port) "byte: ~a~%" byte)
   (let ((buf (fsm-chunk-context-buffer ctx)))
-    (vector-set! buf (fsm-chunk-context-buffer-index ctx) byte)
+    (bytevector-u8-set! buf (fsm-chunk-context-buffer-index ctx) byte)
     (%buffer-index++! ctx)
     ctx))
 
@@ -121,7 +122,7 @@
   ctx)
 
 (define (action:store-data ctx byte)
-  (unless (zero? (vector-length (fsm-chunk-context-buffer ctx)))
+  (unless (zero? (bytevector-length (fsm-chunk-context-buffer ctx)))
     (action:store ctx byte)
     (let ((chunk (fsm-chunk-context-chunk ctx))
           (data  (fsm-chunk-context-buffer ctx)))

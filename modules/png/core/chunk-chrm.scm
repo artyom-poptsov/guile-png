@@ -1,5 +1,6 @@
 (define-module (png core chunk-chrm)
   #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -73,34 +74,34 @@
 
 
 
-(define-method (data:white-point-x (vec <vector>))
-  (vector->int32 (vector-copy vec 0 4)))
+(define-method (data:white-point-x (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 0 4)))
 
-(define-method (data:white-point-y (vec <vector>))
-  (vector->int32 (vector-copy vec 4 8)))
+(define-method (data:white-point-y (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 4 4)))
 
-(define-method (data:red-x (vec <vector>))
-  (vector->int32 (vector-copy vec 8 12)))
+(define-method (data:red-x (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 8 4)))
 
-(define-method (data:red-y (vec <vector>))
-  (vector->int32 (vector-copy vec 12 16)))
+(define-method (data:red-y (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 12 4)))
 
-(define-method (data:green-x (vec <vector>))
-  (vector->int32 (vector-copy vec 16 20)))
+(define-method (data:green-x (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 16 4)))
 
-(define-method (data:green-y (vec <vector>))
-  (vector->int32 (vector-copy vec 20 24)))
+(define-method (data:green-y (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 20 4)))
 
-(define-method (data:blue-x (vec <vector>))
-  (vector->int32 (vector-copy vec 24 28)))
+(define-method (data:blue-x (vec <bytevector>))
+  (vector->int32 (bytevector-copy/part vec 24 4)))
 
-(define-method (data:blue-y (vec <vector>))
-  (vector->int32 (vector-copy vec 28 32)))
+(define-method (data:blue-y (vec <bytevector>))
+  (vector->int32 (bytevector-copy vec 28 4)))
 
-(define-method (data->png-chunk:cHRM (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:cHRM (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (make <png-chunk:cHRM>
     #:length             length
     #:type               type

@@ -1,5 +1,6 @@
 (define-module (png core chunk-iccp)
   #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -42,14 +43,14 @@
 
 
 
-(define-method (data->png-chunk:iCCP (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:iCCP (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (define (read-profile index output)
     (let loop ((profile '())
                (idx  index))
-      (if (= idx (vector-length data))
+      (if (= idx (bytevector-length data))
           (make <png-chunk:iCCP>
             #:length  length
             #:type    type
@@ -58,26 +59,26 @@
             #:profile-name       (assoc-ref output 'profile-name)
             #:compression-method (assoc-ref output 'compression-method)
             ;; TODO: Decompress the datastream.
-            #:profile            (list->vector profile))
-          (loop (append profile (list (vector-ref data idx)))
+            #:profile            (u8-list->bytevector profile))
+          (loop (append profile (list (bytevector-u8-ref data idx)))
                 (+ idx 1)))))
 
 
   (define (read-compression-method index output)
     (read-profile (+ index 1)
                   (acons 'compression-method
-                         (vector-ref data index)
+                         (bytevector-u8-ref data index)
                          output)))
 
   (define (read-profile-name)
     (let loop ((profile-name '())
                (index   0))
-      (if (zero? (vector-ref data index))
+      (if (zero? (bytevector-u8-ref data index))
           (read-compression-method
            index
            `((profile-name . ,(list->string profile-name))))
           (loop (append profile-name
-                        (list (integer->char (vector-ref data index))))
+                        (list (integer->char (bytevector-u8-ref data index))))
                 (+ index 1)))))
 
   (read-profile-name))

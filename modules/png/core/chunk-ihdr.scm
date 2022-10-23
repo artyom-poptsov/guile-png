@@ -1,5 +1,6 @@
 (define-module (png core chunk-ihdr)
   #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -135,33 +136,33 @@
   (%display chunk port))
 
 
-(define-method (data:width (data <vector>))
-  (vector->int32 (vector-copy data 0 4)))
+(define-method (data:width (data <bytevector>))
+  (vector->int32 (bytevector-copy/part data 0 4)))
 
-(define-method (data:heigth (data <vector>))
-  (vector->int32 (vector-copy data 4 8)))
+(define-method (data:heigth (data <bytevector>))
+  (vector->int32 (bytevector-copy/part data 4 4)))
 
-(define-method (data:bit-depth (data <vector>))
-  (vector-ref data 8))
+(define-method (data:bit-depth (data <bytevector>))
+  (bytevector-u8-ref data 8))
 
-(define-method (data:color-type (data <vector>))
-  (vector-ref data 9))
+(define-method (data:color-type (data <bytevector>))
+  (bytevector-u8-ref data 9))
 
-(define-method (data:compression-method (data <vector>))
-  (vector-ref data 10))
+(define-method (data:compression-method (data <bytevector>))
+  (bytevector-u8-ref data 10))
 
-(define-method (data:filter-method (data <vector>))
-  (vector-ref data 11))
+(define-method (data:filter-method (data <bytevector>))
+  (bytevector-u8-ref data 11))
 
-(define-method (data:interlace-method (data <vector>))
-  (vector-ref data 12))
+(define-method (data:interlace-method (data <bytevector>))
+  (bytevector-u8-ref data 12))
 
 
 
-(define-method (data->png-chunk:IHDR (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:IHDR (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (make <png-chunk:IHDR>
     #:length             length
     #:type               type

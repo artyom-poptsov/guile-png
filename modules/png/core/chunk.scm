@@ -6,6 +6,7 @@
   #:use-module (png core common)
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 binary-ports)
+  #:use-module (rnrs bytevectors)
   #:export (<png-chunk>
             png-chunk-length
             png-chunk-length-set!
@@ -37,35 +38,35 @@
 (define %chunk-types
   '(
     ;; 1. Critical chunk types.
-    (IHDR #(73 72 68 82)   "Image header")
-    (PLTE #(80 76 84 69)   "Palette")
-    (IDAT #(73 68 65 84)   "Image data")
-    (IEND #(73 69 78 68)   "Image trailer")
+    (IHDR #vu8(73 72 68 82)   "Image header")
+    (PLTE #vu8(80 76 84 69)   "Palette")
+    (IDAT #vu8(73 68 65 84)   "Image data")
+    (IEND #vu8(73 69 78 68)   "Image trailer")
 
     ;; 2. Ancillary chunk types.
-    (tRNS #(116 82 78 83)  "Transparency")
-    (cHRM #(99 72 82 77)   "Primary chromaticities and white point")
-    (gAMA #(103 65 77 65)  "Image gamma")
-    (iCCP #(105 67 67 80)  "Embedded ICC profile")
-    (sBIT #(115 66 73 84)  "Significant bits")
-    (sRGB #(115 82 71 66)  "Standard RGB color space")
+    (tRNS #vu8(116 82 78 83)  "Transparency")
+    (cHRM #vu8(99 72 82 77)   "Primary chromaticities and white point")
+    (gAMA #vu8(103 65 77 65)  "Image gamma")
+    (iCCP #vu8(105 67 67 80)  "Embedded ICC profile")
+    (sBIT #vu8(115 66 73 84)  "Significant bits")
+    (sRGB #vu8(115 82 71 66)  "Standard RGB color space")
 
     ;; 2.1. Textual information.
-    (tEXT #(116 69 88 116) "Textual data")
-    (zTXt #(122 84 88 116) "Compressed textual data")
-    (iTXt #(105 84 88 116) "International textual data")
+    (tEXT #vu8(116 69 88 116) "Textual data")
+    (zTXt #vu8(122 84 88 116) "Compressed textual data")
+    (iTXt #vu8(105 84 88 116) "International textual data")
 
     ;; 2.2. Miscellaneous information.
-    (bKGD #(98 75 71 68)   "Background color")
-    (hIST #(104 73 83 84)  "Image histogram")
-    (pHYs #(112 72 89 115) "Physical pixel dimensions")
-    (sPLT #(115 80 76 84)  "Suggested palette")
+    (bKGD #vu8(98 75 71 68)   "Background color")
+    (hIST #vu8(104 73 83 84)  "Image histogram")
+    (pHYs #vu8(112 72 89 115) "Physical pixel dimensions")
+    (sPLT #vu8(115 80 76 84)  "Suggested palette")
 
     ;; 2.3. Time stamp information.
-    (tIME #(116 73 77 69)  "Image last-modification time")
+    (tIME #vu8(116 73 77 69)  "Image last-modification time")
     ))
 
-(define-method (vector->chunk-type (vec <vector>))
+(define-method (vector->chunk-type (vec <bytevector>))
   "Convert a vector VEC with PNG chunk type to a PNG chunk type list.  Return
 the list."
   (let loop ((types %chunk-types))
@@ -100,7 +101,7 @@ the list."
   ;; and lowercase ASCII letters (A-Z and a-z, or 65-90 and 97-122 decimal).
   ;; <vector>
   (type
-   #:init-thunk   (lambda () (make-vector 0))
+   #:init-thunk   (lambda () (make-bytevector 0))
    #:init-keyword #:type
    #:getter       png-chunk-type
    #:setter       png-chunk-type-set!)
@@ -109,7 +110,7 @@ the list."
   ;;
   ;; <vector>
   (data
-   #:init-thunk   (lambda () (make-vector 0))
+   #:init-thunk   (lambda () (make-bytevector 0))
    #:init-keyword #:data
    #:getter       png-chunk-data
    #:setter       png-chunk-data-set!)
@@ -121,7 +122,7 @@ the list."
   ;;
   ;; <vector>
   (crc
-   #:init-thunk   (lambda () (make-vector 0))
+   #:init-thunk   (lambda () (make-bytevector 0))
    #:init-keyword #:crc
    #:getter       png-chunk-crc
    #:setter       png-chunk-crc-set!)
@@ -162,7 +163,7 @@ string."
 
 (define-method (png-chunk->png (chunk <png-chunk>) (port <output-port>))
   "Print a PNG CHUNK to a binary PORT."
-  (put-bytevector port (png-chunk-length chunk))
+  (put-bytevector port (int32->bytevector (png-chunk-length chunk)))
   (put-bytevector port (png-chunk-type chunk))
   (put-bytevector port (png-chunk-data chunk))
   (put-bytevector port (png-chunk-crc chunk)))

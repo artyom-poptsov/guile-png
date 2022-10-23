@@ -1,5 +1,6 @@
 (define-module (png core chunk-iend)
   #:use-module (oop goops)
+  #:use-module (rnrs bytevectors)
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:IEND>
@@ -23,10 +24,10 @@
 
 
 
-(define-method (data->png-chunk:IEND (data   <vector>)
-                                     (type   <vector>)
+(define-method (data->png-chunk:IEND (data   <bytevector>)
+                                     (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <vector>))
+                                     (crc    <bytevector>))
   (make <png-chunk:IEND>
     #:length             length
     #:type               type))

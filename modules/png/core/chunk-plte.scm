@@ -1,5 +1,6 @@
 (define-module (png core chunk-plte)
   ;; #:use-module (srfi srfi-43)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -20,7 +21,7 @@
   ;;
   ;;   #(red green blue)
   ;;
-  ;; <vector> of <vector>
+  ;; <bytevector> of <bytevector>
   (palette-entries
    #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:palette-entries
@@ -52,34 +53,34 @@
 
 
 
-(define-method (palette:red (plte <vector>))
-  (vector-ref plte 0))
+(define-method (palette:red (plte <bytevector>))
+  (bytevector-u8-ref plte 0))
 
-(define-method (palette:green (plte <vector>))
-  (vector-ref plte 1))
+(define-method (palette:green (plte <bytevector>))
+  (bytevector-u8-ref plte 1))
 
-(define-method (palette:blue (plte <vector>))
-  (vector-ref plte 2))
+(define-method (palette:blue (plte <bytevector>))
+  (bytevector-u8-ref plte 2))
 
 
 
-(define-method (vector->PLTE-palette-entries (vec <vector>))
-  (let ((vlen (vector-length vec)))
+(define-method (vector->PLTE-palette-entries (vec <bytevector>))
+  (let ((vlen (bytevector-length vec)))
     (let loop ((offset 0)
                (result '()))
       (if (< offset vlen)
           (loop (+ offset 3)
-                (cons (vector (vector-ref vec (+ 0 offset))
-                              (vector-ref vec (+ 1 offset))
-                              (vector-ref vec (+ 2 offset)))
+                (cons (vector (bytevector-u8-ref vec (+ 0 offset))
+                              (bytevector-u8-ref vec (+ 1 offset))
+                              (bytevector-u8-ref vec (+ 2 offset)))
                       result))
           (list->vector (reverse result))))))
 
-(define-method (data->png-chunk:PLTE  (data   <vector>)
-                                      (type   <vector>)
+(define-method (data->png-chunk:PLTE  (data   <bytevector>)
+                                      (type   <bytevector>)
                                       (length <number>)
-                                      (crc    <vector>))
-  (unless (zero? (remainder (vector-length data) 3))
+                                      (crc    <bytevector>))
+  (unless (zero? (remainder (bytevector-length data) 3))
     (error "Invalid PLTE chunk: data length not divisible by 3" data))
   (make <png-chunk:PLTE>
     #:length             length
