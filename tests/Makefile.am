@@ -19,7 +19,8 @@
 
 SCM_TESTS = \
 	chunks.scm \
-	fsm-context.scm
+	fsm-context.scm	\
+	image.scm
 
 TESTS = ${SCM_TESTS}
 
