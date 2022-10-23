@@ -109,7 +109,7 @@
 (define-method (png-image->png (image <png-image>) (port <output-port>))
   (put-bytevector port %png-image-signature)
   (for-each (lambda (chunk)
-              (put-bytevector port chunk))
-            (png-image-chunks)))
+              (png-chunk->png chunk port))
+            (png-image-chunks image)))
 
 ;; image.scm ends here.
