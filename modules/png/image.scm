@@ -4,6 +4,7 @@
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
   #:export (<png-image>
+            png-image?
             png-image-chunks
             png-image-chunks-query
             png-image-data))
@@ -15,6 +16,10 @@
    #:init-value   '()
    #:init-keyword #:chunks
    #:getter       png-image-chunks))
+
+(define (png-image? x)
+  "Check if X is a PNG image instance."
+  (is-a? x <png-image>))
 
 
 
