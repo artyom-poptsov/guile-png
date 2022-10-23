@@ -26,7 +26,7 @@
 ;;
 ;; <https://www.rfc-editor.org/rfc/rfc2083#page-77>
 (define %png-image-signature
-  #(137 80 78 71 13 10 26 10))
+  #vu8(137 80 78 71 13 10 26 10))
 
 
 (define-class <png-image> ()
