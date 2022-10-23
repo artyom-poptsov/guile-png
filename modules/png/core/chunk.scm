@@ -5,6 +5,7 @@
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (srfi srfi-1)
+  #:use-module (ice-9 binary-ports)
   #:export (<png-chunk>
             png-chunk-length
             png-chunk-length-set!
@@ -16,6 +17,7 @@
             png-chunk-data-set!
             png-chunk-crc
             png-chunk-crc-set!
+            png-chunk->png
 
             ;; Chunk type/vector converters.
             vector->chunk-type
@@ -155,5 +157,15 @@ string."
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
     (and type
          (list-ref type 2))))
+
+
+
+(define-method (png-chunk->png (chunk <png-chunk>) (port <output-port>))
+  "Print a PNG CHUNK to a binary PORT."
+  (put-bytevector port (png-chunk-length chunk))
+  (put-bytevector port (png-chunk-type chunk))
+  (put-bytevector port (png-chunk-data chunk))
+  (put-bytevector port (png-chunk-crc chunk)))
+
 
 ;;; png-chunk.scm ends here.
