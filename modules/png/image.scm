@@ -69,7 +69,7 @@
 
 (define-method (png-image-color-type (image <png-image>))
   (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
-    (png-chunk:IHDR-colour-type ihdr)))
+    (png-chunk:IHDR-color-type ihdr)))
 
 
 

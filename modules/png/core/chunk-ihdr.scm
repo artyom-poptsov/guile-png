@@ -10,8 +10,8 @@
             png-chunk:IHDR-height-set!
             png-chunk:IHDR-bit-depth
             png-chunk:IHDR-bit-depth-set!
-            png-chunk:IHDR-colour-type
-            png-chunk:IHDR-colour-type-set!
+            png-chunk:IHDR-color-type
+            png-chunk:IHDR-color-type-set!
             png-chunk:IHDR-compression-method
             png-chunk:IHDR-compression-method-set!
             png-chunk:IHDR-filter-method
@@ -21,7 +21,7 @@
             data:width
             data:heigth
             data:bit-depth
-            data:colour-type
+            data:color-type
             data:compression-method
             data:filter-method
             data:interlace-method
@@ -82,10 +82,10 @@
   ;;                     followed by an alpha sample.
   ;;
   ;; <number>
-  (colour-type
-   #:init-keyword #:colour-type
-   #:getter       png-chunk:IHDR-colour-type
-   #:setter       png-chunk:IHDR-colour-type-set!)
+  (color-type
+   #:init-keyword #:color-type
+   #:getter       png-chunk:IHDR-color-type
+   #:setter       png-chunk:IHDR-color-type-set!)
 
   ;; Compression method is a single-byte integer that indicates the method
   ;; used to compress the image data.  At present, only compression method 0
@@ -144,7 +144,7 @@
 (define-method (data:bit-depth (data <vector>))
   (vector-ref data 8))
 
-(define-method (data:colour-type (data <vector>))
+(define-method (data:color-type (data <vector>))
   (vector-ref data 9))
 
 (define-method (data:compression-method (data <vector>))
@@ -170,7 +170,7 @@
     #:width              (data:width data)
     #:height             (data:heigth data)
     #:bit-depth          (data:bit-depth data)
-    #:colour-type        (data:colour-type data)
+    #:color-type        (data:color-type data)
     #:compression-method (data:compression-method data)
     #:filter-method      (data:filter-method data)
     #:interlace-method   (data:interlace-method data)))

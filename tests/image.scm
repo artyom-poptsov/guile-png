@@ -70,7 +70,7 @@
                   #:width      200
                   #:height     100
                   #:bit-depth  8
-                  #:colour-type 0
+                  #:color-type 0
                   #:type      (chunk-type->vector 'IHDR)))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
