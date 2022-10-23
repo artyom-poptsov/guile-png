@@ -29,9 +29,6 @@
 (define-public (event-source context)
   (get-u8 (fsm-signature-context-port context)))
 
-;; (define-public (event-source:P context)
-;;   #f)
-
 
 (define-public (guard:correct-first-byte? ctx byte)
   (equal? byte 137))
