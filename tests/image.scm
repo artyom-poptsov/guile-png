@@ -52,6 +52,18 @@
                   #:chunks    (list ihdr iend))))
     (png-image-height image)))
 
+(test-equal "png-image-height"
+  8
+  (let* ((ihdr  (make <png-chunk:IHDR>
+                  #:width     200
+                  #:height    100
+                  #:bit-depth 8
+                  #:type      (chunk-type->vector 'IHDR)))
+         (iend  (make <png-chunk:IEND>))
+         (image (make <png-image>
+                  #:chunks    (list ihdr iend))))
+    (png-image-bit-depth image)))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
