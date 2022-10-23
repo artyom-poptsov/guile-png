@@ -4,6 +4,7 @@
 (define-module (png core chunk)
   #:use-module (oop goops)
   #:use-module (png core common)
+  #:use-module (png core crc)
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 binary-ports)
   #:use-module (rnrs bytevectors)
@@ -17,6 +18,7 @@
             png-chunk-data
             png-chunk-data-set!
             png-chunk-crc
+            png-chunk-crc-calculate
             png-chunk-crc-set!
             png-chunk->png
 
@@ -158,6 +160,16 @@ string."
   (let ((type (vector->chunk-type (png-chunk-type chunk))))
     (and type
          (list-ref type 2))))
+
+(define-method (png-chunk-crc-calculate (chunk <png-chunk>))
+  (let* ((type        (png-chunk-type chunk))
+         (type-length (bytevector-length type))
+         (data        (png-chunk-data chunk))
+         (data-length (bytevector-length data))
+         (bv   (make-bytevector (+ type-length data-length) 0)))
+    (bytevector-copy! type 0 bv 0 type-length)
+    (bytevector-copy! data 0 bv type-length data-length)
+    (int32->bytevector (crc bv))))
 
 
 
