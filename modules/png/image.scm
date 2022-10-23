@@ -5,7 +5,8 @@
   #:use-module (png core chunk-ihdr)
   #:export (<png-image>
             png-image-chunks
-            png-image-chunks-query))
+            png-image-chunks-query
+            png-image-data))
 
 
 (define-class <png-image> ()
@@ -47,5 +48,25 @@
 (define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
   (png-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
+
+
+
+(define-method (png-image-data (image <png-image>))
+  "Get the PNG image data as a single vector."
+  (let ((data-chunks (png-image-chunks-query image 'IDAT)))
+    (let loop ((chunks data-chunks)
+               (result (if (null? data-chunks)
+                           (make-vector 0)
+                           (png-chunk-data (car data-chunks)))))
+      (if (null? chunks)
+          result
+          (let* ((chunk         (car chunks))
+                 (chunk-data    (png-chunk-data chunk))
+                 (result-length (vector-length result))
+                 (chunk-length  (vector-length chunk-data))
+                 (new-result    (make-vector (+ result-length chunk-length))))
+            (vector-copy! new-result 0 result)
+            (vector-copy! new-result result-length chunk-data)
+            (loop (cdr chunks) new-result))))))
 
 ;; image.scm ends here.
