@@ -1,4 +1,4 @@
-;;; png.scm -- GNU Guile PNG parser.
+;;; crc.scm -- CRC-32 implementation for Guile-PNG.
 
 ;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
