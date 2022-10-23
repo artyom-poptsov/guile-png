@@ -45,7 +45,7 @@
                                    (png-chunk-type   ihdr-raw)
                                    (png-chunk-length ihdr-raw)
                                    (png-chunk-crc    ihdr-raw)))
-                        (ctype   (png-chunk:IHDR-colour-type ihdr)))
+                        (ctype   (png-chunk:IHDR-color-type ihdr)))
                    (data->png-chunk:bKGD data
                                          type
                                          length
