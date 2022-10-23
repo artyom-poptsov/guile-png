@@ -5,8 +5,7 @@
   #:use-module (png core chunk-ihdr)
   #:export (<png-image>
             png-image-chunks
-            png-image-chunks-query
-            png-image-chunks-filter))
+            png-image-chunks-query))
 
 
 (define-class <png-image> ()
@@ -38,15 +37,15 @@
   (%display image (current-output-port)))
 
 
-(define-method (png-image-chunks-filter (image <png-image>) (predicate <procedure>))
+(define-method (png-image-chunks-query (image <png-image>) (predicate <procedure>))
   (filter predicate (png-image-chunks image)))
 
 (define-method (png-image-chunks-query (image <png-image>) (chunk <symbol>))
-  (png-image-chunks-filter image (lambda (c)
-                                   (equal? (png-chunk-type/name c) chunk))))
+  (png-image-chunks-query image (lambda (c)
+                                  (equal? (png-chunk-type/name c) chunk))))
 
 (define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
-  (png-image-chunks-filter image (lambda (c)
-                                   (equal? (png-chunk-type c) chunk))))
+  (png-image-chunks-query image (lambda (c)
+                                  (equal? (png-chunk-type c) chunk))))
 
 ;; image.scm ends here.
