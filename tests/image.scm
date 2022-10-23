@@ -30,6 +30,28 @@
     (and (= (length chunks) 1)
          (car chunks))))
 
+(test-equal "png-image-width"
+  200
+  (let* ((ihdr  (make <png-chunk:IHDR>
+                  #:width     200
+                  #:height    100
+                  #:type      (chunk-type->vector 'IHDR)))
+         (iend  (make <png-chunk:IEND>))
+         (image (make <png-image>
+                  #:chunks    (list ihdr iend))))
+    (png-image-width image)))
+
+(test-equal "png-image-height"
+  100
+  (let* ((ihdr  (make <png-chunk:IHDR>
+                  #:width     200
+                  #:height    100
+                  #:type      (chunk-type->vector 'IHDR)))
+         (iend  (make <png-chunk:IEND>))
+         (image (make <png-image>
+                  #:chunks    (list ihdr iend))))
+    (png-image-height image)))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 

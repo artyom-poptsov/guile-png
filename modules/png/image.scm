@@ -7,6 +7,8 @@
             png-image?
             png-image-chunks
             png-image-chunks-query
+            png-image-width
+            png-image-height
             png-image-data))
 
 
@@ -48,6 +50,16 @@
 (define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
   (png-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
+
+
+
+(define-method (png-image-width (image <png-image>))
+  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
+    (png-chunk:IHDR-width ihdr)))
+
+(define-method (png-image-height (image <png-image>))
+  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
+    (png-chunk:IHDR-height ihdr)))
 
 
 
