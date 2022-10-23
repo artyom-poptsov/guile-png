@@ -10,6 +10,7 @@
             png-image-width
             png-image-height
             png-image-bit-depth
+            png-image-color-type
             png-image-data))
 
 
@@ -65,6 +66,10 @@
 (define-method (png-image-bit-depth (image <png-image>))
   (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
     (png-chunk:IHDR-bit-depth ihdr)))
+
+(define-method (png-image-color-type (image <png-image>))
+  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
+    (png-chunk:IHDR-colour-type ihdr)))
 
 
 
