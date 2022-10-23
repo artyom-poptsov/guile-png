@@ -36,20 +36,17 @@
 
 (define (make-crc-table)
   "Make the table for a fast CRC."
-  (uint-list->bytevector (map (lambda (n)
-                                (let loop ((k 0)
-                                           (c n))
-                                  (if (= k 8)
-                                      c
-                                      (if (logand c 1)
-                                          (loop (+ k 1)
-                                                (logxor #xedb88320
-                                                        (ash c 1)))
-                                          (loop (+ k 1)
-                                                (ash c 1))))))
-                              (iota 256 0 1))
-                         (endianness little)
-                         64))
+  (list->vector (map (lambda (n)
+                       (let loop ((k 0)
+                                  (c n))
+                         (if (= k 8)
+                             c
+                             (if (zero? (logand c 1))
+                                 (loop (+ k 1) (ash c -1))
+                                 (loop (+ k 1)
+                                       (logxor #xEDB88320
+                                               (ash c -1)))))))
+                     (iota 256 0 1))))
 
 
 (define %crc-table (make-crc-table))
@@ -64,9 +61,9 @@
           c
           (let ((byte (bytevector-u8-ref buf index)))
             (loop (+ index 1)
-                  (logxor (bytevector-u8-ref %crc-table
-                                             (logand (logxor c byte) #xFF))
-                          (ash c 8))))))))
+                  (logxor (vector-ref %crc-table
+                                      (logand (logxor c byte) #xFF))
+                          (ash c -8))))))))
 
 (define-method (crc (buf <bytevector>))
   (logxor (crc-update buf) #xFFFFFFFF))
