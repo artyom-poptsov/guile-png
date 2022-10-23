@@ -1,5 +1,6 @@
 (define-module (png image)
   #:use-module (oop goops)
+  #:use-module (ice-9 binary-ports)     ; put-bytevector
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
@@ -12,6 +13,7 @@
             png-image-bit-depth
             png-image-color-type
             png-image-data
+            png-image->png
 
             %png-image-signature))
 
@@ -103,5 +105,11 @@
             (vector-copy! new-result 0 result)
             (vector-copy! new-result result-length chunk-data)
             (loop (cdr chunks) new-result))))))
+
+(define-method (png-image->png (image <png-image>) (port <output-port>))
+  (put-bytevector port %png-image-signature)
+  (for-each (lambda (chunk)
+              (put-bytevector port chunk))
+            (png-image-chunks)))
 
 ;; image.scm ends here.
