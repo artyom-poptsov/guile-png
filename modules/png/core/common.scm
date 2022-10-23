@@ -1,5 +1,6 @@
 (define-module (png core common)
   #:use-module (oop goops)
+  #:use-module (rnrs bytevectors)
   #:export (object-address/hex-string
             vector->int32
             vector->int16
@@ -23,8 +24,8 @@
 (define-method (int32->bytevector (number <number>))
   "Convert a NUMBER to a byte vector."
   (u8-list->bytevector
-   (list (ash (logand v #xFF000000) -24)
-         (ash (logand v #x00FF0000) -16)
-         (ash (logand v #x0000FF00) -8)
-         (logand v #x000000FF))))
+   (list (ash (logand number #xFF000000) -24)
+         (ash (logand number #x00FF0000) -16)
+         (ash (logand number #x0000FF00) -8)
+         (logand number #x000000FF))))
 

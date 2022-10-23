@@ -18,6 +18,7 @@
 ## along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 
 SCM_TESTS = \
+	common.scm	\
 	chunks.scm \
 	fsm-context.scm	\
 	image.scm
