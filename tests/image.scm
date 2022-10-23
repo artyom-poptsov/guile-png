@@ -12,6 +12,14 @@
 
 (test-begin %test-name)
 
+(test-assert "png-image?"
+  (let* ((ihdr  (make <png-chunk:IHDR>
+                  #:type      (chunk-type->vector 'IHDR)))
+         (iend  (make <png-chunk:IEND>))
+         (image (make <png-image>
+                  #:chunks    (list ihdr iend))))
+    (png-image? image)))
+
 (test-assert "png-image-chunks-query: IHDR"
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:type      (chunk-type->vector 'IHDR)))
