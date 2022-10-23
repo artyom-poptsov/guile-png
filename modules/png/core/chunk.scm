@@ -46,7 +46,7 @@
     (gAMA #(103 65 77 65)  "Image gamma")
     (iCCP #(105 67 67 80)  "Embedded ICC profile")
     (sBIT #(115 66 73 84)  "Significant bits")
-    (sRGB #(115 82 71 66)  "Standard RGB colour space")
+    (sRGB #(115 82 71 66)  "Standard RGB color space")
 
     ;; 2.1. Textual information.
     (tEXT #(116 69 88 116) "Textual data")
@@ -54,7 +54,7 @@
     (iTXt #(105 84 88 116) "International textual data")
 
     ;; 2.2. Miscellaneous information.
-    (bKGD #(98 75 71 68)   "Background colour")
+    (bKGD #(98 75 71 68)   "Background color")
     (hIST #(104 73 83 84)  "Image histogram")
     (pHYs #(112 72 89 115) "Physical pixel dimensions")
     (sPLT #(115 80 76 84)  "Suggested palette")
