@@ -20,6 +20,7 @@
             png-chunk-data-set!
             png-chunk-crc
             png-chunk-crc-calculate
+            png-chunk-crc-update!
             png-chunk-crc-set!
             png-chunk->png
 
@@ -174,6 +175,10 @@ string."
     (bytevector-copy! type 0 bv 0 type-length)
     (bytevector-copy! data 0 bv type-length data-length)
     (int32->bytevector (crc bv))))
+
+(define-method (png-chunk-crc-update! (chunk <png-chunk>))
+  "Update a PNG CHUNK so the CRC will match the chunk content."
+  (png-chunk-crc-set! chunk (png-chunk-crc-calculate chunk)))
 
 
 
