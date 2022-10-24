@@ -66,6 +66,16 @@
                          #vu8(119 50 219 167))))
 
 
+;; CRC
+
+(test-assert "png-chunk-crc-calculate"
+  (let ((chunk (data->png-chunk:IHDR %ihdr-data
+                                     #vu8(73 72 68 82)
+                                     13
+                                     #vu8(119 50 219 167))))
+    (png-chunk-crc-calculate chunk)))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
