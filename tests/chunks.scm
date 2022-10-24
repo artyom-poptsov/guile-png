@@ -10,6 +10,14 @@
 
 (test-begin %test-name)
 
+(test-equal "png-chunk?: #t"
+  #t
+  (png-chunk? (make <png-chunk> #:type #vu8(73 72 68 82))))
+
+(test-equal "png-chunk?: #f"
+  #f
+  (png-chunk? "not-a-chunk"))
+
 (test-equal "vector->chunk-type"
   '(IHDR #vu8(73 72 68 82) "Image header")
   (vector->chunk-type #vu8(73 72 68 82)))

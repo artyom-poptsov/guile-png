@@ -9,6 +9,7 @@
   #:use-module (ice-9 binary-ports)
   #:use-module (rnrs bytevectors)
   #:export (<png-chunk>
+            png-chunk?
             png-chunk-length
             png-chunk-length-set!
             png-chunk-type
@@ -130,6 +131,9 @@ the list."
    #:setter       png-chunk-crc-set!)
 
   #:metaclass <redefinable-class>)
+
+(define (png-chunk? x)
+  (is-a? x <png-chunk>))
 
 
 
