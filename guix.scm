@@ -66,7 +66,8 @@
     (inputs
      (list bash-minimal
            guile-3.0
-           guile-lib))
+           guile-lib
+           guile-zlib))
     (propagated-inputs
      (list guile-smc))
     (home-page "https://github.com/artyom-poptsov/guile-png")
