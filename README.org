@@ -1,6 +1,6 @@
 * Guile-PNG
 
-  PNG format parser for GNU Guile.
+  PNG ([[https://www.rfc-editor.org/rfc/rfc2083][RFC 2083]]) format parser for GNU Guile.
 
 ** License
     Guile-PNG is free software: you can redistribute it and/or modify it under
@@ -11,4 +11,6 @@
 
 ** Requirements
    - [[https://www.gnu.org/software/guile/][GNU Guile]] 2.2+
+   - [[http://www.nongnu.org/guile-lib/][Guile Library]] 0.1.9+
    - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]]
+   - [[https://notabug.org/guile-zlib/guile-zlib][Guile-ZLIB]] 0.1.0+
