@@ -53,29 +53,29 @@
 
 
 (package
-    (name "guile-png")
-    (version "git")
-    (source (local-file %source-dir
-                        #:recursive? #t
-                        #:select? (git-predicate %source-dir)))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:make-flags '("GUILE_AUTO_COMPILE=0")))     ;to prevent guild warnings
-    (native-inputs
-     (list autoconf automake pkg-config texinfo texlive))
-    (inputs
-     (list bash-minimal
-           guile-3.0
-           guile-lib
-           guile-zlib))
-    (propagated-inputs
-     (list guile-smc))
-    (home-page "https://github.com/artyom-poptsov/guile-png")
-    (synopsis "Guile library for PNG format support")
-    (description
-     "@code{guile-png} is a GNU Guile library for working with the
+ (name "guile-png")
+ (version "git")
+ (source (local-file %source-dir
+                     #:recursive? #t
+                     #:select? (git-predicate %source-dir)))
+ (build-system gnu-build-system)
+ (arguments
+  `(#:make-flags '("GUILE_AUTO_COMPILE=0")))     ;to prevent guild warnings
+ (native-inputs
+  (list autoconf automake pkg-config texinfo texlive))
+ (inputs
+  (list bash-minimal
+        guile-3.0
+        guile-lib
+        guile-zlib))
+ (propagated-inputs
+  (list guile-smc))
+ (home-page "https://github.com/artyom-poptsov/guile-png")
+ (synopsis "Guile library for PNG format support")
+ (description
+  "@code{guile-png} is a GNU Guile library for working with the
 @url{https://en.wikipedia.org/wiki/PNG, PNG format}.  This library provides
 API for reading PNG data.")
-    (license gpl3))
+ (license gpl3))
 
 ;;; guix.scm ends here.
