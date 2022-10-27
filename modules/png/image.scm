@@ -1,6 +1,8 @@
 (define-module (png image)
   #:use-module (oop goops)
+  #:use-module (rnrs bytevectors)
   #:use-module (ice-9 binary-ports)     ; put-bytevector
+  #:use-module (zlib)
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
@@ -88,23 +90,30 @@
 
 
 
-(define-method (png-image-data (image <png-image>))
-  "Get the PNG image data as a single vector."
+(define-method (png-image-data (image <png-image>) (uncompress? <boolean>))
+  "Get the PNG image data as a single bytevector.  When UNCOMPRESS? option is
+set to #t, the procedure returns data in uncompressed form."
   (let ((data-chunks (png-image-chunks-query image 'IDAT)))
     (let loop ((chunks data-chunks)
                (result (if (null? data-chunks)
-                           (make-vector 0)
+                           (make-bytevector 0)
                            (png-chunk-data (car data-chunks)))))
       (if (null? chunks)
-          result
+          (if uncompress?
+              (uncompress result)
+              result)
           (let* ((chunk         (car chunks))
                  (chunk-data    (png-chunk-data chunk))
-                 (result-length (vector-length result))
-                 (chunk-length  (vector-length chunk-data))
-                 (new-result    (make-vector (+ result-length chunk-length))))
-            (vector-copy! new-result 0 result)
-            (vector-copy! new-result result-length chunk-data)
+                 (result-length (bytevector-length result))
+                 (chunk-length  (bytevector-length chunk-data))
+                 (new-result    (make-bytevector (+ result-length chunk-length))))
+            (bytevector-copy! result 0 new-result 0 result-length)
+            (bytevector-copy! chunk-data 0 new-result result-length chunk-length)
             (loop (cdr chunks) new-result))))))
+
+(define-method (png-image-data (image <png-image>))
+  "Get the decompressed PNG image data as a single bytevector."
+  (png-image-data image #t))
 
 (define-method (png-image->png (image <png-image>) (port <output-port>))
   (put-bytevector port %png-image-signature)
