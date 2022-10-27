@@ -73,7 +73,7 @@
   (define (read-keyword)
     (let loop ((keyword '())
                (index   0))
-      (if (zero? (vector-ref data index))
+      (if (zero? (bytevector-u8-ref data index))
           (read-compression-method index `((keyword . ,(list->string keyword))))
           (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
                 (+ index 1)))))
