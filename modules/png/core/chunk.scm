@@ -18,6 +18,7 @@
             png-chunk-type/description
             png-chunk-data
             png-chunk-data-set!
+            png-chunk-data-ref
             png-chunk-crc
             png-chunk-crc-calculate
             png-chunk-crc-update!
@@ -31,7 +32,12 @@
             ;; Constants.
             %png-chunk-length-bytes
             %png-chunk-type-bytes
-            %png-chunk-crc-bytes))
+            %png-chunk-crc-bytes
+
+            ;; Internal procedures that does not update
+            ;; the chunk CRC code.
+            %png-chunk-data-set!
+            ))
 
 
 (define %png-chunk-length-bytes 4)
@@ -140,6 +146,20 @@ the list."
   "Compare CHUNK1 with CHUNK2."
   (and (equal? (png-chunk-length chunk1) (png-chunk-length chunk2))
        (equal? (png-chunk-crc chunk1) (png-chunk-crc chunk2))))
+
+
+
+(define-method (png-chunk-data-ref (chunk <png-chunk>) (index <number>))
+  "Get the byte number INDEX from the CHUNK data field."
+  (bytevector-u8-ref (png-chunk-data chunk) index))
+
+
+(define-method (%png-chunk-data-set! (chunk <png-chunk>)
+                                     (index <number>)
+                                     (byte  <number>))
+  "Set INDEX byte of the CHUNK data field to the specified BYTE.  This method
+does not update the CRC code."
+  (bytevector-u8-set! (png-chunk-data chunk) index byte))
 
 
 
