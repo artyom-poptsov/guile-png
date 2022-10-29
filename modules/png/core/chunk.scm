@@ -105,7 +105,7 @@ the list."
   ;; and lowercase ASCII letters (A-Z and a-z, or 65-90 and 97-122 decimal).
   ;; <vector>
   (type
-   #:init-thunk   (lambda () (make-bytevector 0))
+   #:init-thunk   (lambda () (make-bytevector %png-chunk-type-bytes 0))
    #:init-keyword #:type
    #:getter       png-chunk-type
    #:setter       png-chunk-type-set!)
@@ -126,7 +126,7 @@ the list."
   ;;
   ;; <vector>
   (crc
-   #:init-thunk   (lambda () (make-bytevector 0))
+   #:init-thunk   (lambda () (make-bytevector %png-chunk-crc-bytes 0))
    #:init-keyword #:crc
    #:getter       png-chunk-crc
    #:setter       png-chunk-crc-set!)
