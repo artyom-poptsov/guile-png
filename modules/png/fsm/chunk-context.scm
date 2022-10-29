@@ -87,7 +87,6 @@
 ;; Actions.
 
 (define (action:store ctx byte)
-  ;; (format (current-error-port) "byte: ~a~%" byte)
   (let ((buf (fsm-chunk-context-buffer ctx)))
     (bytevector-u8-set! buf (fsm-chunk-context-buffer-index ctx) byte)
     (%buffer-index++! ctx)
@@ -106,10 +105,6 @@
   (let ((chunk (fsm-chunk-context-chunk ctx))
         (data  (fsm-chunk-context-buffer ctx)))
     (png-chunk-type-set! chunk data)
-    ;; (format (current-error-port) "action:store-type: chunk type (raw): ~a~%"
-    ;;         data)
-    ;; (format (current-error-port) "action:store-type: chunk type: ~a~%"
-    ;;         (vector->chunk-type (png-chunk-type chunk)))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
 
@@ -126,7 +121,6 @@
     (action:store ctx byte)
     (let ((chunk (fsm-chunk-context-chunk ctx))
           (data  (fsm-chunk-context-buffer ctx)))
-      ;; (format (current-error-port) "store-data: ~a~%" data)
       (png-chunk-data-set! chunk data)
       (%buffer-reset! ctx %png-chunk-crc-bytes)))
   ctx)
