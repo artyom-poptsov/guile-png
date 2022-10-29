@@ -136,6 +136,11 @@ the list."
 (define (png-chunk? x)
   (is-a? x <png-chunk>))
 
+(define-method (equal? (chunk1 <png-chunk>) (chunk2 <png-chunk>))
+  "Compare CHUNK1 with CHUNK2."
+  (and (equal? (png-chunk-length chunk1) (png-chunk-length chunk2))
+       (equal? (png-chunk-crc chunk1) (png-chunk-crc chunk2))))
+
 
 
 (define-method (%display (chunk <png-chunk>) (port <port>))

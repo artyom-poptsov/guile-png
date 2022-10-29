@@ -76,6 +76,28 @@
     (png-chunk-crc-calculate chunk)))
 
 
+
+(test-equal "equal?: #f"
+  #t
+  (let ((chunk1 (make <png-chunk>
+                  #:type (chunk-type->vector 'IHDR)))
+        (chunk2 (make <png-chunk>
+                  #:type (chunk-type->vector 'IHDR))))
+    (png-chunk-crc-update! chunk1)
+    (png-chunk-crc-update! chunk2)
+    (equal? chunk1 chunk2)))
+
+(test-equal "equal?: #f"
+  #f
+  (let ((chunk1 (make <png-chunk>
+                  #:type (chunk-type->vector 'IHDR)))
+        (chunk2 (make <png-chunk>
+                  #:type (chunk-type->vector 'IEND))))
+    (png-chunk-crc-update! chunk1)
+    (png-chunk-crc-update! chunk2)
+    (equal? chunk1 chunk2)))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
