@@ -31,9 +31,9 @@
          (ash (logand number #x0000FF00) -8)
          (logand number #x000000FF))))
 
-(define-method (bytevector-copy/part bv source-start length)
-  (let ((result (make-bytevector length)))
-    (bytevector-copy! bv source-start result 0 length)
+(define-method (bytevector-copy/part bv source-start len)
+  (let ((result (make-bytevector len)))
+    (bytevector-copy! bv source-start result 0 len)
     result))
 
 (define-method (bytevector-split (bv <bytevector>) (chunk-size <number>))
@@ -41,8 +41,9 @@
 bytevectors."
   (let ((bv-length (bytevector-length bv)))
     (define (calculate-length index)
-      (let ((n (- chunk-size bv-length index)))
-        (if (< n 0)
+      (let ((n (- bv-length index)))
+        (format #t "cs: ~a; n: ~a; ~a~%" chunk-size n (- chunk-size (- bv-length index)))
+        (if (> n chunk-size)
             chunk-size
             n)))
     (let loop ((index  0)
