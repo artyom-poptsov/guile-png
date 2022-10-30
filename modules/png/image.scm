@@ -214,12 +214,27 @@ data."
                                                (and (not (equal? (png-chunk-type chunk)
                                                                  'IDAT))
                                                     (not (equal? (png-chunk-type chunk)
-                                                                 'IEND)))))))
+                                                                 'IEND))))))
+         (iend-chunk (let ((ch (make <png-chunk:IEND>)))
+                       (png-chunk-crc-update! ch)
+                       ch)))
     (make <png-compressed-image>
-      #:chunks (append old-chunks (append segments (list (make <png-chunk:IEND>)))))))
+      #:chunks (append old-chunks (append segments (list iend-chunk))))))
 
 (define-method (png-image->png (image <png-image>) (port <output-port>))
   (let ((compressed-image (png-image-compress image)))
     (png-image->png compressed-image port)))
+
+(define-method (png-image-clone (image <png-image>))
+  "Copy a PNG IMAGE, return a new copy."
+  (let ((chunks (map png-chunk-clone (png-image-chunks image))))
+    (make <png-image>
+      #:chunks chunks
+      #:header (car (png-image-chunks-query chunks 'IHDR))
+      #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
+                  (and (not (null? plte-chunks))
+                       (car plte-chunks)))
+      #:data   (bytevector-copy (png-image-data image)))))
+
 
 ;; image.scm ends here.
