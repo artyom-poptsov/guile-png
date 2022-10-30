@@ -42,7 +42,7 @@
   ;; Image header.
   ;;
   ;; <png-chunk>
-  (image-header
+  (header
    #:init-value   #f
    #:getter       png-image-header))
 
@@ -51,7 +51,7 @@
   (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
     (unless ihdr-chunks
       (error "IHDR chunk is mandatory"))
-    (slot-set! image 'image-header (car ihdr-chunks))))
+    (slot-set! image 'header (car ihdr-chunks))))
 
 (define (png-image? x)
   "Check if X is a PNG image instance."
