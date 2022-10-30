@@ -13,6 +13,7 @@
             png-chunk-length
             png-chunk-length-set!
             png-chunk-type
+            png-chunk-type-info
             png-chunk-type-set!
             png-chunk-type/name
             png-chunk-type/description
@@ -83,11 +84,14 @@ the list."
             (car types)
             (loop (cdr types))))))
 
+(define-method (png-chunk-type-info (type <symbol>))
+  (find (lambda (t)
+          (equal? (car t) type))
+        %chunk-types))
+
 (define-method (chunk-type->vector (type <symbol>))
   "Convert a PNG chunk TYPE to a vector.  Return the vector."
-  (cadr (find (lambda (t)
-                (equal? (car t) type))
-              %chunk-types)))
+  (cadr (png-chunk-type-info type)))
 
   
 (define-class <png-chunk> ()
