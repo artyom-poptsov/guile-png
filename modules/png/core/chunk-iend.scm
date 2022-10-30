@@ -10,6 +10,10 @@
 
 (define-class <png-chunk:IEND> (<png-chunk>))
 
+(define-method (initialize (chunk <png-chunk:IEND>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'IEND))
+
 (define-method (%display (chunk <png-chunk:IEND>) (port <port>))
   (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:IEND ~a ~a>"
