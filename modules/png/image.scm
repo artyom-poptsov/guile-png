@@ -60,6 +60,10 @@
       (error "IHDR chunk is mandatory"))
     (slot-set! image 'header (car ihdr-chunks)))
 
+  (let ((iend-chunks (png-image-chunks-query image 'IEND)))
+    (when (null? iend-chunks)
+      (error "IEND chunk is mandatory")))
+
   (let ((plte-chunks (png-image-chunks-query image 'PLTE)))
     (unless (null? plte-chunks)
       (slot-set! image 'palette (car plte-chunks)))))
