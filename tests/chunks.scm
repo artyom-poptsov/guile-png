@@ -77,7 +77,7 @@
 
 
 
-(test-equal "equal?: #f"
+(test-equal "equal?: #t"
   #t
   (let ((chunk1 (make <png-chunk>
                   #:type (chunk-type->vector 'IHDR)))
