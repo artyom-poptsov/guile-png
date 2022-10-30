@@ -44,12 +44,19 @@
   ;; <png-chunk>
   (header
    #:init-value   #f
-   #:getter       png-image-header))
+   #:getter       png-image-header)
+
+  ;; Image palette.
+  ;;
+  ;; <png-chunk>
+  (palette
+   #:init-value   #f
+   #:getter       png-image-palette))
 
 (define-method (initialize (image <png-image>) initargs)
   (next-method)
   (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
-    (unless ihdr-chunks
+    (when (null? ihdr-chunks)
       (error "IHDR chunk is mandatory"))
     (slot-set! image 'header (car ihdr-chunks))))
 
