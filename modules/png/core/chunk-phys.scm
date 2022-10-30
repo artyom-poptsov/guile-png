@@ -28,6 +28,10 @@
    #:init-keyword #:unit-specifier
    #:getter       png-chunk:pHYs-unit-specifier))
 
+(define-method (initialize (chunk <png-chunk:pHYs>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'pHYs))
+
 
 
 (define-method (%display (chunk <png-chunk:pHYs>) (port <port>))

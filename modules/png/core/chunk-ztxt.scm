@@ -26,6 +26,10 @@
    #:init-keyword #:text
    #:getter       png-chunk:zTXt-text))
 
+(define-method (initialize (chunk <png-chunk:zTXt>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'zTXt))
+
 
 
 (define-method (%display (chunk <png-chunk:zTXt>) (port <port>))

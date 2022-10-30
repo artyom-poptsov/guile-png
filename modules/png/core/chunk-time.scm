@@ -46,6 +46,10 @@
    #:init-keyword #:second
    #:getter       png-chunk:tIME-second))
 
+(define-method (initialize (chunk <png-chunk:tIME>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'tIME))
+
 
 
 (define-method (%display (chunk <png-chunk:tIME>) (port <port>))

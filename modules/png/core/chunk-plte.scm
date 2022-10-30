@@ -27,6 +27,10 @@
    #:init-keyword #:palette-entries
    #:getter       png-chunk:PLTE-palette-entries))
 
+(define-method (initialize (chunk <png-chunk:PLTE>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'PLTE))
+
 
 
 (define-method (%display (chunk <png-chunk:PLTE>) (port <port>))
