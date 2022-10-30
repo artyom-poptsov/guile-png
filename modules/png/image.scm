@@ -218,5 +218,8 @@ data."
     (make <png-compressed-image>
       #:chunks (append old-chunks (append segments (list (make <png-chunk:IEND>)))))))
 
+(define-method (png-image->png (image <png-image>) (port <output-port>))
+  (let ((compressed-image (png-image-compress image)))
+    (png-image->png compressed-image port)))
 
 ;; image.scm ends here.
