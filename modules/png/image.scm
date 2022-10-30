@@ -6,11 +6,12 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
-  #:export (<png-image>
-            png-image?
+  #:export (<png-raw-image>
+            png-raw-image?
+            png-raw-image-chunks
+            png-raw-image-chunks-query
+
             png-image-clone
-            png-image-chunks
-            png-image-chunks-query
             png-image-width
             png-image-height
             png-image-bit-depth
@@ -32,99 +33,97 @@
   #vu8(137 80 78 71 13 10 26 10))
 
 
-(define-class <png-image> ()
+
+;; A PNG image that consists of PNG chunks.
+(define-class <png-raw-image> ()
   ;; <list> of <png-chunk>
   (chunks
    #:init-value   '()
    #:init-keyword #:chunks
-   #:getter       png-image-chunks)
+   #:getter       png-raw-image-chunks)
 
   ;; Image header.
   ;;
   ;; <png-chunk>
   (header
    #:init-value   #f
-   #:getter       png-image-header)
+   #:getter       png-raw-image-header)
 
   ;; Image palette.
   ;;
   ;; <png-chunk>
   (palette
    #:init-value   #f
-   #:getter       png-image-palette))
+   #:getter       png-raw-image-palette))
 
-(define-method (initialize (image <png-image>) initargs)
+(define-method (initialize (image <png-raw-image>) initargs)
   (next-method)
-  (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
+  (let ((ihdr-chunks (png-raw-image-chunks-query image 'IHDR)))
     (when (null? ihdr-chunks)
       (error "IHDR chunk is mandatory"))
     (slot-set! image 'header (car ihdr-chunks)))
 
-  (let ((iend-chunks (png-image-chunks-query image 'IEND)))
-    (when (null? iend-chunks)
-      (error "IEND chunk is mandatory")))
-
-  (let ((plte-chunks (png-image-chunks-query image 'PLTE)))
+  (let ((plte-chunks (png-raw-image-chunks-query image 'PLTE)))
     (unless (null? plte-chunks)
       (slot-set! image 'palette (car plte-chunks)))))
 
-(define (png-image? x)
+(define (png-raw-image? x)
   "Check if X is a PNG image instance."
-  (is-a? x <png-image>))
+  (is-a? x <png-raw-image>))
 
-(define-method (png-image-clone (image <png-image>))
+(define-method (png-image-clone (image <png-raw-image>))
   "Copy a PNG IMAGE, return a new copy."
-  (make <png-image>
-    #:chunks (map png-chunk-clone (png-image-chunks image))))
+  (make <png-raw-image>
+    #:chunks (map png-chunk-clone (png-raw-image-chunks image))))
 
 
 
-(define-method (%display (image <png-image>) (port <port>))
-  (let ((ihdr (png-image-header image)))
-    (format port "#<png-image ~ax~a ~a bit ~a>"
+(define-method (%display (image <png-raw-image>) (port <port>))
+  (let ((ihdr (png-raw-image-header image)))
+    (format port "#<png-raw-image ~ax~a ~a bit ~a>"
             (png-chunk:IHDR-width ihdr)
             (png-chunk:IHDR-height ihdr)
             (png-chunk:IHDR-bit-depth ihdr)
             (object-address/hex-string image))))
 
-(define-method (display (image <png-image>) (port <port>))
+(define-method (display (image <png-raw-image>) (port <port>))
   (%display image port))
 
-(define-method (write (image <png-image>) (port <port>))
+(define-method (write (image <png-raw-image>) (port <port>))
   (%display image port))
 
 
-(define-method (png-image-chunks-query (image <png-image>) (predicate <procedure>))
-  (filter predicate (png-image-chunks image)))
+(define-method (png-raw-image-chunks-query (image <png-raw-image>) (predicate <procedure>))
+  (filter predicate (png-raw-image-chunks image)))
 
-(define-method (png-image-chunks-query (image <png-image>) (chunk <symbol>))
-  (png-image-chunks-query image (lambda (c)
+(define-method (png-raw-image-chunks-query (image <png-raw-image>) (chunk <symbol>))
+  (png-raw-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
 
-(define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
-  (png-image-chunks-query image (lambda (c)
+(define-method (png-raw-image-chunks-query (image <png-raw-image>) (chunk <vector>))
+  (png-raw-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
 
 
 
-(define-method (png-image-width (image <png-image>))
-  (png-chunk:IHDR-width (png-image-header image)))
+(define-method (png-image-width (image <png-raw-image>))
+  (png-chunk:IHDR-width (png-raw-image-header image)))
 
-(define-method (png-image-height (image <png-image>))
-  (png-chunk:IHDR-height (png-image-header image)))
+(define-method (png-image-height (image <png-raw-image>))
+  (png-chunk:IHDR-height (png-raw-image-header image)))
 
-(define-method (png-image-bit-depth (image <png-image>))
-  (png-chunk:IHDR-bit-depth (png-image-header image)))
+(define-method (png-image-bit-depth (image <png-raw-image>))
+  (png-chunk:IHDR-bit-depth (png-raw-image-header image)))
 
-(define-method (png-image-color-type (image <png-image>))
-  (png-chunk:IHDR-color-type (png-image-header image)))
+(define-method (png-image-color-type (image <png-raw-image>))
+  (png-chunk:IHDR-color-type (png-raw-image-header image)))
 
 
 
-(define-method (png-image-data (image <png-image>) (uncompress? <boolean>))
+(define-method (png-image-data (image <png-raw-image>) (uncompress? <boolean>))
   "Get the PNG image data as a single bytevector.  When UNCOMPRESS? option is
 set to #t, the procedure returns data in uncompressed form."
-  (let ((data-chunks (png-image-chunks-query image 'IDAT)))
+  (let ((data-chunks (png-raw-image-chunks-query image 'IDAT)))
     (let loop ((chunks data-chunks)
                (result (if (null? data-chunks)
                            (make-bytevector 0)
@@ -142,14 +141,14 @@ set to #t, the procedure returns data in uncompressed form."
             (bytevector-copy! chunk-data 0 new-result result-length chunk-length)
             (loop (cdr chunks) new-result))))))
 
-(define-method (png-image-data (image <png-image>))
+(define-method (png-image-data (image <png-raw-image>))
   "Get the decompressed PNG image data as a single bytevector."
   (png-image-data image #t))
 
-(define-method (png-image->png (image <png-image>) (port <output-port>))
+(define-method (png-image->png (image <png-raw-image>) (port <output-port>))
   (put-bytevector port %png-image-signature)
   (for-each (lambda (chunk)
               (png-chunk->png chunk port))
-            (png-image-chunks image)))
+            (png-raw-image-chunks image)))
 
 ;; image.scm ends here.
