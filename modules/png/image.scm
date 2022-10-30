@@ -6,6 +6,7 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
+  #:use-module (png core chunk-iend)
   #:use-module (png chunk-converter)
   #:export (<png-compressed-image>
             png-compressed-image?
@@ -21,6 +22,7 @@
             png-image-color-type
             png-image-data
             png-image->png
+            png-image-compress
 
             %png-image-signature))
 
@@ -165,7 +167,12 @@ set to #t, the procedure returns data in uncompressed form."
    #:init-thunk   (lambda () (make-bytevector 0))
    #:init-keyword #:data
    #:setter       png-image-data-set!
-   #:getter       png-image-data))
+   #:getter       png-image-data)
+
+  (data-chunk-size
+   #:init-value   256
+   #:init-keyword #:data-chunk-size
+   #:getter       png-image-data-chunk-size))
 
 (define (png-image? x)
   "Check if X is a PNG image instance."
@@ -183,6 +190,33 @@ data."
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
-      #:data (png-image-data image))))
+      #:data (png-image-data image)
+      #:data-chunk-size (let ((idat (car (png-image-chunks-query image 'IDAT))))
+                          (png-chunk-length idat)))))
+
+(define* (png-image-compress image
+                             #:key
+                             (data-chunk-size #f))
+  (let* ((data            (png-image-data image))
+         (compressed-data (compress data))
+         (chunk-size      (or data-chunk-size
+                              (png-image-data-chunk-size image)))
+         (segments        (map (lambda (data)
+                                 (let ((chunk (make <png-chunk>
+                                                #:length (bytevector-length data)
+                                                #:type   'IDAT
+                                                #:data   data)))
+                                   (png-chunk-crc-update! chunk)
+                                   chunk))
+                               (bytevector-split data chunk-size)))
+         (old-chunks (png-image-chunks-query image
+                                             (lambda (chunk)
+                                               (and (not (equal? (png-chunk-type chunk)
+                                                                 'IDAT))
+                                                    (not (equal? (png-chunk-type chunk)
+                                                                 'IEND)))))))
+    (make <png-compressed-image>
+      #:chunks (append old-chunks (append segments (list (make <png-chunk:IEND>)))))))
+
 
 ;; image.scm ends here.
