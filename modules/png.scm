@@ -50,9 +50,6 @@
                      #:chunks (reverse (png-context-chunks context)))))
         (if raw?
             image
-            (make <png-compressed-image>
-              #:chunks (map (lambda (chunk)
-                              (png-chunk->typed-chunk image chunk))
-                            (png-image-chunks image))))))))
+            (png-compressed-image-decompress image))))))
 
 ;;; png.scm ends here.

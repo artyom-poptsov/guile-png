@@ -6,9 +6,12 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
+  #:use-module (png chunk-converter)
   #:export (<png-compressed-image>
             png-compressed-image?
+            png-compressed-image-decompress
 
+            <png-image>
             png-image-chunks
             png-image-chunks-query
             png-image-clone
@@ -93,6 +96,9 @@
   (%display image port))
 
 
+(define-method (png-image-chunks-query (chunks <list>) (chunk <symbol>))
+  (filter (lambda (c) (equal? (png-chunk-type c) chunk)) chunks))
+
 (define-method (png-image-chunks-query (image <png-compressed-image>) (predicate <procedure>))
   (filter predicate (png-image-chunks image)))
 
@@ -150,5 +156,33 @@ set to #t, the procedure returns data in uncompressed form."
   (for-each (lambda (chunk)
               (png-chunk->png chunk port))
             (png-compressed-image-chunks image)))
+
+
+
+(define-class <png-image> (<png-compressed-image>)
+  ;; IDAT: Image data.
+  (data
+   #:init-thunk   (lambda () (make-bytevector 0))
+   #:init-keyword #:data
+   #:setter       png-image-data-set!
+   #:getter       png-image-data))
+
+(define (png-image? x)
+  "Check if X is a PNG image instance."
+  (is-a? x <png-image>))
+
+(define-method (png-compressed-image-decompress (image <png-compressed-image>))
+  "Decompress an IMAGE, return a new <png-image> instance with uncompressed
+data."
+  (let ((chunks (map (lambda (chunk)
+                       (png-chunk->typed-chunk image chunk))
+                     (map png-chunk-clone (png-image-chunks image)))))
+    (make <png-image>
+      #:chunks chunks
+      #:header (png-image-chunks-query chunks 'IHDR)
+      #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
+                  (and (not (null? plte-chunks))
+                       (car plte-chunks)))
+      #:data (png-image-data image))))
 
 ;; image.scm ends here.

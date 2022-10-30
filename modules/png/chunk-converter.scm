@@ -54,7 +54,7 @@
 
 
 
-(define-method (png-chunk->typed-chunk (image <png-compressed-image>)
+(define-method (png-chunk->typed-chunk image
                                        (chunk <png-chunk>))
   (let ((type (png-chunk-type chunk)))
     (if type
