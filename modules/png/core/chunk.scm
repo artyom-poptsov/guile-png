@@ -22,6 +22,7 @@
             png-chunk-crc-calculate
             png-chunk-crc-update!
             png-chunk->png
+            png-chunk-valid?
 
             ;; Chunk type/vector converters.
             vector->chunk-type
@@ -186,6 +187,10 @@ string."
 (define-method (png-chunk-crc-update! (chunk <png-chunk>))
   "Update a PNG CHUNK so the CRC will match the chunk content."
   (%png-chunk-crc-set! chunk (png-chunk-crc-calculate chunk)))
+
+(define-method (png-chunk-valid? (chunk <png-chunk>))
+  "Check if CRC of a CHUNK is valid."
+  (equal? (png-chunk-crc-calculate chunk) (png-chunk-crc chunk)))
 
 
 
