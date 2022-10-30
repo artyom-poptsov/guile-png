@@ -58,7 +58,11 @@
   (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
     (when (null? ihdr-chunks)
       (error "IHDR chunk is mandatory"))
-    (slot-set! image 'header (car ihdr-chunks))))
+    (slot-set! image 'header (car ihdr-chunks)))
+
+  (let ((plte-chunks (png-image-chunks-query image 'PLTE)))
+    (unless (null? plte-chunks)
+      (slot-set! image 'palette (car plte-chunks)))))
 
 (define (png-image? x)
   "Check if X is a PNG image instance."
