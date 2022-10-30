@@ -121,6 +121,10 @@
    #:getter       png-chunk:IHDR-interlace-method
    #:setter       png-chunk:IHDR-interlace-method-set!))
 
+(define-method (initialize (chunk <png-chunk:IHDR>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'IHDR))
+
 
 
 (define-method (%display (chunk <png-chunk:IHDR>) (port <port>))
