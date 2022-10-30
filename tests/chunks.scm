@@ -1,6 +1,7 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
              (oop goops)
+             (png core common)
              (png core chunk)
              (png core chunk-ihdr))
 
@@ -47,7 +48,7 @@
    (data->png-chunk:IHDR %ihdr-data
                          #vu8(73 72 68 82)
                          13
-                         #vu8(119 50 219 167))))
+                         (vector->int32 #vu8(119 50 219 167)))))
 
 (test-equal "data->png-chunk:IHDR: height"
   2480
@@ -55,7 +56,7 @@
    (data->png-chunk:IHDR %ihdr-data
                          #vu8(73 72 68 82)
                          13
-                         #vu8(119 50 219 167))))
+                         (vector->int32 #vu8(119 50 219 167)))))
 
 (test-equal "data->png-chunk:IHDR: bit-depth"
   8
@@ -63,7 +64,7 @@
    (data->png-chunk:IHDR %ihdr-data
                          #vu8(73 72 68 82)
                          13
-                         #vu8(119 50 219 167))))
+                         (vector->int32 #vu8(119 50 219 167)))))
 
 
 ;; CRC
@@ -72,7 +73,7 @@
   (let ((chunk (data->png-chunk:IHDR %ihdr-data
                                      #vu8(73 72 68 82)
                                      13
-                                     #vu8(119 50 219 167))))
+                                     (vector->int32 #vu8(119 50 219 167)))))
     (png-chunk-crc-calculate chunk)))
 
 

@@ -71,7 +71,7 @@
 (define-method (data->png-chunk:tIME (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (make <png-chunk:tIME>
     #:length length
     #:type   type

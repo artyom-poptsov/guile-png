@@ -79,7 +79,7 @@
 (define-method (data->png-chunk:PLTE  (data   <bytevector>)
                                       (type   <bytevector>)
                                       (length <number>)
-                                      (crc    <bytevector>))
+                                      (crc    <number>))
   (unless (zero? (remainder (bytevector-length data) 3))
     (error "Invalid PLTE chunk: data length not divisible by 3" data))
   (make <png-chunk:PLTE>

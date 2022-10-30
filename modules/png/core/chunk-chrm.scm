@@ -101,7 +101,7 @@
 (define-method (data->png-chunk:cHRM (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (make <png-chunk:cHRM>
     #:length             length
     #:type               type

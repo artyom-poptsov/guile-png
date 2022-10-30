@@ -50,7 +50,7 @@
 (define-method (data->png-chunk:pHYs (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (make <png-chunk:pHYs>
     #:length length
     #:type   type

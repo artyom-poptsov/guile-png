@@ -101,8 +101,8 @@
 (define-method (data->png-chunk:bKGD (data        <bytevector>)
                                      (type        <bytevector>)
                                      (length      <number>)
-                                     (crc         <bytevector>)
-                                     (color-type <number>))
+                                     (crc         <number>)
+                                     (color-type  <number>))
   "Convert a PNG chunk data to a bKGD chunk instance."
   (case color-type
     ((0 4)

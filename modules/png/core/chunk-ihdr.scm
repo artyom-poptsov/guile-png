@@ -162,7 +162,7 @@
 (define-method (data->png-chunk:IHDR (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (make <png-chunk:IHDR>
     #:length             length
     #:type               type

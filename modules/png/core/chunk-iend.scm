@@ -27,7 +27,7 @@
 (define-method (data->png-chunk:IEND (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (make <png-chunk:IEND>
     #:length             length
     #:type               type))

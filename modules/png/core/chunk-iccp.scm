@@ -46,7 +46,7 @@
 (define-method (data->png-chunk:iCCP (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (define (read-profile index output)
     (let loop ((profile '())
                (idx  index))

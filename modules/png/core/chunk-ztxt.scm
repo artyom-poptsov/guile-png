@@ -46,7 +46,7 @@
 (define-method (data->png-chunk:zTXt (data   <bytevector>)
                                      (type   <bytevector>)
                                      (length <number>)
-                                     (crc    <bytevector>))
+                                     (crc    <number>))
   (define (read-text index output)
     (let loop ((text '())
                (idx  index))
