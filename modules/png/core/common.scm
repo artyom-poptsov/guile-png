@@ -5,7 +5,8 @@
             vector->int32
             vector->int16
             int32->bytevector
-            bytevector-copy/part))
+            bytevector-copy/part
+            bytevector-split))
 
 
 (define (object-address/hex-string object)
@@ -34,3 +35,22 @@
   (let ((result (make-bytevector length)))
     (bytevector-copy! bv source-start result 0 length)
     result))
+
+(define-method (bytevector-split (bv <bytevector>) (chunk-size <number>))
+  "Split a bytevector BV into parts of CHUNK-SIZE.  Return a list of
+bytevectors."
+  (let ((bv-length (bytevector-length bv)))
+    (define (calculate-length index)
+      (let ((n (- chunk-size bv-length index)))
+        (if (< n 0)
+            chunk-size
+            n)))
+    (let loop ((index  0)
+               (result '()))
+      (if (< index bv-length)
+          (loop (+ index chunk-size)
+                (cons (bytevector-copy/part bv
+                                            index
+                                            (calculate-length index))
+                      result))
+          (reverse result)))))
