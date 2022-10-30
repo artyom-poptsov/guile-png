@@ -25,10 +25,15 @@
 
 
 (define-class <chunk-context> ()
+  ;; Port to read the chunk data from.
+  ;;
+  ;; <port>
   (port
    #:init-keyword #:port
    #:getter       fsm-chunk-context-port)
 
+  ;; Buffer to store the temporary data.
+  ;;
   ;; <bytevector>
   (buffer
    #:init-thunk   (lambda () (make-bytevector %png-chunk-length-bytes 0))
