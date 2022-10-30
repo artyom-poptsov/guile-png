@@ -8,6 +8,7 @@
   #:use-module (png core chunk-ihdr)
   #:export (<png-image>
             png-image?
+            png-image-clone
             png-image-chunks
             png-image-chunks-query
             png-image-width
@@ -41,6 +42,11 @@
 (define (png-image? x)
   "Check if X is a PNG image instance."
   (is-a? x <png-image>))
+
+(define-method (png-image-clone (image <png-image>))
+  "Copy a PNG IMAGE, return a new copy."
+  (make <png-image>
+    #:chunks (map png-chunk-clone (png-image-chunks image))))
 
 
 
