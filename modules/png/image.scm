@@ -37,7 +37,21 @@
   (chunks
    #:init-value   '()
    #:init-keyword #:chunks
-   #:getter       png-image-chunks))
+   #:getter       png-image-chunks)
+
+  ;; Image header.
+  ;;
+  ;; <png-chunk>
+  (image-header
+   #:init-value   #f
+   #:getter       png-image-header))
+
+(define-method (initialize (image <png-image>) initargs)
+  (next-method)
+  (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
+    (unless ihdr-chunks
+      (error "IHDR chunk is mandatory"))
+    (slot-set! image 'image-header (car ihdr-chunks))))
 
 (define (png-image? x)
   "Check if X is a PNG image instance."
@@ -51,7 +65,7 @@
 
 
 (define-method (%display (image <png-image>) (port <port>))
-  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
+  (let ((ihdr (png-image-header image)))
     (format port "#<png-image ~ax~a ~a bit ~a>"
             (png-chunk:IHDR-width ihdr)
             (png-chunk:IHDR-height ihdr)
@@ -79,20 +93,16 @@
 
 
 (define-method (png-image-width (image <png-image>))
-  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
-    (png-chunk:IHDR-width ihdr)))
+  (png-chunk:IHDR-width (png-image-header image)))
 
 (define-method (png-image-height (image <png-image>))
-  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
-    (png-chunk:IHDR-height ihdr)))
+  (png-chunk:IHDR-height (png-image-header image)))
 
 (define-method (png-image-bit-depth (image <png-image>))
-  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
-    (png-chunk:IHDR-bit-depth ihdr)))
+  (png-chunk:IHDR-bit-depth (png-image-header image)))
 
 (define-method (png-image-color-type (image <png-image>))
-  (let ((ihdr (car (png-image-chunks-query image 'IHDR))))
-    (png-chunk:IHDR-color-type ihdr)))
+  (png-chunk:IHDR-color-type (png-image-header image)))
 
 
 
