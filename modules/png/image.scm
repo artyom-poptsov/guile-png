@@ -157,7 +157,7 @@ set to #t, the procedure returns data in uncompressed form."
   (put-bytevector port %png-image-signature)
   (for-each (lambda (chunk)
               (png-chunk->png chunk port))
-            (png-compressed-image-chunks image)))
+            (png-image-chunks image)))
 
 
 
