@@ -12,21 +12,21 @@
 
 (test-begin %test-name)
 
-(test-assert "png-raw-image?"
+(test-assert "png-compressed-image?"
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend))))
-    (png-raw-image? image)))
+    (png-compressed-image? image)))
 
-(test-assert "png-raw-image-chunks-query: IHDR"
+(test-assert "png-compressed-image-chunks-query: IHDR"
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend)))
-         (chunks (png-raw-image-chunks-query image 'IHDR)))
+         (chunks (png-compressed-image-chunks-query image 'IHDR)))
     (and (= (length chunks) 1)
          (car chunks))))
 
@@ -37,7 +37,7 @@
                   #:height    100
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend))))
     (png-image-width image)))
 
@@ -48,7 +48,7 @@
                   #:height    100
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend))))
     (png-image-height image)))
 
@@ -60,7 +60,7 @@
                   #:bit-depth 8
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend))))
     (png-image-bit-depth image)))
 
@@ -73,7 +73,7 @@
                   #:color-type 0
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
-         (image (make <png-raw-image>
+         (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend))))
     (png-image-color-type image)))
 
