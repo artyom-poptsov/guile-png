@@ -13,7 +13,7 @@
 
 (test-equal "png-chunk?: #t"
   #t
-  (png-chunk? (make <png-chunk> #:type #vu8(73 72 68 82))))
+  (png-chunk? (make <png-chunk> #:type 'IHDR)))
 
 (test-equal "png-chunk?: #f"
   #f
@@ -27,15 +27,10 @@
   #vu8(73 72 68 82)
   (chunk-type->vector 'IHDR))
 
-(test-equal "png-chunk-type/name"
-  'IHDR
-  (png-chunk-type/name (make <png-chunk>
-                         #:type #vu8(73 72 68 82))))
-
 (test-equal "png-chunk-type/description"
   "Image header"
   (png-chunk-type/description (make <png-chunk>
-                                #:type #vu8(73 72 68 82))))
+                                #:type 'IHDR)))
 
 
 ;; IHDR
@@ -46,7 +41,7 @@
   3508
   (png-chunk:IHDR-width
    (data->png-chunk:IHDR %ihdr-data
-                         #vu8(73 72 68 82)
+                         'IHDR
                          13
                          (vector->int32 #vu8(119 50 219 167)))))
 
@@ -54,7 +49,7 @@
   2480
   (png-chunk:IHDR-height
    (data->png-chunk:IHDR %ihdr-data
-                         #vu8(73 72 68 82)
+                         'IHDR
                          13
                          (vector->int32 #vu8(119 50 219 167)))))
 
@@ -62,7 +57,7 @@
   8
   (png-chunk:IHDR-bit-depth
    (data->png-chunk:IHDR %ihdr-data
-                         #vu8(73 72 68 82)
+                         'IHDR
                          13
                          (vector->int32 #vu8(119 50 219 167)))))
 
@@ -71,7 +66,7 @@
 
 (test-assert "png-chunk-crc-calculate"
   (let ((chunk (data->png-chunk:IHDR %ihdr-data
-                                     #vu8(73 72 68 82)
+                                     'IHDR
                                      13
                                      (vector->int32 #vu8(119 50 219 167)))))
     (png-chunk-crc-calculate chunk)))
@@ -81,9 +76,9 @@
 (test-equal "equal?: #t"
   #t
   (let ((chunk1 (make <png-chunk>
-                  #:type (chunk-type->vector 'IHDR)))
+                  #:type 'IHDR))
         (chunk2 (make <png-chunk>
-                  #:type (chunk-type->vector 'IHDR))))
+                  #:type 'IHDR)))
     (png-chunk-crc-update! chunk1)
     (png-chunk-crc-update! chunk2)
     (equal? chunk1 chunk2)))
@@ -91,9 +86,9 @@
 (test-equal "equal?: #f"
   #f
   (let ((chunk1 (make <png-chunk>
-                  #:type (chunk-type->vector 'IHDR)))
+                  #:type 'IHDR))
         (chunk2 (make <png-chunk>
-                  #:type (chunk-type->vector 'IEND))))
+                  #:type 'IEND)))
     (png-chunk-crc-update! chunk1)
     (png-chunk-crc-update! chunk2)
     (equal? chunk1 chunk2)))

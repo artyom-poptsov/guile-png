@@ -29,7 +29,7 @@
 
 
 (define-method (%display (chunk <png-chunk:zTXt>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type chunk)))
     (format port "#<png-chunk:zTXt ~a: ~a ~a>"
             (list-ref type 2)
             (png-chunk:zTXt-keyword chunk)
@@ -44,7 +44,7 @@
 
 
 (define-method (data->png-chunk:zTXt (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (define (read-text index output)

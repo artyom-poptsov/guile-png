@@ -64,7 +64,7 @@
 
 (define-method (png-image-chunks-query (image <png-image>) (chunk <symbol>))
   (png-image-chunks-query image (lambda (c)
-                                  (equal? (png-chunk-type/name c) chunk))))
+                                  (equal? (png-chunk-type c) chunk))))
 
 (define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
   (png-image-chunks-query image (lambda (c)

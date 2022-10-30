@@ -77,7 +77,7 @@
   (= (fsm-chunk-context-buffer-index ctx) 3))
 
 (define (guard:iend-chunk? ctx event)
-  (equal? (png-chunk-type/name (fsm-chunk-context-chunk ctx))
+  (equal? (png-chunk-type (fsm-chunk-context-chunk ctx))
           'IEND))
 
 (define (guard:data-read? ctx event)
@@ -109,7 +109,7 @@
   (action:store ctx byte)
   (let ((chunk (fsm-chunk-context-chunk ctx))
         (data  (fsm-chunk-context-buffer ctx)))
-    (png-chunk-type-set! chunk data)
+    (png-chunk-type-set! chunk (car (vector->chunk-type data)))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
 

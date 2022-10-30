@@ -124,7 +124,7 @@
 
 
 (define-method (%display (chunk <png-chunk:IHDR>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:IHDR ~a ~a>"
             (list-ref type 2)
             (object-address/hex-string chunk))))
@@ -160,7 +160,7 @@
 
 
 (define-method (data->png-chunk:IHDR (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (make <png-chunk:IHDR>

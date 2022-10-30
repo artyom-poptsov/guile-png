@@ -15,7 +15,6 @@
             png-chunk-type
             png-chunk-type-info
             png-chunk-type-set!
-            png-chunk-type/name
             png-chunk-type/description
             png-chunk-data
             png-chunk-data-set!
@@ -107,12 +106,13 @@ the list."
    #:getter       png-chunk-length
    #:setter       png-chunk-length-set!)
 
-  ;; A 4-byte chunk type code.  For convenience in description and in
-  ;; examining PNG files, type codes are restricted to consist of uppercase
-  ;; and lowercase ASCII letters (A-Z and a-z, or 65-90 and 97-122 decimal).
-  ;; <vector>
+  ;; A chunk type code.  For convenience in description and in examining PNG
+  ;; files, type codes are restricted to consist of uppercase and lowercase
+  ;; ASCII letters (A-Z and a-z, or 65-90 and 97-122 decimal).
+  ;;
+  ;; <symbol> | #f
   (type
-   #:init-thunk   (lambda () (make-bytevector %png-chunk-type-bytes 0))
+   #:init-value   #f
    #:init-keyword #:type
    #:getter       png-chunk-type
    #:setter       png-chunk-type-set!)
@@ -148,13 +148,17 @@ the list."
   (and (equal? (png-chunk-length chunk1) (png-chunk-length chunk2))
        (equal? (png-chunk-crc chunk1) (png-chunk-crc chunk2))))
 
+(define-method (png-chunk-type-info (chunk <png-chunk>))
+  (png-chunk-type-info (png-chunk-type chunk)))
+
 
 
 (define-method (%display (chunk <png-chunk>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let* ((type      (png-chunk-type chunk))
+         (type-info (png-chunk-type-info type)))
     (format port "#<png-chunk:~a ~a ~a>"
-            (list-ref type 0)
-            (list-ref type 2)
+            type
+            (list-ref type-info 2)
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk>) (port <port>))
@@ -165,27 +169,19 @@ the list."
 
 
 
-(define-method (png-chunk-type/name (chunk <png-chunk>))
-  "Get the name of the PNG CHUNK type.  Return the type name as a string."
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (and type
-         (list-ref type 0))))
-
 (define-method (png-chunk-type/description (chunk <png-chunk>))
   "Get the description of the PNG CHUNK type.  Return the description as a
 string."
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
-    (and type
-         (list-ref type 2))))
+  (list-ref (png-chunk-type-info (png-chunk-type chunk)) 2))
 
 (define-method (png-chunk-crc-calculate (chunk <png-chunk>))
-  (let* ((type        (png-chunk-type chunk))
-         (type-length (bytevector-length type))
+  (let* ((type        (chunk-type->vector (png-chunk-type chunk)))
          (data        (png-chunk-data chunk))
          (data-length (bytevector-length data))
-         (bv   (make-bytevector (+ type-length data-length) 0)))
-    (bytevector-copy! type 0 bv 0 type-length)
-    (bytevector-copy! data 0 bv type-length data-length)
+         (bv          (make-bytevector (+ %png-chunk-type-bytes data-length)
+                                       0)))
+    (bytevector-copy! type 0 bv 0 %png-chunk-type-bytes)
+    (bytevector-copy! data 0 bv %png-chunk-type-bytes data-length)
     (crc bv)))
 
 (define-method (png-chunk-crc-update! (chunk <png-chunk>))
@@ -201,7 +197,7 @@ string."
 (define-method (png-chunk->png (chunk <png-chunk>) (port <output-port>))
   "Print a PNG CHUNK to a binary PORT."
   (put-bytevector port (int32->bytevector (png-chunk-length chunk)))
-  (put-bytevector port (png-chunk-type chunk))
+  (put-bytevector port (chunk-type->vector (png-chunk-type chunk)))
   (put-bytevector port (png-chunk-data chunk))
   (put-bytevector port (int32->bytevector (png-chunk-crc chunk))))
 

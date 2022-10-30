@@ -49,7 +49,7 @@
 
 
 (define-method (%display (chunk <png-chunk:tIME>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type chunk)))
     (format port "#<png-chunk:tIME ~a: ~d-~2,'0d-~2,'0dT~2,'0d:~2,'0d:~2,'0d ~a>"
             (list-ref type 2)
             (png-chunk:tIME-year chunk)
@@ -69,7 +69,7 @@
 
 
 (define-method (data->png-chunk:tIME (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (make <png-chunk:tIME>

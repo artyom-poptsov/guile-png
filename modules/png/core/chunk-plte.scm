@@ -30,7 +30,7 @@
 
 
 (define-method (%display (chunk <png-chunk:PLTE>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type chunk)))
     (format port "#<png-chunk:PLTE ~a (~a entr~:@p) ~a>"
             (list-ref type 2)
             (png-chunk:PLTE-palette-entries-count chunk)
@@ -77,7 +77,7 @@
           (list->vector (reverse result))))))
 
 (define-method (data->png-chunk:PLTE  (data   <bytevector>)
-                                      (type   <bytevector>)
+                                      (type   <symbol>)
                                       (length <number>)
                                       (crc    <number>))
   (unless (zero? (remainder (bytevector-length data) 3))

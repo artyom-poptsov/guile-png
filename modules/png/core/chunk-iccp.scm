@@ -29,7 +29,7 @@
 
 
 (define-method (%display (chunk <png-chunk:iCCP>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk))))
     (format port "#<png-chunk:iCCP ~a: ~a ~a>"
             (list-ref type 2)
             (png-chunk:iCCP-profile-name chunk)
@@ -44,7 +44,7 @@
 
 
 (define-method (data->png-chunk:iCCP (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (define (read-profile index output)

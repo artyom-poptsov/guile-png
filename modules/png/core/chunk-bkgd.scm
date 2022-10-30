@@ -85,7 +85,7 @@
 
 
 (define-method (%display (chunk <png-chunk:bKGD>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:bKGD color type: ~a ~a>"
             (png-chunk:bKGD-color-type chunk)
             (object-address/hex-string chunk))))
@@ -99,7 +99,7 @@
 
 
 (define-method (data->png-chunk:bKGD (data        <bytevector>)
-                                     (type        <bytevector>)
+                                     (type        <symbol>)
                                      (length      <number>)
                                      (crc         <number>)
                                      (color-type  <number>))

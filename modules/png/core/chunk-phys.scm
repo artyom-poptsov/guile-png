@@ -31,7 +31,7 @@
 
 
 (define-method (%display (chunk <png-chunk:pHYs>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:pHYs ~a: ~ax~a (unit: ~a) ~a>"
             (list-ref type 2)
             (png-chunk:pHYs-pixels-per-unit-x-axis chunk)

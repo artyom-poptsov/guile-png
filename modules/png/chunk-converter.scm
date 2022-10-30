@@ -56,7 +56,7 @@
 
 (define-method (png-chunk->typed-chunk (image <png-image>)
                                        (chunk <png-chunk>))
-  (let ((type (png-chunk-type/name chunk)))
+  (let ((type (png-chunk-type chunk)))
     (if type
         (let ((converter (assoc-ref %converters-to-typed type)))
           (if converter

@@ -11,7 +11,7 @@
 (define-class <png-chunk:IEND> (<png-chunk>))
 
 (define-method (%display (chunk <png-chunk:IEND>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:IEND ~a ~a>"
             (list-ref type 2)
             (object-address/hex-string chunk))))
@@ -25,7 +25,7 @@
 
 
 (define-method (data->png-chunk:IEND (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (make <png-chunk:IEND>

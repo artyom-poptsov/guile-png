@@ -116,7 +116,7 @@
 
 (define (guard:iend-chunk? ctx chunk-context)
   (let ((chunk (png-context-current-chunk ctx)))
-    (equal? (png-chunk-type/name chunk) 'IEND)))
+    (equal? (png-chunk-type chunk) 'IEND)))
 
 
 

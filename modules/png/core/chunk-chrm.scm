@@ -61,7 +61,7 @@
    #:getter       png-chunk:cHRM-blue-y))
 
 (define-method (%display (chunk <png-chunk:cHRM>) (port <port>))
-  (let ((type (vector->chunk-type (png-chunk-type chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:cHRM ~a ~a>"
             (list-ref type 2)
             (object-address/hex-string chunk))))
@@ -99,7 +99,7 @@
   (vector->int32 (bytevector-copy vec 28 4)))
 
 (define-method (data->png-chunk:cHRM (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (make <png-chunk:cHRM>

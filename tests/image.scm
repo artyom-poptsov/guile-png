@@ -14,7 +14,7 @@
 
 (test-assert "png-image?"
   (let* ((ihdr  (make <png-chunk:IHDR>
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend))))
@@ -22,7 +22,7 @@
 
 (test-assert "png-image-chunks-query: IHDR"
   (let* ((ihdr  (make <png-chunk:IHDR>
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend)))
@@ -35,7 +35,7 @@
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:width     200
                   #:height    100
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend))))
@@ -46,7 +46,7 @@
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:width     200
                   #:height    100
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend))))
@@ -58,7 +58,7 @@
                   #:width     200
                   #:height    100
                   #:bit-depth 8
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend))))
@@ -71,7 +71,7 @@
                   #:height     100
                   #:bit-depth  8
                   #:color-type 0
-                  #:type      (chunk-type->vector 'IHDR)))
+                  #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
                   #:chunks    (list ihdr iend))))
