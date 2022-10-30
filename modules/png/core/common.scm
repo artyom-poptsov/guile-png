@@ -42,7 +42,6 @@ bytevectors."
   (let ((bv-length (bytevector-length bv)))
     (define (calculate-length index)
       (let ((n (- bv-length index)))
-        (format #t "cs: ~a; n: ~a; ~a~%" chunk-size n (- chunk-size (- bv-length index)))
         (if (> n chunk-size)
             chunk-size
             n)))
