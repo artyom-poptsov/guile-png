@@ -53,6 +53,6 @@
             (make <png-compressed-image>
               #:chunks (map (lambda (chunk)
                               (png-chunk->typed-chunk image chunk))
-                            (png-compressed-image-chunks image))))))))
+                            (png-image-chunks image))))))))
 
 ;;; png.scm ends here.

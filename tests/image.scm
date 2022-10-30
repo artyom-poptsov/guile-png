@@ -26,7 +26,7 @@
          (iend  (make <png-chunk:IEND>))
          (image (make <png-compressed-image>
                   #:chunks    (list ihdr iend)))
-         (chunks (png-compressed-image-chunks-query image 'IHDR)))
+         (chunks (png-image-chunks-query image 'IHDR)))
     (and (= (length chunks) 1)
          (car chunks))))
 

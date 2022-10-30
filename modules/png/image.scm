@@ -8,9 +8,9 @@
   #:use-module (png core chunk-ihdr)
   #:export (<png-compressed-image>
             png-compressed-image?
-            png-compressed-image-chunks
-            png-compressed-image-chunks-query
 
+            png-image-chunks
+            png-image-chunks-query
             png-image-clone
             png-image-width
             png-image-height
@@ -40,30 +40,30 @@
   (chunks
    #:init-value   '()
    #:init-keyword #:chunks
-   #:getter       png-compressed-image-chunks)
+   #:getter       png-image-chunks)
 
   ;; Image header.
   ;;
   ;; <png-chunk>
   (header
    #:init-value   #f
-   #:getter       png-compressed-image-header)
+   #:getter       png-image-header)
 
   ;; Image palette.
   ;;
   ;; <png-chunk>
   (palette
    #:init-value   #f
-   #:getter       png-compressed-image-palette))
+   #:getter       png-image-palette))
 
 (define-method (initialize (image <png-compressed-image>) initargs)
   (next-method)
-  (let ((ihdr-chunks (png-compressed-image-chunks-query image 'IHDR)))
+  (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
     (when (null? ihdr-chunks)
       (error "IHDR chunk is mandatory"))
     (slot-set! image 'header (car ihdr-chunks)))
 
-  (let ((plte-chunks (png-compressed-image-chunks-query image 'PLTE)))
+  (let ((plte-chunks (png-image-chunks-query image 'PLTE)))
     (unless (null? plte-chunks)
       (slot-set! image 'palette (car plte-chunks)))))
 
@@ -74,12 +74,12 @@
 (define-method (png-image-clone (image <png-compressed-image>))
   "Copy a PNG IMAGE, return a new copy."
   (make <png-compressed-image>
-    #:chunks (map png-chunk-clone (png-compressed-image-chunks image))))
+    #:chunks (map png-chunk-clone (png-image-chunks image))))
 
 
 
 (define-method (%display (image <png-compressed-image>) (port <port>))
-  (let ((ihdr (png-compressed-image-header image)))
+  (let ((ihdr (png-image-header image)))
     (format port "#<png-compressed-image ~ax~a ~a bit ~a>"
             (png-chunk:IHDR-width ihdr)
             (png-chunk:IHDR-height ihdr)
@@ -93,37 +93,37 @@
   (%display image port))
 
 
-(define-method (png-compressed-image-chunks-query (image <png-compressed-image>) (predicate <procedure>))
-  (filter predicate (png-compressed-image-chunks image)))
+(define-method (png-image-chunks-query (image <png-compressed-image>) (predicate <procedure>))
+  (filter predicate (png-image-chunks image)))
 
-(define-method (png-compressed-image-chunks-query (image <png-compressed-image>) (chunk <symbol>))
-  (png-compressed-image-chunks-query image (lambda (c)
+(define-method (png-image-chunks-query (image <png-compressed-image>) (chunk <symbol>))
+  (png-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
 
-(define-method (png-compressed-image-chunks-query (image <png-compressed-image>) (chunk <vector>))
-  (png-compressed-image-chunks-query image (lambda (c)
+(define-method (png-image-chunks-query (image <png-compressed-image>) (chunk <vector>))
+  (png-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
 
 
 
 (define-method (png-image-width (image <png-compressed-image>))
-  (png-chunk:IHDR-width (png-compressed-image-header image)))
+  (png-chunk:IHDR-width (png-image-header image)))
 
 (define-method (png-image-height (image <png-compressed-image>))
-  (png-chunk:IHDR-height (png-compressed-image-header image)))
+  (png-chunk:IHDR-height (png-image-header image)))
 
 (define-method (png-image-bit-depth (image <png-compressed-image>))
-  (png-chunk:IHDR-bit-depth (png-compressed-image-header image)))
+  (png-chunk:IHDR-bit-depth (png-image-header image)))
 
 (define-method (png-image-color-type (image <png-compressed-image>))
-  (png-chunk:IHDR-color-type (png-compressed-image-header image)))
+  (png-chunk:IHDR-color-type (png-image-header image)))
 
 
 
 (define-method (png-image-data (image <png-compressed-image>) (uncompress? <boolean>))
   "Get the PNG image data as a single bytevector.  When UNCOMPRESS? option is
 set to #t, the procedure returns data in uncompressed form."
-  (let ((data-chunks (png-compressed-image-chunks-query image 'IDAT)))
+  (let ((data-chunks (png-image-chunks-query image 'IDAT)))
     (let loop ((chunks data-chunks)
                (result (if (null? data-chunks)
                            (make-bytevector 0)
