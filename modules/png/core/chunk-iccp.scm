@@ -29,7 +29,7 @@
 
 
 (define-method (%display (chunk <png-chunk:iCCP>) (port <port>))
-  (let ((type (png-chunk-type-info chunk))))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:iCCP ~a: ~a ~a>"
             (list-ref type 2)
             (png-chunk:iCCP-profile-name chunk)
