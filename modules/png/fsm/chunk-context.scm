@@ -117,7 +117,7 @@
   (action:store ctx byte)
   (let ((chunk (fsm-chunk-context-chunk ctx))
         (data  (fsm-chunk-context-buffer ctx)))
-    (%png-chunk-crc-set! chunk data)
+    (%png-chunk-crc-set! chunk (vector->int32 data))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
 

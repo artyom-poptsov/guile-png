@@ -127,9 +127,9 @@ the list."
   ;; including the length field.  The CRC is always present, even for chunks
   ;; containing no data.
   ;;
-  ;; <vector>
+  ;; <number>
   (crc
-   #:init-thunk   (lambda () (make-bytevector %png-chunk-crc-bytes 0))
+   #:init-value   0
    #:init-keyword #:crc
    #:getter       png-chunk-crc
    #:setter       %png-chunk-crc-set!)
@@ -182,7 +182,7 @@ string."
          (bv   (make-bytevector (+ type-length data-length) 0)))
     (bytevector-copy! type 0 bv 0 type-length)
     (bytevector-copy! data 0 bv type-length data-length)
-    (int32->bytevector (crc bv))))
+    (crc bv)))
 
 (define-method (png-chunk-crc-update! (chunk <png-chunk>))
   "Update a PNG CHUNK so the CRC will match the chunk content."
@@ -199,7 +199,7 @@ string."
   (put-bytevector port (int32->bytevector (png-chunk-length chunk)))
   (put-bytevector port (png-chunk-type chunk))
   (put-bytevector port (png-chunk-data chunk))
-  (put-bytevector port (png-chunk-crc chunk)))
+  (put-bytevector port (int32->bytevector (png-chunk-crc chunk))))
 
 
 ;;; png-chunk.scm ends here.
