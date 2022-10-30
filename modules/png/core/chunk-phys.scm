@@ -48,7 +48,7 @@
   (%display chunk port))
 
 (define-method (data->png-chunk:pHYs (data   <bytevector>)
-                                     (type   <bytevector>)
+                                     (type   <symbol>)
                                      (length <number>)
                                      (crc    <number>))
   (make <png-chunk:pHYs>
