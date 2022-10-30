@@ -22,7 +22,6 @@
             png-chunk-crc
             png-chunk-crc-calculate
             png-chunk-crc-update!
-            png-chunk-crc-set!
             png-chunk->png
 
             ;; Chunk type/vector converters.
@@ -34,10 +33,9 @@
             %png-chunk-type-bytes
             %png-chunk-crc-bytes
 
-            ;; Internal procedures that does not update
-            ;; the chunk CRC code.
+            ;; Internal procedures that should be used with extra care.
             %png-chunk-data-set!
-            ))
+            %png-chunk-crc-set!))
 
 
 (define %png-chunk-length-bytes 4)
@@ -135,7 +133,7 @@ the list."
    #:init-thunk   (lambda () (make-bytevector %png-chunk-crc-bytes 0))
    #:init-keyword #:crc
    #:getter       png-chunk-crc
-   #:setter       png-chunk-crc-set!)
+   #:setter       %png-chunk-crc-set!)
 
   #:metaclass <redefinable-class>)
 
@@ -203,7 +201,7 @@ string."
 
 (define-method (png-chunk-crc-update! (chunk <png-chunk>))
   "Update a PNG CHUNK so the CRC will match the chunk content."
-  (png-chunk-crc-set! chunk (png-chunk-crc-calculate chunk)))
+  (%png-chunk-crc-set! chunk (png-chunk-crc-calculate chunk)))
 
 
 
