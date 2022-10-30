@@ -30,7 +30,7 @@
 
 
 (define-method (%display (chunk <png-chunk:PLTE>) (port <port>))
-  (let ((type (png-chunk-type chunk)))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:PLTE ~a (~a entr~:@p) ~a>"
             (list-ref type 2)
             (png-chunk:PLTE-palette-entries-count chunk)

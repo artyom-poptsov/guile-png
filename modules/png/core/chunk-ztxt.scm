@@ -29,7 +29,7 @@
 
 
 (define-method (%display (chunk <png-chunk:zTXt>) (port <port>))
-  (let ((type (png-chunk-type chunk)))
+  (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:zTXt ~a: ~a ~a>"
             (list-ref type 2)
             (png-chunk:zTXt-keyword chunk)
