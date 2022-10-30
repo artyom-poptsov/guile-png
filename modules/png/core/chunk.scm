@@ -73,26 +73,9 @@
     (tIME #vu8(116 73 77 69)  "Image last-modification time")
     ))
 
-(define-method (vector->chunk-type (vec <bytevector>))
-  "Convert a vector VEC with PNG chunk type to a PNG chunk type list.  Return
-the list."
-  (let loop ((types %chunk-types))
-    (if (null? types)
-        #f
-        (if (equal? (list-ref (car types) 1) vec)
-            (car types)
-            (loop (cdr types))))))
 
-(define-method (png-chunk-type-info (type <symbol>))
-  (find (lambda (t)
-          (equal? (car t) type))
-        %chunk-types))
+
 
-(define-method (chunk-type->vector (type <symbol>))
-  "Convert a PNG chunk TYPE to a vector.  Return the vector."
-  (cadr (png-chunk-type-info type)))
-
-  
 (define-class <png-chunk> ()
   ;; A 4-byte unsigned integer giving the number of bytes in the chunk's data
   ;; field. The length counts only the data field, not itself, the chunk type
@@ -148,6 +131,25 @@ the list."
   (and (equal? (png-chunk-length chunk1) (png-chunk-length chunk2))
        (equal? (png-chunk-crc chunk1) (png-chunk-crc chunk2))))
 
+(define-method (vector->chunk-type (vec <bytevector>))
+  "Convert a vector VEC with PNG chunk type to a PNG chunk type list.  Return
+the list."
+  (let loop ((types %chunk-types))
+    (if (null? types)
+        #f
+        (if (equal? (list-ref (car types) 1) vec)
+            (car types)
+            (loop (cdr types))))))
+
+(define-method (png-chunk-type-info (type <symbol>))
+  (find (lambda (t)
+          (equal? (car t) type))
+        %chunk-types))
+
+(define-method (chunk-type->vector (type <symbol>))
+  "Convert a PNG chunk TYPE to a vector.  Return the vector."
+  (cadr (png-chunk-type-info type)))
+
 (define-method (png-chunk-type-info (chunk <png-chunk>))
   (png-chunk-type-info (png-chunk-type chunk)))
 
@@ -200,6 +202,5 @@ string."
   (put-bytevector port (chunk-type->vector (png-chunk-type chunk)))
   (put-bytevector port (png-chunk-data chunk))
   (put-bytevector port (int32->bytevector (png-chunk-crc chunk))))
-
 
 ;;; png-chunk.scm ends here.
