@@ -93,6 +93,13 @@
     (png-chunk-crc-update! chunk2)
     (equal? chunk1 chunk2)))
 
+(test-equal "png-chunk-clone"
+  #t
+  (let ((chunk1 (make <png-chunk> #:type 'IHDR)))
+    (png-chunk-crc-update! chunk1)
+    (let ((chunk2 (png-chunk-clone chunk1)))
+      (equal? chunk1 chunk2))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 

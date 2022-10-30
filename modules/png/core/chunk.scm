@@ -10,6 +10,7 @@
   #:use-module (rnrs bytevectors)
   #:export (<png-chunk>
             png-chunk?
+            png-chunk-clone
             png-chunk-length
             png-chunk-length-set!
             png-chunk-type
@@ -130,6 +131,13 @@
   "Compare CHUNK1 with CHUNK2."
   (and (equal? (png-chunk-length chunk1) (png-chunk-length chunk2))
        (equal? (png-chunk-crc chunk1) (png-chunk-crc chunk2))))
+
+(define-method (png-chunk-clone (chunk <png-chunk>))
+  (make <png-chunk>
+    #:type   (png-chunk-type chunk)
+    #:length (png-chunk-length chunk)
+    #:data   (png-chunk-data chunk)
+    #:crc    (png-chunk-crc chunk)))
 
 (define-method (vector->chunk-type (vec <bytevector>))
   "Convert a vector VEC with PNG chunk type to a PNG chunk type list.  Return
