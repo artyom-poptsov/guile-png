@@ -133,9 +133,7 @@
 set to #t, the procedure returns data in uncompressed form."
   (let ((data-chunks (png-image-chunks-query image 'IDAT)))
     (let loop ((chunks data-chunks)
-               (result (if (null? data-chunks)
-                           (make-bytevector 0)
-                           (png-chunk-data (car data-chunks)))))
+               (result (make-bytevector 0)))
       (if (null? chunks)
           (if uncompress?
               (uncompress result)
@@ -203,7 +201,9 @@ data."
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
-      #:data (png-image-data image)
+      #:data (let ((data (png-image-data image)))
+               (format (current-error-port) "data length: ~a~%" (bytevector-length data))
+               data)
       #:data-chunk-size (let ((idat (car (png-image-chunks-query image 'IDAT))))
                           (png-chunk-length idat)))))
 
