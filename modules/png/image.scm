@@ -235,7 +235,7 @@ data."
                      (map png-chunk-clone (png-image-chunks image)))))
     (make <png-image>
       #:chunks chunks
-      #:header (png-image-chunks-query chunks 'IHDR)
+      #:header (car (png-image-chunks-query chunks 'IHDR))
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
