@@ -260,7 +260,7 @@ data."
                                                 #:data   data)))
                                    (png-chunk-crc-update! chunk)
                                    chunk))
-                               (bytevector-split data chunk-size)))
+                               (bytevector-split compressed-data chunk-size)))
          (old-chunks (png-image-chunks-query image
                                              (lambda (chunk)
                                                (and (not (equal? (png-chunk-type chunk)
