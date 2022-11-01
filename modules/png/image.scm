@@ -227,6 +227,30 @@ new bytevector with image data with filter type bytes removed."
                                     (bytevector-u8-ref image-data source-index))
                 (loop (+ result-index 1) (+ source-index 1))))))))
 
+(define-method (png-image-data/append-scanlines (image <png-image>)
+                                                (image-data <bytevector>))
+  (let* ((width             (png-image-width image))
+         (height            (png-image-height image))
+         (image-data-length (bytevector-length image-data))
+         (scanline-length   (* width 3))  ; TODO: Handle other color types
+         (result            (make-bytevector (+ (* width height 3) height) 0)))
+    (let loop ((result-index 0)
+               (source-index 0))
+      (if (= source-index image-data-length)
+          result
+          (if (zero? (euclidean-remainder source-index scanline-length))
+              (begin
+                (bytevector-u8-set! result result-index 0)
+                (bytevector-u8-set! result
+                                    (+ result-index 1)
+                                    (bytevector-u8-ref image-data source-index))
+                (loop (+ result-index 2) (+ source-index 1)))
+              (begin
+                (bytevector-u8-set! result
+                                    result-index
+                                    (bytevector-u8-ref image-data source-index))
+                (loop (+ result-index 1) (+ source-index 1))))))))
+
 (define-method (png-compressed-image-decompress (image <png-compressed-image>))
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
 data."
@@ -250,7 +274,7 @@ data."
                              #:key
                              (data-chunk-size #f))
   (let* ((data            (png-image-data image))
-         (compressed-data (compress data))
+         (compressed-data (compress (png-image-data/append-scanlines image data)))
          (chunk-size      (or data-chunk-size
                               (png-image-data-chunk-size image)))
          (segments        (map (lambda (data)
