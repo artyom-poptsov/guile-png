@@ -132,5 +132,16 @@
        #:color-type        color-type
        #:palette-index      (vector-ref data 0)))))
 
+(define-method (png-chunk-clone (chunk <png-chunk:bKGD>))
+  (make <png-chunk:bKGD>
+    #:length (png-chunk-length chunk)
+    #:data   (png-chunk-data   chunk)
+    #:crc    (png-chunk-crc    chunk)
+    #:color-type (png-chunk:bKGD-color-type chunk)
+    #:greyscale  (png-chunk:bKGD-grayscale chunk)
+    #:red        (png-chunk:bKGD-red chunk)
+    #:green      (png-chunk:bKGD-green chunk)
+    #:blue       (png-chunk:bKGD-blue chunk)
+    #:palette-index (png-chunk:bKGD-palette-index chunk)))
 
 ;;; chunk-bkgd.scm ends here.
