@@ -31,8 +31,7 @@
     (iCCP . ,(make-converter data->png-chunk:iCCP))
     (pHYs . ,(make-converter data->png-chunk:pHYs))
     (bKGD . ,(lambda (image chunk)
-               (let ((result (png-compressed-image-chunks-query image
-                                                                'IHDR)))
+               (let ((result (png-image-chunks-query image 'IHDR)))
                  (unless result
                    (error "Could not find IHDR chunk"))
                  (let* ((data     (png-chunk-data   chunk))
