@@ -13,21 +13,15 @@
     (let loop ((offset 0))
       (if (= offset data-length)
           image-clone
-          (let* ((a (bytevector-u8-ref data offset))
-                 (r (bytevector-u8-ref data (+ offset 1)))
-                 (g (bytevector-u8-ref data (+ offset 2)))
-                 (b (bytevector-u8-ref data (+ offset 3)))
-                 (new-a a)
+          (let* ((r (bytevector-u8-ref data (+ offset 0)))
+                 (g (bytevector-u8-ref data (+ offset 1)))
+                 (b (bytevector-u8-ref data (+ offset 2)))
                  (new-r (- 255 r))
                  (new-g (- 255 g))
                  (new-b (- 255 b)))
-            ;; (format (current-error-port)
-            ;;         "a: ~a -> ~a; r: ~a -> ~a; g: ~a -> ~a; b: ~a -> ~a~%"
-            ;;         a new-a r new-r g new-g b new-b)
-            (bytevector-u8-set! data offset new-a)
-            (bytevector-u8-set! data (+ offset 1) new-r)
-            (bytevector-u8-set! data (+ offset 2) new-g)
-            (bytevector-u8-set! data (+ offset 3) new-b)
-            (loop (+ offset 4)))))))
+            (bytevector-u8-set! data (+ offset 0) new-r)
+            (bytevector-u8-set! data (+ offset 1) new-g)
+            (bytevector-u8-set! data (+ offset 2) new-b)
+            (loop (+ offset 3)))))))
 
 ;;; filter.scm ends here.
