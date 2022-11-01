@@ -174,9 +174,22 @@ set to #t, the procedure returns data in uncompressed form."
    #:init-keyword #:data-chunk-size
    #:getter       png-image-data-chunk-size))
 
+
 (define (png-image? x)
   "Check if X is a PNG image instance."
   (is-a? x <png-image>))
+
+
+
+(define-method (%display (image <png-image>) (port <port>))
+  (let ((ihdr (png-image-header image)))
+    (format port "#<png-image ~ax~a ~a bit ~a>"
+            (png-chunk:IHDR-width ihdr)
+            (png-chunk:IHDR-height ihdr)
+            (png-chunk:IHDR-bit-depth ihdr)
+            (object-address/hex-string image))))
+
+
 
 (define-method (png-compressed-image-decompress (image <png-compressed-image>))
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
