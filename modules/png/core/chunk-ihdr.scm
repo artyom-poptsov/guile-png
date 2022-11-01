@@ -180,4 +180,17 @@
     #:filter-method      (data:filter-method data)
     #:interlace-method   (data:interlace-method data)))
 
+(define-method (png-chunk-clone (chunk <png-chunk:IHDR>))
+  (make <png-chunk:IHDR>
+    #:length (png-chunk-length chunk)
+    #:data   (png-chunk-data   chunk)
+    #:crc    (png-chunk-crc    chunk)
+    #:width              (png-chunk:IHDR-width chunk)
+    #:height             (png-chunk:IHDR-height chunk)
+    #:bit-depth  (png-chunk:IHDR-bit-depth chunk)
+    #:color-type (png-chunk:IHDR-color-type chunk)
+    #:compression-method (png-chunk:IHDR-compression-method chunk)
+    #:filter-method      (png-chunk:IHDR-filter-method chunk)
+    #:interlace-method   (png-chunk:IHDR-interlace-method chunk)))
+
 ;;; chunk-ihdr.scm ends here.
