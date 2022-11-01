@@ -189,6 +189,44 @@ set to #t, the procedure returns data in uncompressed form."
 
 
 
+;; 4.1.3. IDAT Image data
+;;
+;; The IDAT chunk contains the actual image data.  To create this
+;; data:
+;;
+;; * Begin with image scanlines represented as described in Image layout
+;;   (Section 2.3); the layout and total size of this raw data are determined by
+;;   the fields of IHDR.
+;;
+;; * Filter the image data according to the filtering method specified by the
+;;   IHDR chunk.  (Note that with filter method 0, the only one currently
+;;   defined, this implies prepending a filter type byte to each scanline.)
+;;
+;; * Compress the filtered data using the compression method
+;;   specified by the IHDR chunk.
+;;
+;; <https://www.rfc-editor.org/rfc/rfc2083#page-18>
+(define-method (png-image-data/cleanup-scanlines (ihdr <png-chunk:IHDR>)
+                                                 (image-data <bytevector>))
+  "This method removes filter data from each scanline of IMAGE-DATA.  Return a
+new bytevector with image data with filter type bytes removed."
+  (let* ((width             (png-chunk:IHDR-width ihdr))
+         (height            (png-chunk:IHDR-height ihdr))
+         (image-data-length (bytevector-length image-data))
+         (scanline-length   (+ (* width 3) 1))  ; TODO: Handle other color types
+         (result            (make-bytevector (* width height 3) 0)))
+    (let loop ((result-index 0)
+               (source-index 0))
+      (if (= source-index image-data-length)
+          result
+          (if (zero? (euclidean-remainder source-index scanline-length))
+              (loop result-index (+ source-index 1))
+              (begin
+                (bytevector-u8-set! result
+                                    result-index
+                                    (bytevector-u8-ref image-data source-index))
+                (loop (+ result-index 1) (+ source-index 1))))))))
+
 (define-method (png-compressed-image-decompress (image <png-compressed-image>))
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
 data."
@@ -202,8 +240,9 @@ data."
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
       #:data (let ((data (png-image-data image)))
-               (format (current-error-port) "data length: ~a~%" (bytevector-length data))
-               data)
+               (png-image-data/cleanup-scanlines (car (png-image-chunks-query chunks
+                                                                              'IHDR))
+                                                 data))
       #:data-chunk-size (let ((idat (car (png-image-chunks-query image 'IDAT))))
                           (png-chunk-length idat)))))
 
