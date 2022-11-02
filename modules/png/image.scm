@@ -189,6 +189,16 @@ set to #t, the procedure returns data in uncompressed form."
 
 
 
+(define-method (png-image-color-type->pixel-size (color-type <number>))
+  (case color-type
+    ((0 3) 1)
+    ((2)   3)
+    ((4)   2)
+    ((6)   4)))
+
+(define-method (png-image-pixel-size (image <png-image>))
+  (png-image-color-type->pixel-size (png-image-color-type (png-image-header image))))
+
 ;; 4.1.3. IDAT Image data
 ;;
 ;; The IDAT chunk contains the actual image data.  To create this
@@ -213,16 +223,25 @@ new bytevector with image data with filter type bytes removed."
   (let* ((width             (png-chunk:IHDR-width ihdr))
          (height            (png-chunk:IHDR-height ihdr))
          (image-data-length (bytevector-length image-data))
-         (scanline-length   (+ (* width 3) 1))  ; TODO: Handle other color types
-         (result-length     (* width height 3))
+         (color-type        (png-chunk:IHDR-color-type ihdr))
+         (pixel-size        (png-image-color-type->pixel-size color-type))
+         (scanline-length   (+ (* width pixel-size) 1))
+         (result-length     (* width height pixel-size))
          (result            (make-bytevector result-length 0)))
+    ;; (format (current-error-port) "image size:      ~ax~a~%" width height)
+    ;; (format (current-error-port) "image color type: ~a~%" (png-chunk:IHDR-color-type ihdr ))
+    ;; (format (current-error-port) "image bit depth: ~a~%" (png-chunk:IHDR-bit-depth ihdr ))
+    ;; (format (current-error-port) "image filter:    ~a~%" (png-chunk:IHDR-filter-method ihdr ))
     (let loop ((result-index 0)
                (source-index 0))
       (if (= result-index result-length)
           result
           (if (zero? (euclidean-remainder source-index scanline-length))
-              (loop result-index (+ source-index 1))
               (begin
+                ;; (format (current-error-port) "|~4a " (bytevector-u8-ref image-data source-index))
+                (loop result-index (+ source-index 1)))
+              (begin
+                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
                 (bytevector-u8-set! result
                                     result-index
                                     (bytevector-u8-ref image-data source-index))
@@ -232,21 +251,27 @@ new bytevector with image data with filter type bytes removed."
                                                 (image-data <bytevector>))
   (let* ((width             (png-image-width image))
          (height            (png-image-height image))
+         (color-type        (png-image-color-type image))
+         (pixel-size        (png-image-color-type->pixel-size color-type))
+         (scanline-length   (+ (* width pixel-size) 0))
          (image-data-length (bytevector-length image-data))
-         (scanline-length   (* width 3))  ; TODO: Handle other color types
-         (result            (make-bytevector (+ (* width height 3) height) 0)))
+         (result            (make-bytevector (+ (* width height pixel-size) height) 0)))
+    (newline (current-error-port))
     (let loop ((result-index 0)
                (source-index 0))
       (if (= source-index image-data-length)
           result
           (if (zero? (euclidean-remainder source-index scanline-length))
               (begin
+                ;; (format (current-error-port) "|~4a " 0)
+                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
                 (bytevector-u8-set! result result-index 0)
                 (bytevector-u8-set! result
                                     (+ result-index 1)
                                     (bytevector-u8-ref image-data source-index))
                 (loop (+ result-index 2) (+ source-index 1)))
               (begin
+                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
                 (bytevector-u8-set! result
                                     result-index
                                     (bytevector-u8-ref image-data source-index))
