@@ -214,10 +214,11 @@ new bytevector with image data with filter type bytes removed."
          (height            (png-chunk:IHDR-height ihdr))
          (image-data-length (bytevector-length image-data))
          (scanline-length   (+ (* width 3) 1))  ; TODO: Handle other color types
-         (result            (make-bytevector (* width height 3) 0)))
+         (result-length     (* width height 3))
+         (result            (make-bytevector result-length 0)))
     (let loop ((result-index 0)
                (source-index 0))
-      (if (= source-index image-data-length)
+      (if (= result-index result-length)
           result
           (if (zero? (euclidean-remainder source-index scanline-length))
               (loop result-index (+ source-index 1))
