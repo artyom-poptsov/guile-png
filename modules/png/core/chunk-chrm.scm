@@ -60,6 +60,13 @@
    #:init-keyword #:blue-y
    #:getter       png-chunk:cHRM-blue-y))
 
+
+
+(define-method (initialize (chunk <png-chunk:cHRM>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'cHRM))
+
+
 (define-method (%display (chunk <png-chunk:cHRM>) (port <port>))
   (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:cHRM ~a ~a>"

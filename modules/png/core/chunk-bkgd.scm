@@ -83,6 +83,11 @@
    #:getter       png-chunk:bKGD-palette-index))
 
 
+(define-method (initialize (chunk <png-chunk:bKGD>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'bKGD))
+
+
 
 (define-method (%display (chunk <png-chunk:bKGD>) (port <port>))
   (let ((type (png-chunk-type-info chunk)))

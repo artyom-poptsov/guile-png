@@ -27,6 +27,11 @@
    #:getter       png-chunk:iCCP-profile))
 
 
+(define-method (initialize (chunk <png-chunk:iCCP>) initargs)
+  (next-method)
+  (slot-set! chunk 'type 'iCCP))
+
+
 
 (define-method (%display (chunk <png-chunk:iCCP>) (port <port>))
   (let ((type (png-chunk-type-info chunk)))
