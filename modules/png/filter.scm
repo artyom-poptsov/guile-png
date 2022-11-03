@@ -9,19 +9,19 @@
   "Copy IMAGE and its colors.  Return new image."
   (let* ((image-clone (png-image-clone image))
          (data        (png-image-data image-clone))
-         (data-length (bytevector-length data)))
+         (data-length (bytevector-length data))
+         (pixel-size  (png-image-pixel-size image)))
     (let loop ((offset 0))
       (if (= offset data-length)
           image-clone
-          (let* ((r (bytevector-u8-ref data (+ offset 0)))
-                 (g (bytevector-u8-ref data (+ offset 1)))
-                 (b (bytevector-u8-ref data (+ offset 2)))
-                 (new-r (- 255 r))
-                 (new-g (- 255 g))
-                 (new-b (- 255 b)))
-            (bytevector-u8-set! data (+ offset 0) new-r)
-            (bytevector-u8-set! data (+ offset 1) new-g)
-            (bytevector-u8-set! data (+ offset 2) new-b)
-            (loop (+ offset 3)))))))
+          (begin
+            (let loop-over-pixel ((index 0))
+              (unless (= index pixel-size)
+                (bytevector-u8-set! data
+                                    (+ offset index)
+                                    (- 255
+                                       (bytevector-u8-ref data (+ offset index))))
+                (loop-over-pixel (+ index 1))))
+            (loop (+ offset pixel-size)))))))
 
 ;;; filter.scm ends here.
