@@ -198,7 +198,7 @@ set to #t, the procedure returns data in uncompressed form."
     ((6)   4)))
 
 (define-method (png-image-pixel-size (image <png-image>))
-  (png-image-color-type->pixel-size (png-image-color-type (png-image-header image))))
+  (png-image-color-type->pixel-size (png-image-color-type image)))
 
 ;; 4.1.3. IDAT Image data
 ;;
