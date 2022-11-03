@@ -20,6 +20,7 @@
             png-image-height
             png-image-bit-depth
             png-image-color-type
+            png-image-pixel-size
             png-image-data
             png-image->png
             png-image-compress
