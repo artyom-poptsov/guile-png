@@ -162,6 +162,44 @@
   (bytevector-u8-ref data 12))
 
 
+;; The methods below allow to get information about the image from the untyped
+;; header chunk.
+
+(define (%verify-chunk-type (chunk <png-chunk>))
+  "Verify the CHUNK type.  Throw an error when the type is not IHDR."
+  (let ((chunk-type (png-chunk-type chunk)))
+    (unless (equal? chunk-type 'IHDR)
+      (error "Wrong chunk type (expecting IHDR)" chunk chunk-type))))
+
+(define-method (png-chunk:IHDR-width (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:width (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-height (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:heigth (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-color-type (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:color-type (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-bit-depth (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:bit-depth (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-compression-method (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:compression-method (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-filter-method (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:filter-method (png-chunk-data chunk)))
+
+(define-method (png-chunk:IHDR-interlace-method (chunk <png-chunk>))
+  (%verify-chunk-type chunk)
+  (data:interlace-method (png-chunk-data chunk)))
+
+
 
 (define-method (data->png-chunk:IHDR (data   <bytevector>)
                                      (type   <symbol>)
