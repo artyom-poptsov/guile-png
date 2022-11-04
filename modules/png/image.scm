@@ -249,35 +249,31 @@ new bytevector with image data with filter type bytes removed."
                                     (bytevector-u8-ref image-data source-index))
                 (loop (+ result-index 1) (+ source-index 1))))))))
 
-(define-method (png-image-data/append-scanlines (image <png-image>)
-                                                (image-data <bytevector>))
-  (let* ((width             (png-image-width image))
+(define-method (png-image-data/apply-filter (image <png-image>))
+  (let* ((image-data        (png-image-data image))
+         (width             (png-image-width image))
          (height            (png-image-height image))
          (color-type        (png-image-color-type image))
          (pixel-size        (png-image-color-type->pixel-size color-type))
-         (scanline-length   (+ (* width pixel-size) 0))
+         (scanline-length   (* width pixel-size))
          (image-data-length (bytevector-length image-data))
          (result            (make-bytevector (+ (* width height pixel-size) height) 0)))
-    (newline (current-error-port))
-    (let loop ((result-index 0)
-               (source-index 0))
-      (if (= source-index image-data-length)
+
+    (define (apply-filter! row-index)
+      (let ((input-scanline-begin (* row-index scanline-length)))
+        (bytevector-u8-set! result (* (+ scanline-length 1) row-index) 0)
+        (bytevector-copy! image-data
+                          input-scanline-begin
+                          result
+                          (+ (* (+ scanline-length 1) row-index) 1)
+                          scanline-length)))
+
+    (let loop-over-rows ((row-index 0))
+      (if (= row-index height)
           result
-          (if (zero? (euclidean-remainder source-index scanline-length))
-              (begin
-                ;; (format (current-error-port) "|~4a " 0)
-                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
-                (bytevector-u8-set! result result-index 0)
-                (bytevector-u8-set! result
-                                    (+ result-index 1)
-                                    (bytevector-u8-ref image-data source-index))
-                (loop (+ result-index 2) (+ source-index 1)))
-              (begin
-                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
-                (bytevector-u8-set! result
-                                    result-index
-                                    (bytevector-u8-ref image-data source-index))
-                (loop (+ result-index 1) (+ source-index 1))))))))
+          (begin
+            (apply-filter! row-index)
+            (loop-over-rows (+ row-index 1)))))))
 
 (define-method (png-image-pretty-print-data (image <png-image>) (port <port>))
   (let* ((width             (png-image-width image))
@@ -359,7 +355,7 @@ data."
                              #:key
                              (data-chunk-size #f))
   (let* ((data            (png-image-data image))
-         (compressed-data (compress (png-image-data/append-scanlines image data)))
+         (compressed-data (compress (png-image-data/apply-filter image)))
          (chunk-size      (or data-chunk-size
                               (png-image-data-chunk-size image)))
          (segments        (map (lambda (data)
