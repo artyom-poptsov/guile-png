@@ -201,6 +201,23 @@ set to #t, the procedure returns data in uncompressed form."
 (define-method (png-image-pixel-size (image <png-image>))
   (png-image-color-type->pixel-size (png-image-color-type image)))
 
+(define-method (paeth-predictor (left <number>)
+                                (above <number>)
+                                (upper-left <number>))
+  "Paeth predictor that is implemented based on the description in RFC 2083.
+The original algorithm developed by Alan W. Paeth."
+  (let* ((p            (+ left (- above upper-left)))
+         (p-left       (abs (- p left)))
+         (p-above      (abs (- p above)))
+         (p-upper-left (abs (- p upper-left))))
+    (cond
+     ((and (<= p-left p-above) (<= p-left p-upper-left))
+      left)
+     ((<= p-above p-upper-left)
+      above)
+     (else
+      upper-left))))
+
 ;; 4.1.3. IDAT Image data
 ;;
 ;; The IDAT chunk contains the actual image data.  To create this
@@ -277,6 +294,45 @@ new bytevector with image data with filter type bytes removed."
                   (loop-over-pixel (+ index 1)))))
             (loop (+ px-index 1))))))
 
+    (define (remove-filter/paeth! row-index)
+      (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
+            (output-scanline-begin (* row-index scanline-length))
+            (previous-scanline-begin (* (- row-index 1) scanline-length)))
+        (let loop ((px-index 0))
+          (unless (= px-index width)
+            (let loop-over-pixel ((index 0))
+              (unless (= index pixel-size)
+                (let* ((absolute-input-index (+ input-scanline-begin
+                                                (* px-index pixel-size)
+                                                index))
+                       (absolute-output-index (+ output-scanline-begin
+                                                 (* px-index pixel-size)
+                                                 index))
+                       (left                  (if (zero? px-index)
+                                                  0
+                                                  (bytevector-u8-ref result
+                                                                     (- absolute-output-index
+                                                                        pixel-size))))
+                       (above                 (if (zero? row-index)
+                                                  0
+                                                  (bytevector-u8-ref result
+                                                                     (+ previous-scanline-begin
+                                                                        absolute-input-index))))
+                       (upper-left            (if (zero? row-index)
+                                                  0
+                                                  (bytevector-u8-ref result
+                                                                     (+ previous-scanline-begin
+                                                                        (- absolute-input-index
+                                                                           pixel-size))))))
+                  (bytevector-u8-set! result
+                                      absolute-output-index
+                                      (modulo (- (bytevector-u8-ref uncompressed-data
+                                                                    absolute-input-index)
+                                                 (paeth-predictor left above upper-left))
+                                              256))
+                  (loop-over-pixel (+ index 1)))))
+            (loop (+ px-index 1))))))
+
     (define (remove-filter! row-index)
       (let* ((input-scanline-begin (* row-index (+ scanline-length 1)))
              (filter-type          (bytevector-u8-ref uncompressed-data
@@ -284,6 +340,7 @@ new bytevector with image data with filter type bytes removed."
         (case filter-type
           ((0) (remove-filter/none! row-index))
           ((1) (remove-filter/sub!  row-index))
+          ((4) (remove-filter/paeth! row-index))
           (else
            (error "Unsupported filter type" filter-type image)))))
 
