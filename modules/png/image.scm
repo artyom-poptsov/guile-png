@@ -332,7 +332,8 @@ new bytevector with image data with filter type bytes removed."
 (define-method (png-image-pretty-print-data (image <png-compressed-image>))
   (png-image-pretty-print-data image (current-error-port)))
 
-(define-method (png-compressed-image-decompress (image <png-compressed-image>))
+(define-method (png-compressed-image-decompress (image <png-compressed-image>)
+                                                (remove-filter? <boolean>))
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
 data."
   (let ((chunks (map (lambda (chunk)
@@ -344,12 +345,15 @@ data."
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
-      #:data (let ((data (png-image-data image)))
-               (png-image-data/cleanup-scanlines (car (png-image-chunks-query chunks
-                                                                              'IHDR))
-                                                 data))
+      #:data (if remove-filter?
+                 (png-image-data/remove-filter image
+                                               (png-image-data image))
+                 (png-image-data image))
       #:data-chunk-size (let ((idat (car (png-image-chunks-query image 'IDAT))))
                           (png-chunk-length idat)))))
+
+(define-method (png-compressed-image-decompress (image <png-compressed-image>))
+  (png-compressed-image-decompress image #t))
 
 (define* (png-image-compress image
                              #:key

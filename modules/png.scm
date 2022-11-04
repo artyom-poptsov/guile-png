@@ -40,7 +40,8 @@
 (define* (png->scm port
                    #:key
                    (debug-mode? #f)
-                   (decompress? #t))
+                   (decompress? #t)
+                   (remove-filter? #t))
   (let ((fsm (make <png-parser>)))
     (log-use-stderr! debug-mode?)
     (let ((context (fsm-run! fsm (make <png-context>
@@ -49,7 +50,7 @@
       (let ((image (make <png-compressed-image>
                      #:chunks (reverse (png-context-chunks context)))))
         (if decompress?
-            (png-compressed-image-decompress image)
+            (png-compressed-image-decompress image remove-filter?)
             image)))))
 
 ;;; png.scm ends here.
