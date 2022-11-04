@@ -165,7 +165,7 @@
 ;; The methods below allow to get information about the image from the untyped
 ;; header chunk.
 
-(define (%verify-chunk-type (chunk <png-chunk>))
+(define-method (%verify-chunk-type (chunk <png-chunk>))
   "Verify the CHUNK type.  Throw an error when the type is not IHDR."
   (let ((chunk-type (png-chunk-type chunk)))
     (unless (equal? chunk-type 'IHDR)
