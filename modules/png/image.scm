@@ -24,6 +24,7 @@
             png-image-data
             png-image->png
             png-image-compress
+            png-image-pretty-print-data
 
             %png-image-signature))
 
@@ -277,6 +278,34 @@ new bytevector with image data with filter type bytes removed."
                                     result-index
                                     (bytevector-u8-ref image-data source-index))
                 (loop (+ result-index 1) (+ source-index 1))))))))
+
+(define-method (png-image-pretty-print-data (image <png-image>) (port <port>))
+  (let* ((width             (png-image-width image))
+         (height            (png-image-height image))
+         (color-type        (png-image-color-type image))
+         (pixel-size        (png-image-color-type->pixel-size color-type))
+         (scanline-length   (* width pixel-size))
+         (image-data        (png-image-data image))
+         (image-data-length (bytevector-length image-data)))
+
+    (define (print-pixel offset)
+      (let loop-over-pixel ((index 0))
+        (unless (= index pixel-size)
+          (format port "~3a " (bytevector-u8-ref image-data (+ offset index)))
+          (loop-over-pixel (+ index 1))))
+      (format port " "))
+
+    (let loop-over-rows ((row-index 0))
+      (unless (= row-index height)
+        (let loop-over-scanline ((pixel-index 0))
+          (unless (= pixel-index scanline-length)
+            (print-pixel (+ (* row-index scanline-length) pixel-index))
+            (loop-over-scanline (+ pixel-index pixel-size))))
+        (newline port)
+        (loop-over-rows (+ row-index 1))))))
+
+(define-method (png-image-pretty-print-data (image <png-image>))
+  (png-image-pretty-print-data image (current-error-port)))
 
 (define-method (png-compressed-image-decompress (image <png-compressed-image>))
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
