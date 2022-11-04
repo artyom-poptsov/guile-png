@@ -218,36 +218,81 @@ set to #t, the procedure returns data in uncompressed form."
 ;;   specified by the IHDR chunk.
 ;;
 ;; <https://www.rfc-editor.org/rfc/rfc2083#page-18>
-(define-method (png-image-data/cleanup-scanlines (ihdr <png-chunk:IHDR>)
-                                                 (image-data <bytevector>))
+(define-method (png-image-data/remove-filter (image <png-compressed-image>)
+                                             (uncompressed-data <bytevector>))
   "This method removes filter data from each scanline of IMAGE-DATA.  Return a
 new bytevector with image data with filter type bytes removed."
-  (let* ((width             (png-chunk:IHDR-width ihdr))
-         (height            (png-chunk:IHDR-height ihdr))
-         (image-data-length (bytevector-length image-data))
-         (color-type        (png-chunk:IHDR-color-type ihdr))
+  (let* ((width             (png-image-width image))
+         (height            (png-image-height image))
+         (image-data-length (bytevector-length uncompressed-data))
+         (color-type        (png-image-color-type image))
          (pixel-size        (png-image-color-type->pixel-size color-type))
-         (scanline-length   (+ (* width pixel-size) 1))
+         (scanline-length   (* width pixel-size))
          (result-length     (* width height pixel-size))
          (result            (make-bytevector result-length 0)))
+
     ;; (format (current-error-port) "image size:      ~ax~a~%" width height)
     ;; (format (current-error-port) "image color type: ~a~%" (png-chunk:IHDR-color-type ihdr ))
     ;; (format (current-error-port) "image bit depth: ~a~%" (png-chunk:IHDR-bit-depth ihdr ))
     ;; (format (current-error-port) "image filter:    ~a~%" (png-chunk:IHDR-filter-method ihdr ))
-    (let loop ((result-index 0)
-               (source-index 0))
-      (if (= result-index result-length)
+
+    (define (remove-filter/none! row-index)
+      (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
+            (output-scanline-begin (* row-index scanline-length)))
+        (bytevector-copy! uncompressed-data
+                          input-scanline-begin
+                          result
+                          output-scanline-begin
+                          scanline-length)))
+
+    (define (remove-filter/sub! row-index)
+      (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
+            (output-scanline-begin (* row-index scanline-length)))
+
+        ;; Copy the first pixel as is.
+        (bytevector-copy! uncompressed-data
+                          input-scanline-begin
+                          result
+                          output-scanline-begin
+                          pixel-size)
+
+        (let loop ((px-index 1))
+          (unless (= px-index width)
+            (let loop-over-pixel ((index 0))
+              (unless (= index pixel-size)
+                (let ((absolute-input-index (+ input-scanline-begin
+                                               (* px-index pixel-size)
+                                               index))
+                      (absolute-output-index (+ output-scanline-begin
+                                                (* px-index pixel-size)
+                                                index)))
+                  (bytevector-u8-set! result
+                                      absolute-output-index
+                                      (modulo (+ (bytevector-u8-ref uncompressed-data
+                                                                    absolute-input-index)
+                                                 (bytevector-u8-ref result
+                                                                    (- absolute-output-index
+                                                                       pixel-size)))
+                                              256))
+                  (loop-over-pixel (+ index 1)))))
+            (loop (+ px-index 1))))))
+
+    (define (remove-filter! row-index)
+      (let* ((input-scanline-begin (* row-index (+ scanline-length 1)))
+             (filter-type          (bytevector-u8-ref uncompressed-data
+                                                      input-scanline-begin)))
+        (case filter-type
+          ((0) (remove-filter/none! row-index))
+          ((1) (remove-filter/sub!  row-index))
+          (else
+           (error "Unsupported filter type" filter-type image)))))
+
+    (let loop-over-rows ((row-index 0))
+      (if (= row-index height)
           result
-          (if (zero? (euclidean-remainder source-index scanline-length))
-              (begin
-                ;; (format (current-error-port) "|~4a " (bytevector-u8-ref image-data source-index))
-                (loop result-index (+ source-index 1)))
-              (begin
-                ;; (format (current-error-port) "~4a " (bytevector-u8-ref image-data source-index))
-                (bytevector-u8-set! result
-                                    result-index
-                                    (bytevector-u8-ref image-data source-index))
-                (loop (+ result-index 1) (+ source-index 1))))))))
+          (begin
+            (remove-filter! row-index)
+            (loop-over-rows (+ row-index 1)))))))
 
 (define-method (png-image-data/apply-filter (image <png-image>))
   (let* ((image-data        (png-image-data image))
