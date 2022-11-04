@@ -1,4 +1,4 @@
-(define-module (png filter)
+(define-module (png image-processing)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
