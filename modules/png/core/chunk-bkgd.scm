@@ -117,7 +117,7 @@
        #:data               data
        #:crc                crc
        #:color-type        color-type
-       #:greyscale          (vector-int16 data)))
+       #:greyscale          (vector->int16 data)))
     ((2 6)
      (make <png-chunk:bKGD>
        #:length             length
