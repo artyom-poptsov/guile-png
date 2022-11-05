@@ -28,7 +28,6 @@ BUILT_SOURCES =	\
 	context.scm
 
 EXTRA_DIST += \
-	context.scm	\
 	chunk-parser.puml \
 	chunk-parser.scm \
 	png-parser.puml \
@@ -106,6 +105,11 @@ png-parser.scm: context.go chunk-parser.go png-context.go png-parser.puml
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_PNG_PARSER_ARGS) png-parser.puml > $@
 
 png-context.scm: signature-parser.scm chunk-parser.scm
+
+# XXX: Automake does not remove those files for some reason.
+uninstall-hook:
+	rm -f $(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/context.scm \
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/context.scm
 
 CLEANFILES += \
 	context.log	\
