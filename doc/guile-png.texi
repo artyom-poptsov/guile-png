@@ -303,6 +303,28 @@ Convert an @var{image} to the PNG binary format, print the data to a
 Make an exact copy of an @var{image}, return the copy.
 @end deffn
 
+@section PNG Pixel
+
+@code{(png pixel)} module provides high-level API for working with PNG pixel
+data.
+
+@deffn {Method} png-image-pixel-ref (image <png-image>) @
+                                    (x <number>)
+
+Get the value of a pixel referenced by @var{x} from an @var{image}.  The pixel
+is returned as a byte vector.
+
+@end deffn
+
+@deffn {Method} png-image-pixel-set! (image <png-image>) @
+                                     (x     <number>) @
+                                     (pixel <bytevector>)
+
+Set the @var{pixel} value for a pixel referenced by @var{x} from an
+@var{image}.  The return value is undefined.
+
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
