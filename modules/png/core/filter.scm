@@ -4,6 +4,7 @@
   #:export (png-filter-none-remove!
             png-filter-sub-remove!
             png-filter-paeth-remove!
+            png-filter-up-remove!
 
             paeth-predictor))
 
@@ -127,5 +128,30 @@ The original algorithm developed by Alan W. Paeth."
                                           256))
               (loop-over-pixel (+ index 1)))))
         (loop (+ px-index 1))))))
+
+(define* (png-filter-up-remove! input
+                                output
+                                #:key
+                                scanline-length
+                                scanline-index)
+    (if (zero? scanline-index)
+        (png-filter-none-remove! input
+                                 output
+                                 #:scanline-index scanline-index
+                                 #:scanline-length scanline-length)
+        (let ((input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
+              (output-scanline-begin   (* scanline-index scanline-length)))
+          (let loop ((index 0))
+            (unless (= index scanline-length)
+              (let* ((absolute-index (+ input-scanline-begin index))
+                     (raw            (bytevector-u8-ref input
+                                                        absolute-index))
+                     (prior          (bytevector-u8-ref output
+                                                        (- absolute-index
+                                                           scanline-length))))
+              (bytevector-u8-set! output
+                                  (+ output-scanline-begin index)
+                                  (modulo (- raw prior)
+                                          256))))))))
 
 ;;; filter.scm ends here.

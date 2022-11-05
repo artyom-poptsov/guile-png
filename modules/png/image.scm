@@ -252,6 +252,10 @@ new bytevector with image data with filter type bytes removed."
                                        #:scanline-index   row-index
                                        #:scanline-length  scanline-length
                                        #:bytes-per-pixel  pixel-size))
+          ((2) (png-filter-up-remove! uncompressed-data
+                                      result
+                                      #:scanline-index    row-index
+                                      #:scanline-length   scanline-length))
           ((4) (png-filter-paeth-remove! uncompressed-data
                                          result
                                          #:image-width     width
