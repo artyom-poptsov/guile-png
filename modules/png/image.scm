@@ -22,6 +22,7 @@
             png-image-bit-depth
             png-image-color-type
             png-image-pixel-size
+            png-image-pixels
             png-image-data
             png-image->png
             png-image-compress
@@ -201,6 +202,9 @@ set to #t, the procedure returns data in uncompressed form."
 
 (define-method (png-image-pixel-size (image <png-image>))
   (png-image-color-type->pixel-size (png-image-color-type image)))
+
+(define-method (png-image-pixels (image <png-image>))
+  (* (png-image-width image) (png-image-height image)))
 
 ;; 4.1.3. IDAT Image data
 ;;
