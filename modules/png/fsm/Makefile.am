@@ -117,9 +117,12 @@ CLEANFILES += \
 	context.go	\
 	png-parser.scm \
 	png-parser.log	\
+	png-parser.go	\
 	signature-parser.scm	\
 	signature-parser.log	\
+	signature-parser.go	\
 	chunk-parser.scm	\
-	chunk-parser.log
+	chunk-parser.log	\
+	chunk-parser.go
 
 ### Makefile.am ends here.
