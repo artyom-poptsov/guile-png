@@ -29,7 +29,10 @@ SOURCES = \
 	chunk-iend.scm	\
 	chunk-chrm.scm	\
 	chunk-ztxt.scm	\
-	chunk-time.scm
+	chunk-time.scm	\
+	chunk-iccp.scm	\
+	chunk-bkgd.scm	\
+	chunk-phys.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
