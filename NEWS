@@ -7,3 +7,9 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.1.0 (2022-11-05)
+** Release of the first version of Guile-PNG
+
+Local Variables:
+mode: org
+End:

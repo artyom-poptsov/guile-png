@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_PNG_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2021 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2021-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-PNG.
 
@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 ]])
 
-AC_INIT([Guile-PNG], [0.0.0], [poptsov.artyom@gmail.com],
+AC_INIT([Guile-PNG], [0.1.0], [poptsov.artyom@gmail.com],
                      [guile-png],
                      [https://github.com/artyom-poptsov/guile-png])
 
