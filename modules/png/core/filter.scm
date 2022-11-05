@@ -134,43 +134,35 @@ The original algorithm developed by Alan W. Paeth."
   (let* ((scanline-length         (png-filter-scanline-length filter))
          (image-width             (png-filter-image-width filter))
          (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
-         (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
+         (input-scanline-begin    (* scanline-index (+ scanline-length 1)))
          (output-scanline-begin   (* scanline-index scanline-length))
          (previous-scanline-begin (* (- scanline-index 1) scanline-length)))
-    (let loop ((px-index 0))
-      (unless (= px-index image-width)
-        (let loop-over-pixel ((index 0))
-          (unless (= index bytes-per-pixel)
-            (let* ((absolute-input-index (+ input-scanline-begin
-                                            (* px-index bytes-per-pixel)
-                                            index))
-                   (absolute-output-index (+ output-scanline-begin
-                                             (* px-index bytes-per-pixel)
-                                             index))
-                   (left                  (if (zero? px-index)
-                                              0
-                                              (bytevector-u8-ref output
-                                                                 (- absolute-output-index
-                                                                    bytes-per-pixel))))
-                   (above                 (if (zero? scanline-index)
-                                              0
-                                              (bytevector-u8-ref output
-                                                                 (+ previous-scanline-begin
-                                                                    absolute-input-index))))
-                   (upper-left            (if (zero? scanline-index)
-                                              0
-                                              (bytevector-u8-ref output
-                                                                 (+ previous-scanline-begin
-                                                                    (- absolute-input-index
-                                                                       bytes-per-pixel))))))
-              (bytevector-u8-set! output
-                                  absolute-output-index
-                                  (modulo (- (bytevector-u8-ref input
-                                                                absolute-input-index)
-                                             (paeth-predictor left above upper-left))
-                                          256))
-              (loop-over-pixel (+ index 1)))))
-        (loop (+ px-index 1))))))
+
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((absolute-index (+ input-scanline-begin index))
+               (left          (if (zero? index)
+                                  0
+                                  (bytevector-u8-ref input
+                                                     (+ input-scanline-begin
+                                                        (- index 1)))))
+               (above         (if (zero? scanline-index)
+                                  0
+                                  (bytevector-u8-ref output
+                                                     (+ previous-scanline-begin
+                                                        index))))
+               (upper-left    (if (or (zero? scanline-index) (zero? index))
+                                  0
+                                  (bytevector-u8-ref output
+                                                     (+ previous-scanline-begin
+                                                        (- index 1)))))
+               (raw          (bytevector-u8-ref input absolute-index)))
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (- raw
+                                         (paeth-predictor left above upper-left))
+                                      256)))
+        (loop (+ index 1))))))
 
 
 
