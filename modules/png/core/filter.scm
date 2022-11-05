@@ -74,37 +74,23 @@ SCANLINE-INDEX."
 SCANLINE-INDEX."
   (let* ((scanline-length       (png-filter-scanline-length filter))
          (bytes-per-pixel       (png-filter-bytes-per-pixel filter))
-         (image-width           (png-filter-image-width filter))
          (input-scanline-begin  (+ (* scanline-index (+ scanline-length 1)) 1))
          (output-scanline-begin (* scanline-index scanline-length)))
 
-    ;; Copy the first pixel as is.
-    (bytevector-copy! input
-                      input-scanline-begin
-                      output
-                      output-scanline-begin
-                      bytes-per-pixel)
-
-    (let loop ((px-index 1))
-      (unless (= px-index image-width)
-        (let loop-over-pixel ((index 0))
-          (unless (= index bytes-per-pixel)
-            (let ((absolute-input-index (+ input-scanline-begin
-                                           (* px-index bytes-per-pixel)
-                                           index))
-                  (absolute-output-index (+ output-scanline-begin
-                                            (* px-index bytes-per-pixel)
-                                            index)))
-              (bytevector-u8-set! output
-                                  absolute-output-index
-                                  (modulo (+ (bytevector-u8-ref input
-                                                                absolute-input-index)
-                                             (bytevector-u8-ref output
-                                                                (- absolute-output-index
-                                                                   bytes-per-pixel)))
-                                          256))
-              (loop-over-pixel (+ index 1)))))
-        (loop (+ px-index 1))))))
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((left  (if (< (- index bytes-per-pixel) 0)
+                          0
+                          (bytevector-u8-ref output
+                                             (+ output-scanline-begin
+                                                (- index bytes-per-pixel)))))
+               (sub-x (bytevector-u8-ref input
+                                         (+ input-scanline-begin index))))
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (+ sub-x left)
+                                      256)))
+        (loop (+ index 1))))))
 
 
 
@@ -195,22 +181,11 @@ The original algorithm developed by Alan W. Paeth."
                                                          index)))
                (paeth        (paeth-predictor left above upper-left)))
 
-          ;; (when (< scanline-index 3)
-          ;;   (format (current-error-port) "left: ~a; above: ~a; upper-left: ~a; raw: ~3a; paeth: ~a out: ~3a~%"
-          ;;           left
-          ;;           above
-          ;;           upper-left
-          ;;           raw
-          ;;           paeth
-          ;;           (modulo (+ raw paeth)
-          ;;                   256)))
-
           (bytevector-u8-set! output
                               (+ output-scanline-begin index)
                               (modulo (+ raw paeth)
                                       256)))
         (loop (+ index 1))))))
-  ;; (newline (current-error-port)))
 
 
 
@@ -254,18 +229,21 @@ The original algorithm developed by Alan W. Paeth."
          (output-scanline-begin   (* scanline-index scanline-length)))
     (let loop ((index 0))
       (unless (= index scanline-length)
-        (let* ((raw            (bytevector-u8-ref input
-                                                  absolute-index))
-               (prior-raw      (if (zero? index)
-                                   0
-                                   (bytevector-u8-ref input
-                                                      (- absolute-index bytes-per-pixel))))
-               (prior          (bytevector-u8-ref output
-                                                  (- absolute-index
-                                                     scanline-length))))
+        (let* ((average (bytevector-u8-ref input
+                                           (+ input-scanline-begin index)))
+               (prior-x (if (zero? scanline-index)
+                            0
+                            (bytevector-u8-ref output
+                                               (+ (- output-scanline-begin scanline-length)
+                                                  index))))
+               (raw     (if (< (- index bytes-per-pixel) 0)
+                            0
+                            (bytevector-u8-ref output
+                                               (+ output-scanline-begin
+                                                  (- index bytes-per-pixel))))))
           (bytevector-u8-set! output
                               (+ output-scanline-begin index)
-                              (modulo (+ raw (floor (/ (- prior-raw prior) 2)))
+                              (modulo (+ average (floor (/ (+ raw prior-x) 2)))
                                       256)))
         (loop (+ index 1))))))
 
