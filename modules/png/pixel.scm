@@ -41,4 +41,13 @@
                             (bytevector-u8-ref pixel index))
         (loop (+ index 1))))))
 
+(define-method (png-image-pixel-set! (image <png-image>)
+                                     (x     <number>)
+                                     (y     <number>)
+                                     (pixel <bytevector>))
+  (png-image-pixel-set! image
+                        (+ (* y (png-image-width image))
+                           x)
+                        pixel))
+
 ;;; pixel.scm ends here.
