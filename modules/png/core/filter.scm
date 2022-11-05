@@ -1,7 +1,10 @@
 (define-module (png core filter)
+  #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:export (png-filter-none-remove!
-            png-filter-sub-remove!))
+            png-filter-sub-remove!
+
+            paeth-predictor))
 
 
 
@@ -59,5 +62,24 @@ SCANLINE-INDEX."
                                           256))
               (loop-over-pixel (+ index 1)))))
         (loop (+ px-index 1))))))
+
+
+
+(define-method (paeth-predictor (left <number>)
+                                (above <number>)
+                                (upper-left <number>))
+  "Paeth predictor that is implemented based on the description in RFC 2083.
+The original algorithm developed by Alan W. Paeth."
+  (let* ((p            (+ left (- above upper-left)))
+         (p-left       (abs (- p left)))
+         (p-above      (abs (- p above)))
+         (p-upper-left (abs (- p upper-left))))
+    (cond
+     ((and (<= p-left p-above) (<= p-left p-upper-left))
+      left)
+     ((<= p-above p-upper-left)
+      above)
+     (else
+      upper-left))))
 
 ;;; filter.scm ends here.

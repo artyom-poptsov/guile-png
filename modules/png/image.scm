@@ -202,23 +202,6 @@ set to #t, the procedure returns data in uncompressed form."
 (define-method (png-image-pixel-size (image <png-image>))
   (png-image-color-type->pixel-size (png-image-color-type image)))
 
-(define-method (paeth-predictor (left <number>)
-                                (above <number>)
-                                (upper-left <number>))
-  "Paeth predictor that is implemented based on the description in RFC 2083.
-The original algorithm developed by Alan W. Paeth."
-  (let* ((p            (+ left (- above upper-left)))
-         (p-left       (abs (- p left)))
-         (p-above      (abs (- p above)))
-         (p-upper-left (abs (- p upper-left))))
-    (cond
-     ((and (<= p-left p-above) (<= p-left p-upper-left))
-      left)
-     ((<= p-above p-upper-left)
-      above)
-     (else
-      upper-left))))
-
 ;; 4.1.3. IDAT Image data
 ;;
 ;; The IDAT chunk contains the actual image data.  To create this
