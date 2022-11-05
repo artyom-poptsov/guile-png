@@ -38,7 +38,8 @@
 
 
 
-(define* (png->scm port
+(define* (png->scm #:optional
+                   (port (current-input-port))
                    #:key
                    (debug-mode? #f)
                    (decompress? #t)
