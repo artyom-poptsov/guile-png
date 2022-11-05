@@ -28,6 +28,7 @@
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (ice-9 binary-ports)     ; put-bytevector
+  #:use-module (ice-9 format)
   #:use-module (zlib)
   #:use-module (png core common)
   #:use-module (png core filter)
