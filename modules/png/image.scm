@@ -422,6 +422,9 @@ data."
   (let ((compressed-image (png-image-compress image)))
     (png-image->png compressed-image port)))
 
+(define-method (png-image->png (image <png-image>))
+  (png-image->png image (current-output-port)))
+
 (define-method (png-image-clone (image <png-image>))
   "Copy a PNG IMAGE, return a new copy."
   (let ((chunks (map png-chunk-clone (png-image-chunks image))))
