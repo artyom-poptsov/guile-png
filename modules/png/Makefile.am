@@ -27,9 +27,8 @@ SOURCES = \
 	chunk-converter.scm	\
 	pixel.scm		\
 	image.scm		\
-	image-processing.scm
-
-GOBJECTS = $(SOURCES:%.scm=%.go)
+	image-processing.scm	\
+	graphics.scm
 
 moddir=$(guilesitedir)/png/
 nobase_dist_mod_DATA = \
