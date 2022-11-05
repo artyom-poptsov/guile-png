@@ -103,7 +103,7 @@
   (vector->int32 (bytevector-copy/part vec 24 4)))
 
 (define-method (data:blue-y (vec <bytevector>))
-  (vector->int32 (bytevector-copy vec 28 4)))
+  (vector->int32 (bytevector-copy/part vec 28 4)))
 
 (define-method (data->png-chunk:cHRM (data   <bytevector>)
                                      (type   <symbol>)
