@@ -33,7 +33,8 @@
   #:use-module (png fsm png-parser)
   #:use-module (png core chunk)
   #:use-module (png chunk-converter)
-  #:export (png->scm))
+  #:export (png->scm
+            scm->png))
 
 
 
@@ -52,5 +53,10 @@
         (if decompress?
             (png-compressed-image-decompress image remove-filter?)
             image)))))
+
+(define* (scm->png image
+                   #:optional
+                   (port (current-output-port)))
+  (png-image->png image port))
 
 ;;; png.scm ends here.
