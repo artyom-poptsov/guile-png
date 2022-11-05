@@ -26,7 +26,8 @@ SUBDIRS = \
 SOURCES = \
 	chunk-converter.scm	\
 	pixel.scm		\
-	image.scm
+	image.scm		\
+	image-processing.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
