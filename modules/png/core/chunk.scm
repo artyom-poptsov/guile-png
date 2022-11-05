@@ -120,9 +120,7 @@
    #:init-value   0
    #:init-keyword #:crc
    #:getter       png-chunk-crc
-   #:setter       %png-chunk-crc-set!)
-
-  #:metaclass <redefinable-class>)
+   #:setter       %png-chunk-crc-set!))
 
 (define (png-chunk? x)
   (is-a? x <png-chunk>))
