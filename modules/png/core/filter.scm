@@ -249,23 +249,23 @@ The original algorithm developed by Alan W. Paeth."
                                    (output         <bytevector>)
                                    (scanline-index <number>))
   (let* ((scanline-length        (png-filter-scanline-length filter))
+         (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
          (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
          (output-scanline-begin   (* scanline-index scanline-length)))
     (let loop ((index 0))
       (unless (= index scanline-length)
-        (let* ((absolute-index (+ input-scanline-begin index))
-               (raw            (bytevector-u8-ref input
+        (let* ((raw            (bytevector-u8-ref input
                                                   absolute-index))
                (prior-raw      (if (zero? index)
                                    0
                                    (bytevector-u8-ref input
-                                                      (- absolute-index 1))))
+                                                      (- absolute-index bytes-per-pixel))))
                (prior          (bytevector-u8-ref output
                                                   (- absolute-index
                                                      scanline-length))))
           (bytevector-u8-set! output
                               (+ output-scanline-begin index)
-                              (modulo (- raw (floor (/ (- prior-raw prior) 2)))
+                              (modulo (+ raw (floor (/ (- prior-raw prior) 2)))
                                       256)))
         (loop (+ index 1))))))
 
