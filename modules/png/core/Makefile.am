@@ -21,6 +21,7 @@ include $(top_srcdir)/build-aux/am/guilec
 
 SOURCES = \
 	crc.scm		\
+	filter.scm	\
 	common.scm	\
 	chunk.scm	\
 	chunk-ihdr.scm	\

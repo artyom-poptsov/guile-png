@@ -4,6 +4,7 @@
   #:use-module (ice-9 binary-ports)     ; put-bytevector
   #:use-module (zlib)
   #:use-module (png core common)
+  #:use-module (png core filter)
   #:use-module (png core chunk)
   #:use-module (png core chunk-ihdr)
   #:use-module (png core chunk-iend)
@@ -253,15 +254,6 @@ new bytevector with image data with filter type bytes removed."
     ;; (format (current-error-port) "image bit depth: ~a~%" (png-chunk:IHDR-bit-depth ihdr ))
     ;; (format (current-error-port) "image filter:    ~a~%" (png-chunk:IHDR-filter-method ihdr ))
 
-    (define (remove-filter/none! row-index)
-      (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
-            (output-scanline-begin (* row-index scanline-length)))
-        (bytevector-copy! uncompressed-data
-                          input-scanline-begin
-                          result
-                          output-scanline-begin
-                          scanline-length)))
-
     (define (remove-filter/sub! row-index)
       (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
             (output-scanline-begin (* row-index scanline-length)))
@@ -338,7 +330,10 @@ new bytevector with image data with filter type bytes removed."
              (filter-type          (bytevector-u8-ref uncompressed-data
                                                       input-scanline-begin)))
         (case filter-type
-          ((0) (remove-filter/none! row-index))
+          ((0) (png-filter-none-remove! uncompressed-data
+                                        result
+                                        #:scanline-index  row-index
+                                        #:scanline-length scanline-length))
           ((1) (remove-filter/sub!  row-index))
           ((4) (remove-filter/paeth! row-index))
           (else
