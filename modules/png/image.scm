@@ -254,38 +254,6 @@ new bytevector with image data with filter type bytes removed."
     ;; (format (current-error-port) "image bit depth: ~a~%" (png-chunk:IHDR-bit-depth ihdr ))
     ;; (format (current-error-port) "image filter:    ~a~%" (png-chunk:IHDR-filter-method ihdr ))
 
-    (define (remove-filter/sub! row-index)
-      (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
-            (output-scanline-begin (* row-index scanline-length)))
-
-        ;; Copy the first pixel as is.
-        (bytevector-copy! uncompressed-data
-                          input-scanline-begin
-                          result
-                          output-scanline-begin
-                          pixel-size)
-
-        (let loop ((px-index 1))
-          (unless (= px-index width)
-            (let loop-over-pixel ((index 0))
-              (unless (= index pixel-size)
-                (let ((absolute-input-index (+ input-scanline-begin
-                                               (* px-index pixel-size)
-                                               index))
-                      (absolute-output-index (+ output-scanline-begin
-                                                (* px-index pixel-size)
-                                                index)))
-                  (bytevector-u8-set! result
-                                      absolute-output-index
-                                      (modulo (+ (bytevector-u8-ref uncompressed-data
-                                                                    absolute-input-index)
-                                                 (bytevector-u8-ref result
-                                                                    (- absolute-output-index
-                                                                       pixel-size)))
-                                              256))
-                  (loop-over-pixel (+ index 1)))))
-            (loop (+ px-index 1))))))
-
     (define (remove-filter/paeth! row-index)
       (let ((input-scanline-begin  (+ (* row-index (+ scanline-length 1)) 1))
             (output-scanline-begin (* row-index scanline-length))
@@ -334,7 +302,12 @@ new bytevector with image data with filter type bytes removed."
                                         result
                                         #:scanline-index  row-index
                                         #:scanline-length scanline-length))
-          ((1) (remove-filter/sub!  row-index))
+          ((1) (png-filter-sub-remove! uncompressed-data
+                                       result
+                                       #:image-width      width
+                                       #:scanline-index   row-index
+                                       #:scanline-length  scanline-length
+                                       #:bytes-per-pixel  pixel-size))
           ((4) (remove-filter/paeth! row-index))
           (else
            (error "Unsupported filter type" filter-type image)))))
