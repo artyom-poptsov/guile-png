@@ -10,21 +10,20 @@
 (define-method (png-image-filter-invert-colors (image <png-image>))
   "Copy IMAGE and its colors.  Return new image."
   (let* ((image-clone (png-image-clone image))
-         (data        (png-image-data image-clone))
-         (data-length (bytevector-length data))
-         (pixel-size  (png-image-pixel-size image)))
-    (let loop ((offset 0))
-      (if (= offset data-length)
+         (pixel-count (png-image-pixels image)))
+    (let loop ((index 0))
+      (if (= index pixel-count)
           image-clone
           (begin
-            (let loop-over-pixel ((index 0))
-              (unless (= index pixel-size)
-                (bytevector-u8-set! data
-                                    (+ offset index)
-                                    (- 255
-                                       (bytevector-u8-ref data (+ offset index))))
-                (loop-over-pixel (+ index 1))))
-            (loop (+ offset pixel-size)))))))
+            (let* ((pixel (png-image-pixel-ref image index))
+                   (red   (bytevector-u8-ref pixel 0))
+                   (green (bytevector-u8-ref pixel 1))
+                   (blue  (bytevector-u8-ref pixel 2)))
+              (bytevector-u8-set! pixel 0 (- 255 red))
+              (bytevector-u8-set! pixel 1 (- 255 green))
+              (bytevector-u8-set! pixel 2 (- 255 blue))
+              (png-image-pixel-set! image-clone index pixel)
+              (loop (+ index 1))))))))
 
 (define-method (png-image-filter-solarize (image     <png-image>)
                                           (threshold <number>))
