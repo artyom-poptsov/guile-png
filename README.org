@@ -1,16 +1,37 @@
 * Guile-PNG
 
-  PNG ([[https://www.rfc-editor.org/rfc/rfc2083][RFC 2083]]) format parser for GNU Guile.
+Portable Network Graphics (PNG, [[https://www.rfc-editor.org/rfc/rfc2083][RFC 2083]]) library for GNU Guile.
 
 ** License
-    Guile-PNG is free software: you can redistribute it and/or modify it under
-    the terms of the GNU General Public License as published by the Free
-    Software Foundation, either version 3 of the License, or (at your option)
-    any later version.  Please see =COPYING= file for the terms of GNU General
-    Public License.
+Guile-PNG is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.  Please see =COPYING= file for the terms of GNU General Public
+License.
 
 ** Requirements
    - [[https://www.gnu.org/software/guile/][GNU Guile]] 2.2+
    - [[http://www.nongnu.org/guile-lib/][Guile Library]] 0.1.9+
    - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]]
    - [[https://notabug.org/guile-zlib/guile-zlib][Guile-ZLIB]] 0.1.0+
+
+** Installation
+*** GNU Guix
+Development version from =guix.scm=:
+#+BEGIN_EXAMPLE shell
+$ guix build -f guix.scm
+$ guix package -f guix.scm
+#+END_EXAMPLE
+
+*** Manual
+ #+BEGIN_EXAMPLE shell
+$ git clone https://github.com/artyom-poptsov/guile-png.git
+$ cd guile-png
+$ autoreconf -vif
+$ ./configure
+$ make -j$(nproc)
+$ sudo make install
+#+END_EXAMPLE
+
+** Usage Examples
+Please see the =examples= directory for examples of Guile-PNG usage.
