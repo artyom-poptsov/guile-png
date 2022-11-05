@@ -180,10 +180,10 @@ The original algorithm developed by Alan W. Paeth."
                                    (output         <bytevector>)
                                    (scanline-index <number>))
     (if (zero? scanline-index)
-        (png-filter-none-remove! (change-class filter <png-filter>)
-                                 input
-                                 output
-                                 scanline-index)
+        (png-filter-remove! (change-class filter <png-filter>)
+                            input
+                            output
+                            scanline-index)
         (let* ((scanline-length        (png-filter-scanline-length filter))
                (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
                (output-scanline-begin   (* scanline-index scanline-length)))
