@@ -1,6 +1,7 @@
 (define-module (png core filter)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
+  #:use-module (png core common)
   #:export (<png-filter>
             <png-filter:none>
             <png-filter:sub>
@@ -26,6 +27,21 @@
    #:init-keyword #:bytes-per-pixel
    #:getter       png-filter-bytes-per-pixel))
 
+
+
+(define-method (%display (filter <png-filter>) (port <port>))
+  (format port
+          "#<png-filter image-width: ~apx scanline-length: ~ab bytes-per-pixel: ~ab ~a>"
+          (png-filter-image-width filter)
+          (png-filter-scanline-length filter)
+          (png-filter-bytes-per-pixel filter)
+          (object-address/hex-string filter)))
+
+(define-method (display (filter <png-filter>) (port <port>))
+  (%display filter port))
+
+(define-method (write (filter <png-filter>) (port <port>))
+  (%display filter port))
 
 
 
