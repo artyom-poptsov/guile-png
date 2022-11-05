@@ -7,6 +7,6 @@
              (png image-processing))
 
 (define (main args)
-  (let* ((png-image (png->scm (current-input-port)))
+  (let* ((png-image (png->scm))
          (new-image (png-image-filter-invert-colors png-image)))
-    (png-image->png new-image (current-output-port))))
+    (scm->png new-image)))

@@ -7,7 +7,7 @@
              (png image-processing))
 
 (define (main args)
-  (let* ((png-image (png->scm (current-input-port)))
+  (let* ((png-image (png->scm))
          (threshold 100)
          (new-image (png-image-filter-solarize png-image threshold)))
-    (png-image->png new-image (current-output-port))))
+    (scm->png new-image)))
