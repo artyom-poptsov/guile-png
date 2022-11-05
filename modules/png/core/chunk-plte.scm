@@ -1,5 +1,5 @@
 (define-module (png core chunk-plte)
-  ;; #:use-module (srfi srfi-43)
+  #:use-module (ice-9 format)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
