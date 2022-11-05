@@ -325,6 +325,25 @@ Set the @var{pixel} value for a pixel referenced by @var{x} from an
 
 @end deffn
 
+@section PNG Image Processing
+
+@code{(png image-processing)} provides high-level API for processing PNG
+images.
+
+@deffn {Method} png-image-filter-invert-colors (image <png-image>)
+
+Invert colors of an @var{image}, return a new image.
+
+@end deffn
+
+@deffn {Method} png-image-filter-solarize (image     <png-image>) @
+                                          (threshold <number>)
+
+Apply solarization effect to an @var{image} with the given @var{threshold}.
+Return a new image.
+
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
