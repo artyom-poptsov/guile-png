@@ -243,6 +243,10 @@ new bytevector with image data with filter type bytes removed."
                               #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size))
+         (filter-average    (make <png-filter:average>
+                              #:image-width width
+                              #:scanline-length scanline-length
+                              #:bytes-per-pixel pixel-size))
          (filter-paeth      (make <png-filter:paeth>
                               #:image-width width
                               #:scanline-length scanline-length
@@ -264,6 +268,8 @@ new bytevector with image data with filter type bytes removed."
            (png-filter-remove! filter-sub uncompressed-data result row-index))
           ((2)
            (png-filter-remove! filter-up uncompressed-data result row-index))
+          ((3)
+           (png-filter-remove! filter-average uncompressed-data result row-index))
           ((4)
            (png-filter-remove! filter-paeth uncompressed-data result row-index))
           (else

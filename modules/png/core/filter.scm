@@ -7,6 +7,7 @@
             <png-filter:sub>
             <png-filter:paeth>
             <png-filter:up>
+            <png-filter:average>
 
             png-filter-remove!
 
@@ -199,5 +200,34 @@ The original algorithm developed by Alan W. Paeth."
                                   (+ output-scanline-begin index)
                                   (modulo (- raw prior)
                                           256))))))))
+
+
+
+(define-class <png-filter:average> (<png-filter>))
+
+(define-method (png-filter-remove! (filter         <png-filter:average>)
+                                   (input          <bytevector>)
+                                   (output         <bytevector>)
+                                   (scanline-index <number>))
+  (let* ((scanline-length        (png-filter-scanline-length filter))
+         (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
+         (output-scanline-begin   (* scanline-index scanline-length)))
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((absolute-index (+ input-scanline-begin index))
+               (raw            (bytevector-u8-ref input
+                                                  absolute-index))
+               (prior-raw      (if (zero? index)
+                                   0
+                                   (bytevector-u8-ref input
+                                                      (- absolute-index 1))))
+               (prior          (bytevector-u8-ref output
+                                                  (- absolute-index
+                                                     scanline-length))))
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (- raw (floor (/ (- prior-raw prior) 2)))
+                                      256)))
+        (loop (+ index 1))))))
 
 ;;; filter.scm ends here.
