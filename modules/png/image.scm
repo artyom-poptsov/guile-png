@@ -230,7 +230,23 @@ new bytevector with image data with filter type bytes removed."
          (pixel-size        (png-image-color-type->pixel-size color-type))
          (scanline-length   (* width pixel-size))
          (result-length     (* width height pixel-size))
-         (result            (make-bytevector result-length 0)))
+         (result            (make-bytevector result-length 0))
+         (filter-none       (make <png-filter:none>
+                              #:image-width width
+                              #:scanline-length scanline-length
+                              #:bytes-per-pixel pixel-size))
+         (filter-sub        (make <png-filter:sub>
+                              #:image-width width
+                              #:scanline-length scanline-length
+                              #:bytes-per-pixel pixel-size))
+         (filter-up         (make <png-filter:up>
+                              #:image-width width
+                              #:scanline-length scanline-length
+                              #:bytes-per-pixel pixel-size))
+         (filter-paeth      (make <png-filter:paeth>
+                              #:image-width width
+                              #:scanline-length scanline-length
+                              #:bytes-per-pixel pixel-size)))
 
     ;; (format (current-error-port) "image size:      ~ax~a~%" width height)
     ;; (format (current-error-port) "image color type: ~a~%" (png-chunk:IHDR-color-type ihdr ))
@@ -242,26 +258,14 @@ new bytevector with image data with filter type bytes removed."
              (filter-type          (bytevector-u8-ref uncompressed-data
                                                       input-scanline-begin)))
         (case filter-type
-          ((0) (png-filter-none-remove! uncompressed-data
-                                        result
-                                        #:scanline-index  row-index
-                                        #:scanline-length scanline-length))
-          ((1) (png-filter-sub-remove! uncompressed-data
-                                       result
-                                       #:image-width      width
-                                       #:scanline-index   row-index
-                                       #:scanline-length  scanline-length
-                                       #:bytes-per-pixel  pixel-size))
-          ((2) (png-filter-up-remove! uncompressed-data
-                                      result
-                                      #:scanline-index    row-index
-                                      #:scanline-length   scanline-length))
-          ((4) (png-filter-paeth-remove! uncompressed-data
-                                         result
-                                         #:image-width     width
-                                         #:scanline-index  row-index
-                                         #:scanline-length scanline-length
-                                         #:bytes-per-pixel pixel-size))
+          ((0)
+           (png-filter-remove! filter-none uncompressed-data result row-index))
+          ((1)
+           (png-filter-remove! filter-sub uncompressed-data result row-index))
+          ((2)
+           (png-filter-remove! filter-up uncompressed-data result row-index))
+          ((4)
+           (png-filter-remove! filter-paeth uncompressed-data result row-index))
           (else
            (error "Unsupported filter type" filter-type image)))))
 
