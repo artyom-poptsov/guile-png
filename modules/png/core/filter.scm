@@ -127,10 +127,10 @@ The original algorithm developed by Alan W. Paeth."
      (else
       upper-left))))
 
-(define-method (png-filter-remove! (filter         <png-filter:paeth>)
-                                   (input          <bytevector>)
-                                   (output         <bytevector>)
-                                   (scanline-index <number>))
+(define-method (png-filter-apply! (filter         <png-filter:paeth>)
+                                  (input          <bytevector>)
+                                  (output         <bytevector>)
+                                  (scanline-index <number>))
   (let* ((scanline-length         (png-filter-scanline-length filter))
          (image-width             (png-filter-image-width filter))
          (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
@@ -164,6 +164,54 @@ The original algorithm developed by Alan W. Paeth."
                                       256)))
         (loop (+ index 1))))))
 
+(define-method (png-filter-remove! (filter         <png-filter:paeth>)
+                                   (input          <bytevector>)
+                                   (output         <bytevector>)
+                                   (scanline-index <number>))
+  (let* ((scanline-length         (png-filter-scanline-length filter))
+         (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
+         (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
+         (output-scanline-begin   (* scanline-index scanline-length))
+         (previous-scanline-begin (* (- scanline-index 1) scanline-length)))
+
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((left          (if (< (- index bytes-per-pixel) 0)
+                                  0
+                                  (bytevector-u8-ref output
+                                                     (+ output-scanline-begin
+                                                        (- index bytes-per-pixel)))))
+               (above         (if (zero? scanline-index)
+                                  0
+                                  (bytevector-u8-ref output
+                                                     (+ previous-scanline-begin
+                                                        index))))
+               (upper-left    (if (< (- index bytes-per-pixel) 0)
+                                  0
+                                  (bytevector-u8-ref output
+                                                     (+ previous-scanline-begin
+                                                        (- index bytes-per-pixel)))))
+               (raw          (bytevector-u8-ref input (+ input-scanline-begin
+                                                         index)))
+               (paeth        (paeth-predictor left above upper-left)))
+
+          ;; (when (< scanline-index 3)
+          ;;   (format (current-error-port) "left: ~a; above: ~a; upper-left: ~a; raw: ~3a; paeth: ~a out: ~3a~%"
+          ;;           left
+          ;;           above
+          ;;           upper-left
+          ;;           raw
+          ;;           paeth
+          ;;           (modulo (+ raw paeth)
+          ;;                   256)))
+
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (+ raw paeth)
+                                      256)))
+        (loop (+ index 1))))))
+  ;; (newline (current-error-port)))
+
 
 
 (define-class <png-filter:up> (<png-filter>))
@@ -172,26 +220,25 @@ The original algorithm developed by Alan W. Paeth."
                                    (input          <bytevector>)
                                    (output         <bytevector>)
                                    (scanline-index <number>))
-    (if (zero? scanline-index)
-        (png-filter-remove! (change-class filter <png-filter>)
-                            input
-                            output
-                            scanline-index)
-        (let* ((scanline-length        (png-filter-scanline-length filter))
-               (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
-               (output-scanline-begin   (* scanline-index scanline-length)))
-          (let loop ((index 0))
-            (unless (= index scanline-length)
-              (let* ((absolute-index (+ input-scanline-begin index))
-                     (raw            (bytevector-u8-ref input
-                                                        absolute-index))
-                     (prior          (bytevector-u8-ref output
-                                                        (- absolute-index
-                                                           scanline-length))))
-              (bytevector-u8-set! output
-                                  (+ output-scanline-begin index)
-                                  (modulo (- raw prior)
-                                          256))))))))
+  (let* ((scanline-length        (png-filter-scanline-length filter))
+         (input-scanline-begin    (+ (* scanline-index (+ scanline-length 1)) 1))
+         (output-scanline-begin   (* scanline-index scanline-length))
+         (previous-scanline-begin (* (- scanline-index 1) scanline-length)))
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((raw   (bytevector-u8-ref input
+                                         (+ input-scanline-begin index)))
+               (prior (if (zero? scanline-index)
+                          0
+                          (bytevector-u8-ref output
+                                             (+ previous-scanline-begin
+                                                index)))))
+
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (+ raw prior)
+                                      256)))
+        (loop (+ index 1))))))
 
 
 
