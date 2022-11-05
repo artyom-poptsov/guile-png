@@ -1,0 +1,43 @@
+name: GNU Guile 2.2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install guile-2.2 guile-2.2-libs guile-library
+          sudo apt install guile-2.2-dev texinfo gettext
+          sudo apt install automake autoconf help2man
+        
+      - name: Install Guile-SMC
+        run: |
+          git clone https://github.com/artyom-poptsov/guile-smc
+          cd guile-smc
+          git checkout master
+          autoreconf -vif
+          ./configure --with-guilesitedir=/usr/share/guile/site/2.2 --prefix=/usr
+          sudo make -j$(nproc) install
+
+      - name: Checkout repository 
+        uses: actions/checkout@v2
+
+      - name: Autoreconf
+        run: autoreconf -vif
+
+      - name: Configure
+        run: ./configure
+
+      - name: Build
+        run: make -j$(nproc)
+
+      - name: Test
+        run: make -j$(nproc) check

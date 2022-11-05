@@ -1,0 +1,39 @@
+name: GNU Guile 3.0
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt --force-yes -qy install guile-3.0 guile-3.0-libs guile-3.0-dev guile-library texinfo gettext make automake autoconf help2man
+
+      - name: Install Guile-SMC
+        run: |
+          git clone https://github.com/artyom-poptsov/guile-smc
+          cd guile-smc
+          git checkout master
+          autoreconf -vif
+          ./configure --with-guilesitedir=/usr/share/guile/site/3.0 --prefix=/usr
+          sudo make -j$(nproc) install
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Autoreconf
+        run: autoreconf -vif
+
+      - name: Configure
+        run: ./configure
+
+      - name: Build
+        run: make -j$(nproc)
+
+      - name: Test
+        run: make -j$(nproc) check
