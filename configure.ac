@@ -86,6 +86,10 @@ AC_CONFIG_FILES([
         doc/Makefile
 ])
 
+AC_CONFIG_LINKS([modules/png/fsm/chunk-parser.puml:modules/png/fsm/chunk-parser.puml])
+AC_CONFIG_LINKS([modules/png/fsm/signature-parser.puml:modules/png/fsm/signature-parser.puml])
+AC_CONFIG_LINKS([modules/png/fsm/png-parser.puml:modules/png/fsm/png-parser.puml])
+
 dnl texinfo package required to make the documentation in Texinfo format.
 AC_CHECK_PROG(MAKEINFO_CHECK, makeinfo, yes)
 AS_IF([test x"$MAKEINFO_CHECK" != x"yes"],
