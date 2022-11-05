@@ -1,4 +1,5 @@
 * Guile-PNG
+[[https://github.com/artyom-poptsov/guile-png][https://github.com/artyom-poptsov/guile-png/workflows/GNU%20Guile%202.2/badge.svg]] [[https://github.com/artyom-poptsov/guile-png][https://github.com/artyom-poptsov/guile-png/workflows/GNU%20Guile%203.0/badge.svg]]
 
 Portable Network Graphics (PNG, [[https://www.rfc-editor.org/rfc/rfc2083][RFC 2083]]) library for GNU Guile.
 
