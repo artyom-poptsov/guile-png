@@ -232,23 +232,18 @@ new bytevector with image data with filter type bytes removed."
          (result-length     (* width height pixel-size))
          (result            (make-bytevector result-length 0))
          (filter-none       (make <png-filter:none>
-                              #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size))
          (filter-sub        (make <png-filter:sub>
-                              #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size))
          (filter-up         (make <png-filter:up>
-                              #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size))
          (filter-average    (make <png-filter:average>
-                              #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size))
          (filter-paeth      (make <png-filter:paeth>
-                              #:image-width width
                               #:scanline-length scanline-length
                               #:bytes-per-pixel pixel-size)))
 
@@ -265,12 +260,16 @@ new bytevector with image data with filter type bytes removed."
           ((0)
            (png-filter-remove! filter-none uncompressed-data result row-index))
           ((1)
+           ;; (format (current-error-port) "~a: sub~%" row-index)
            (png-filter-remove! filter-sub uncompressed-data result row-index))
           ((2)
+           ;; (format (current-error-port) "~a: up~%" row-index)
            (png-filter-remove! filter-up uncompressed-data result row-index))
           ((3)
+           ;; (format (current-error-port) "~a: average~%" row-index)
            (png-filter-remove! filter-average uncompressed-data result row-index))
           ((4)
+           ;; (format (current-error-port) "~a: paeth~%" row-index)
            (png-filter-remove! filter-paeth uncompressed-data result row-index))
           (else
            (error "Unsupported filter type" filter-type image)))))

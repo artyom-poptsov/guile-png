@@ -15,11 +15,6 @@
 
 (define-class <png-filter> ()
   ;; <number>
-  (image-width
-   #:init-keyword #:image-width
-   #:getter       png-filter-image-width)
-
-  ;; <number>
   (scanline-length
    #:init-keyword #:scanline-length
    #:getter       png-filter-scanline-length)
@@ -32,8 +27,7 @@
 
 (define-method (%display (filter <png-filter>) (port <port>))
   (format port
-          "#<png-filter image-width: ~apx scanline-length: ~ab bytes-per-pixel: ~ab ~a>"
-          (png-filter-image-width filter)
+          "#<png-filter scanline-length: ~ab bytes-per-pixel: ~ab ~a>"
           (png-filter-scanline-length filter)
           (png-filter-bytes-per-pixel filter)
           (object-address/hex-string filter)))
@@ -118,7 +112,6 @@ The original algorithm developed by Alan W. Paeth."
                                   (output         <bytevector>)
                                   (scanline-index <number>))
   (let* ((scanline-length         (png-filter-scanline-length filter))
-         (image-width             (png-filter-image-width filter))
          (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
          (input-scanline-begin    (* scanline-index (+ scanline-length 1)))
          (output-scanline-begin   (* scanline-index scanline-length))
