@@ -146,13 +146,23 @@ This chapter describes the Guile-PNG API.
 @code{(png)} module contains the basic PNG procedures to read/write PNG
 images.
 
-@deffn {Scheme Procedure} png->scm port @
-                                   [debug-mode?=#f] @
-                                   [decompress?=#t] @
-                                   [remove-filter?=#t]
+@deffn {Scheme Procedure} png->scm [port=(current-input-port) @
+                                   [#:debug-mode?=#f] @
+                                   [#:decompress?=#t] @
+                                   [#:remove-filter?=#t]
 
 Read PNG data fro m the specified @var{port}, return a new @code{<png-image>}
 instance.
+
+@end deffn
+
+@deffn {Scheme Procedure} scm->png image @
+                                   [port=(current-output-port)]
+
+Convert an @var{image} to a PNG binary format, print the output to a
+@var{port}.
+
+Return value is undefined.
 
 @end deffn
 
