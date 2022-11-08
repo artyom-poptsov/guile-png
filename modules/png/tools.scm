@@ -1,18 +1,18 @@
-(define-module (png graphics)
+(define-module (png tools)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png image)
   #:use-module (png pixel)
-  #:export (png-graphics-draw-line!))
+  #:export (png-tools-draw-line!))
 
 
 
-(define-method (png-graphics-draw-line! (image <png-image>)
-                                        (x1 <number>)
-                                        (y1 <number>)
-                                        (x2 <number>)
-                                        (y2 <number>)
-                                        (color <bytevector>))
+(define-method (png-tools-draw-line! (image <png-image>)
+                                     (x1 <number>)
+                                     (y1 <number>)
+                                     (x2 <number>)
+                                     (y2 <number>)
+                                     (color <bytevector>))
   "This method implements Bresenham's Line generation algorithm."
   (let ((m-new (* 2 (- y2 y1))))
     (let loop ((x x1)
