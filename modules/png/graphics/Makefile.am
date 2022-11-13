@@ -2,7 +2,7 @@
 ##
 ## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
-## This file is part of Guile-INI.
+## This file is part of Guile-PNG.
 ##
 ## Guile-PNG is free software: you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
