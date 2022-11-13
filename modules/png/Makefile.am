@@ -29,7 +29,7 @@ SOURCES = \
 	pixel.scm		\
 	image.scm		\
 	image-processing.scm	\
-	tools.scm
+	graphics.scm
 
 moddir=$(guilesitedir)/png/
 nobase_dist_mod_DATA = \
