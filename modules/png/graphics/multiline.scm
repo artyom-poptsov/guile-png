@@ -5,7 +5,7 @@
   #:use-module (png graphics point)
   #:use-module (png graphics line)
   #:export (<multiline>
-            multi-line-points))
+            multiline-points))
 
 
 (define-class <multiline> (<graphic>)
