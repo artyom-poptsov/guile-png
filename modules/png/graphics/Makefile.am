@@ -23,7 +23,8 @@ SOURCES = \
 	graphic.scm	\
 	point.scm	\
 	line.scm	\
-	rectangle.scm
+	rectangle.scm	\
+	ellipse.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
