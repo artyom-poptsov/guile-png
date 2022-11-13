@@ -37,6 +37,7 @@
 (re-export-modules (png graphics graphic)
                    (png graphics point)
                    (png graphics line)
+                   (png graphics multiline)
                    (png graphics rectangle)
                    (png graphics ellipse)
                    (png graphics circle))
