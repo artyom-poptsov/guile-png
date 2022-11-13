@@ -7,6 +7,14 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.2.0 (2022-11-13)
+** =(png graphics ...)=: New modules
+There's now a set of classes that allow to draw graphical primitives like
+points, lines, multilines, rectangles, ellipses and circles on a PNG image.
+** =(png graphics)=: New module
+This module re-exports everything from =(png graphics ...)=.
+** =(png pixel)= now =(png graphics pixel)=
+
 * Changes in version 0.1.0 (2022-11-05)
 ** Release of the first version of Guile-PNG
 
