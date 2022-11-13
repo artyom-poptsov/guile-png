@@ -24,7 +24,8 @@ SOURCES = \
 	point.scm	\
 	line.scm	\
 	rectangle.scm	\
-	ellipse.scm
+	ellipse.scm	\
+	circle.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

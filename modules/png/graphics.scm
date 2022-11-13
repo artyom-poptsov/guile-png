@@ -38,6 +38,7 @@
                    (png graphics point)
                    (png graphics line)
                    (png graphics rectangle)
-                   (png graphics ellipse))
+                   (png graphics ellipse)
+                   (png graphics circle))
 
 ;;; graphics.scm ends here.
