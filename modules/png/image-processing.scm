@@ -27,7 +27,7 @@
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
-  #:use-module (png pixel)
+  #:use-module (png graphics pixel)
   #:export (png-image-filter-invert-colors
             png-image-filter-solarize))
 

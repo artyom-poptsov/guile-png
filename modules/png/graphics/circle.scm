@@ -1,7 +1,7 @@
 (define-module (png graphics circle)
   #:use-module (oop goops)
   #:use-module (png image)
-  #:use-module (png pixel)
+  #:use-module (png graphics pixel)
   #:use-module (png graphics graphic)
   #:use-module (png graphics ellipse)
   #:export (<circle>

@@ -26,7 +26,6 @@ SUBDIRS = \
 
 SOURCES = \
 	chunk-converter.scm	\
-	pixel.scm		\
 	image.scm		\
 	image-processing.scm	\
 	graphics.scm
