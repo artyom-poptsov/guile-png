@@ -20,6 +20,7 @@
 include $(top_srcdir)/build-aux/am/guilec
 
 SOURCES = \
+	pixel.scm	\
 	graphic.scm	\
 	point.scm	\
 	line.scm	\
