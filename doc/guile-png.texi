@@ -303,10 +303,17 @@ Convert an @var{image} to the PNG binary format, print the data to a
 Make an exact copy of an @var{image}, return the copy.
 @end deffn
 
-@section PNG Pixel
+@section Graphics
 
-@code{(png pixel)} module provides high-level API for working with PNG pixel
-data.
+@code{(png graphcis ...)} contains classes that describing graphical objects
+that can be drawn on a @code{<png-image>} instance.
+
+@code{(png graphics)} modulep re-exports all the graphical objects.
+
+@subsection Pixel-Level Graphics
+
+@code{(png graphics pixel)} module provides low-level API for working with PNG
+pixel data.
 
 @deffn {Method} png-image-pixel-ref (image <png-image>) @
                                     (x <number>)
@@ -323,6 +330,255 @@ is returned as a byte vector.
 Set the @var{pixel} value for a pixel referenced by @var{x} from an
 @var{image}.  The return value is undefined.
 
+@end deffn
+
+@subsection Graphic Objects
+
+@code{(png graphics graphic)} contains @code{<graphic>} class which is the
+foundation for every graphical object that can be drawn on a
+@code{<png-image>} instance.
+
+@deftp {Class} <graphic> [#:color=#u8(0 0 0 0)]
+
+This class represents a generic graphical object.
+
+Constructor parameters:
+
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (graphic <graphic>)
+This method throws an error because a generic @var{graphic} instance cannot be
+drawn.
+@end deffn
+
+@subsection Point
+
+@code{(png graphics point)} describes the simplest object that can be drawn on
+a @code{<png-image>} instance -- a single point.
+
+@deftp {Class} <point> [#:color=#u8(0 0 0 0)] @
+                       [#:x=0] @
+                       [#:y=0]
+
+Single graphical point.
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (point <point>)
+Draw a @var{point} on an @var{image}.
+@end deffn
+
+@deffn {Method} point-x (point <point>)
+The the X coordinate of a @var{point}.
+@end deffn
+
+@deffn {Method} point-y (point <point>)
+The the Y coordinate of a @var{point}.
+@end deffn
+
+@subsection Line
+
+@code{(png graphics line)} describes a line.
+
+@deftp {Class} <line> [#:color=#u8(0 0 0 0)] @
+                      [#:p1=(lambda () (make <point>))] @
+                      [#:p2=(lambda () (make <point>))]
+
+Graphical line that can be drawn on a @code{<png-image>} instance.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:p1 (p1 <point>)
+The first point of the line.  If not set, a point on coordinates 0, 0 is used.
+@item #:p2 (p2 <point>)
+The second point of the line.  If not set, a point on coordinates 0, 0 is
+used.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (line <line>)
+Draw a @var{line} on an @var{image}.
+@end deffn
+
+@deffn {Method} line-p1 (line <line>)
+Get the starting point of a @var{line}.
+@end deffn
+
+@deffn {Method} line-p2 (line <line>)
+Get the ending point of a @var{line}.
+@end deffn
+
+@subsection Multiline
+
+@code{(png graphics multiline)} contains a @code{<multiline>} class.
+
+@deftp {Class} <multiline> [#:color=#u8(0 0 0 0)] @
+                           [#:points='()]
+
+This class describes a line with multiple break points.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:points (points <list>)
+The list of @code{<point>} instances.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (multiline <multiline>)
+
+Draw a @var{multiline} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} multiline-points (multiline <multiline>)
+Get the points of a @var{multiline}.
+@end deffn
+
+@subsection Rectangle
+
+@code{(png graphics rectangle)} contains a @code{<rectangle>} class.
+
+@deftp {Class} <rectangle> [#:color=#u8(0 0 0 0)] @
+                           [#:position=(lambda () (make <point>))] @
+                           [#:width=0] @
+                           [#:height=0]
+
+This class describes a rectangle.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:position (point <point>)
+The position of the upper left angle of the rectangle.
+@item #:width (width <number>)
+The width of the rectangle.
+@item #:height (height <number>)
+The height of the rectangle.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (rectangle <rectangle>)
+
+Draw a @var{rectangle} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} rectangle-position (rectangle <rectangle>)
+Get the position of a @var{rectangle}.
+@end deffn
+
+@deffn {Method} rectangle-width (rectangle <rectangle>)
+Get the width of a @var{rectangle}.
+@end deffn
+
+@deffn {Method} rectangle-height (rectangle <rectangle>)
+Get the height of a @var{rectangle}.
+@end deffn
+
+@subsection Ellipse
+
+@code{(png graphics ellipse)} contains an @code{<ellipse>} class.
+
+@deftp {Class} <ellipse> [#:color=#u8(0 0 0 0)] @
+                         [#:center=(lambda () (make <point>))] @
+                         [#:width=0] @
+                         [#:height=0]
+
+This class describes an ellipse.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:center (point <point>)
+The position of the ellipse center.
+@item #:width (width <number>)
+The width of the ellipse.
+@item #:height (height <number>)
+The height of the ellipse.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (ellipse <ellipse>)
+
+Draw an @var{ellipse} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} ellipse-center (ellipse <ellipse>)
+Get the center point of an @var{ellipse}.
+@end deffn
+
+@deffn {Method} ellipse-width (ellipse <ellipse>)
+Get the width of an @var{ellipse}.
+@end deffn
+
+@deffn {Method} ellipse-height (ellipse <ellipse>)
+Get the height of an @var{ellipse}.
+@end deffn
+
+@subsection Circle
+
+@code{(png graphics circle)} contains a @code{<circle>} class.
+
+@deftp {Class} <circle> [#:color=#u8(0 0 0 0)] @
+                        [#:center=(lambda () (make <point>))] @
+                        [#:radius=0] @
+                        [#:diameter=0]
+
+This class describes a circle.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:center (point <point>)
+The position of the ellipse center.
+@item #:radius (value <number>)
+The radius of the circle.
+@item #:diameter (value <number>)
+The diameter of the circle.  Note that only one of the dimensions must be
+specified; when both diameter and radius are set, an error will be thrown.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (circle <circle>)
+
+Draw an @var{circle} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} circle-center (circle <circle>)
+Get the center of a @var{circle}.
+@end deffn
+
+@deffn {Method} circle-radius (circle <circle>)
+Get the radius of a @var{circle}.
+@end deffn
+
+@deffn {Method} circle-diameter (circle <circle>)
+Get the diameter of a @var{circle}.
 @end deffn
 
 @section PNG Image Processing
