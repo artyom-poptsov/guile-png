@@ -28,6 +28,7 @@ SOURCES = \
 	chunk-plte.scm	\
 	chunk-iend.scm	\
 	chunk-chrm.scm	\
+	chunk-text.scm	\
 	chunk-ztxt.scm	\
 	chunk-time.scm	\
 	chunk-iccp.scm	\
