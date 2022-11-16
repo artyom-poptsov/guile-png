@@ -46,8 +46,8 @@
             #:type    type
             #:data    data
             #:crc     crc
-            #:keyword            keyword
-            #:text               (utf->string (reverse text)))
+            #:keyword keyword
+            #:text    (utf8->string (u8-list->bytevector (reverse text))))
           (loop (cons (bytevector-u8-ref data idx) text)
                 (+ idx 1)))))
 
@@ -56,7 +56,7 @@
                (index   0))
       (let ((byte (bytevector-u8-ref data index)))
       (if (zero? byte)
-          (read-text index (utf8->string (reverse keyword)))
+          (read-text index (utf8->string (u8-list->bytevector (reverse keyword))))
           (loop (cons byte keyword)
                 (+ index 1))))))
 
