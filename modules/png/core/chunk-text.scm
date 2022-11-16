@@ -5,6 +5,7 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:tEXt>
+            png-chunk:tEXt?
             png-chunk:tEXt-keyword
             png-chunk:tEXt-text
             data->png-chunk:tEXt))
@@ -14,13 +15,18 @@
 (define-class <png-chunk:tEXt> (<png-chunk>)
   ;; <string>
   (keyword
-   #:init-value ""
-   #:getter     png-chunk:tEXt-keyword)
+   #:init-value   ""
+   #:init-keyword #:keyword
+   #:getter       png-chunk:tEXt-keyword)
 
   ;; <string>
   (text
-   #:init-value ""
-   #:getter     png-chunk:tEXt-text))
+   #:init-value   ""
+   #:init-keyword #:text
+   #:getter       png-chunk:tEXt-text))
+
+(define (png-chunk:tEXt? x)
+  (is-a? x <png-chunk:tEXt>))
 
 
 
