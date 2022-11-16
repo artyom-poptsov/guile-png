@@ -5,6 +5,7 @@
   #:use-module (png core chunk-plte)
   #:use-module (png core chunk-iend)
   #:use-module (png core chunk-chrm)
+  #:use-module (png core chunk-text)
   #:use-module (png core chunk-ztxt)
   #:use-module (png core chunk-time)
   #:use-module (png core chunk-iccp)
@@ -26,6 +27,8 @@
     (PLTE . ,(make-converter data->png-chunk:PLTE))
     (IEND . ,(make-converter data->png-chunk:IEND))
     (cHRM . ,(make-converter data->png-chunk:cHRM))
+    (tEXt . ,(make-converter data->png-chunk:tEXt))
+    (tEXT . ,(make-converter data->png-chunk:tEXt))
     (zTXt . ,(make-converter data->png-chunk:zTXt))
     (tIME . ,(make-converter data->png-chunk:tIME))
     (iCCP . ,(make-converter data->png-chunk:iCCP))
@@ -56,6 +59,8 @@
 (define-method (png-chunk->typed-chunk image
                                        (chunk <png-chunk>))
   (let ((type (png-chunk-type chunk)))
+    (display type (current-error-port))
+    (newline (current-error-port))
     (if type
         (let ((converter (assoc-ref %converters-to-typed type)))
           (if converter
