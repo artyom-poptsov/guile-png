@@ -25,21 +25,26 @@ SOURCES = \
 	signature-context.scm
 
 BUILT_SOURCES =	\
-	context.scm
-
-EXTRA_DIST += \
-	chunk-parser.puml \
+	context.scm \
+	png-parser.scm \
 	chunk-parser.scm \
-	png-parser.puml \
-	png-parser.scm	\
-	signature-parser.puml \
 	signature-parser.scm
 
 INSTALL += \
-	context.scm
+	context.scm \
+	png-parser.scm \
+	chunk-parser.scm \
+	signature-parser.scm
 
-moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/
-godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/
+EXTRA_DIST += \
+	chunk-parser.puml \
+	png-parser.puml \
+	signature-parser.puml
+
+moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm
+godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm
+
+SUFFIXES = .puml
 
 GUILE_SMC_CONTEXT_ARGS = \
 	--log-driver file \
@@ -85,8 +90,6 @@ GUILE_SMC_PNG_PARSER_ARGS += \
 endif
 
 GUILE_SMC_ENV = GUILE_AUTO_COMPILE=0
-
-all: context.scm png-parser.scm
 
 context.scm:
 	@echo "  SMC      $@"
