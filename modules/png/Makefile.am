@@ -30,12 +30,12 @@ SOURCES = \
 	image-processing.scm	\
 	graphics.scm
 
-moddir=$(guilesitedir)/png/
+moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png
 nobase_dist_mod_DATA = \
 	$(SOURCES) \
 	$(EXTRA_DIST)
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png
 nobase_nodist_ccache_DATA = $(GOBJECTS)
 
 # Make sure source files are installed first, so that the mtime of
