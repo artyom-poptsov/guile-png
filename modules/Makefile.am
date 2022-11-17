@@ -17,16 +17,16 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 
-include $(top_srcdir)/build-aux/am/guilec
+include $(top_srcdir)/build-aux/am/guile.am
 
 SUBDIRS = \
-	png	\
+	png \
 	.
 
 SOURCES = \
 	png.scm
 
-moddir=$(prefix)/share/guile/site/$(GUILE_EFFECTIVE_VERSION)/
-godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/
+moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)
+godir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache
 
 ### Makefile.am ends here.
