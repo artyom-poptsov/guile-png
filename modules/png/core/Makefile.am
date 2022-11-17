@@ -37,11 +37,11 @@ SOURCES = \
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
-moddir=$(guilesitedir)/png/core/
+moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/core
 nobase_dist_mod_DATA = \
 	$(SOURCES)
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/core/
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/core
 nobase_nodist_ccache_DATA = $(GOBJECTS)
 
 # Make sure source files are installed first, so that the mtime of
