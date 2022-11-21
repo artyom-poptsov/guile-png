@@ -1,4 +1,4 @@
-(define-module (png core chunk-text)
+(define-module (png core chunk text)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)

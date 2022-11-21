@@ -3,7 +3,7 @@
              (oop goops)
              (png core common)
              (png core chunk)
-             (png core chunk-ihdr))
+             (png core chunk ihdr))
 
 
 (define %test-name "chunks")

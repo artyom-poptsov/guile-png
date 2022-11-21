@@ -1,40 +1,43 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
-## This file is part of Guile-INI.
+## This file is part of Guile-PNG.
 ##
-## Guile-INI is free software: you can redistribute it and/or
+## Guile-PNG is free software: you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
 ## published by the Free Software Foundation, either version 3 of the
 ## License, or (at your option) any later version.
 ##
-## Guile-INI is distributed in the hope that it will be useful, but
+## Guile-PNG is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ## General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Guile-INI.  If not, see <http://www.gnu.org/licenses/>.
+## along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 
 include $(top_srcdir)/build-aux/am/guilec
 
-SUBDIRS = \
-	. chunk
-
 SOURCES = \
-	crc.scm		\
-	filter.scm	\
-	common.scm	\
-	chunk.scm
+	ihdr.scm	\
+	plte.scm	\
+	iend.scm	\
+	chrm.scm	\
+	text.scm	\
+	ztxt.scm	\
+	time.scm	\
+	iccp.scm	\
+	bkgd.scm	\
+	phys.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
-moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/core
+moddir=$(guilesitedir)/png/core/chunk/
 nobase_dist_mod_DATA = \
 	$(SOURCES)
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/core
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/core/chunk/
 nobase_nodist_ccache_DATA = $(GOBJECTS)
 
 # Make sure source files are installed first, so that the mtime of

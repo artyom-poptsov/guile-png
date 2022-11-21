@@ -3,8 +3,8 @@
              (oop goops)
              (png image)
              (png core chunk)
-             (png core chunk-ihdr)
-             (png core chunk-iend))
+             (png core chunk ihdr)
+             (png core chunk iend))
 
 
 (define %test-name "image")

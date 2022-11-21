@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk-bkgd)
+(define-module (png core chunk bkgd)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
   #:use-module (png core common)

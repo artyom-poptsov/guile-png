@@ -1,4 +1,4 @@
-(define-module (png core chunk-chrm)
+(define-module (png core chunk chrm)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)

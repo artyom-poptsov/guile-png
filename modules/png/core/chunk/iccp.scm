@@ -1,4 +1,4 @@
-(define-module (png core chunk-iccp)
+(define-module (png core chunk iccp)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
