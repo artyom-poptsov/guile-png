@@ -25,6 +25,9 @@
             png-chunk->png
             png-chunk-valid?
 
+            ;; Chunk naming.
+            png-chunk-safe-to-copy?
+
             ;; Chunk type/vector converters.
             vector->chunk-type
             chunk-type->vector
@@ -158,6 +161,17 @@ the list."
 
 (define-method (png-chunk-type-info (chunk <png-chunk>))
   (png-chunk-type-info (png-chunk-type chunk)))
+
+
+
+(define-method (png-chunk-safe-to-copy? (bv <bytevector>))
+  "Check if a bytevector BV describes a chunk type that is safe to copy."
+  (zero? (logand (bytevector-u8-ref bv 3) 32)))
+
+(define-method (png-chunk-safe-to-copy? (chunk <png-chunk>))
+  "Check if a CHUNK is safe to copy."
+  (let ((type-info (png-chunk-type-info (png-chunk-type chunk))))
+    (png-chunk-safe-to-copy? (list-ref type-info 1))))
 
 
 

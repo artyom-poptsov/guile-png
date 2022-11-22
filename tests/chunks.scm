@@ -33,6 +33,17 @@
                                 #:type 'IHDR)))
 
 
+;; Chunk naming.
+
+(test-equal "png-chunk-safe-to-copy?: #t"
+  #t
+  (png-chunk-safe-to-copy? #vu8(73 72 68 82)))
+
+(test-equal "png-chunk-safe-to-copy?: #f"
+  #f
+  (png-chunk-safe-to-copy? #vu8(122 84 88 116)))
+
+
 ;; IHDR
 
 (define %ihdr-data #vu8(0 0 13 180 0 0 9 176 8 2 0 0 0))
