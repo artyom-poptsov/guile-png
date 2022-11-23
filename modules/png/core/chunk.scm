@@ -27,6 +27,7 @@
 
             ;; Chunk naming.
             png-chunk-ancillary?
+            png-chunk-private?
             png-chunk-safe-to-copy?
 
             ;; Chunk type/vector converters.
@@ -173,6 +174,15 @@ the list."
   "Check if a CHUNK is ancillary."
   (let ((type-info (png-chunk-type-info (png-chunk-type chunk))))
     (png-chunk-ancillary? (list-ref type-info 1))))
+
+(define-method (png-chunk-private? (bv <bytevector>))
+  "Check if a bytevector BV describes a chunk type that is private."
+  (> (logand (bytevector-u8-ref bv 1) 32) 0))
+
+(define-method (png-chunk-private? (chunk <png-chunk>))
+  "Check if a CHUNK is private."
+  (let ((type-info (png-chunk-type-info (png-chunk-type chunk))))
+    (png-chunk-private? (list-ref type-info 1))))
 
 (define-method (png-chunk-safe-to-copy? (bv <bytevector>))
   "Check if a bytevector BV describes a chunk type that is safe to copy."

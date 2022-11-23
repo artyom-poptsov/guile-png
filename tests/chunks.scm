@@ -1,5 +1,6 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
+             (ice-9 iconv)
              (oop goops)
              (png core common)
              (png core chunk)
@@ -42,6 +43,14 @@
 (test-equal "png-chunk-ancillary?: #f"
   #f
   (png-chunk-ancillary? (chunk-type->vector 'IHDR)))
+
+(test-equal "png-chunk-private?: #t"
+  #t
+  (png-chunk-private? (string->bytevector "TeST" "ASCII")))
+
+(test-equal "png-chunk-private?: #f"
+  #f
+  (png-chunk-private? (chunk-type->vector 'IHDR)))
 
 (test-equal "png-chunk-safe-to-copy?: #t"
   #t
