@@ -600,6 +600,72 @@ Return a new image.
 
 @end deffn
 
+@section PNG Chunks
+
+A PNG file consists of a PNG signature followed by a series of ``chunks''.
+@code{(png core chunk)} describes a generic PNG chunk.
+
+@deftp {Class} <png-chunk> [#:length=0] @
+                           [#:type=#f] @
+                           [#:data=#vu8()] @
+                           [#:crc=0]
+
+This class describes a generic PNG Chunk.
+
+Constructor parameters:
+@table @asis
+@item #:length (length <number>)
+A 4-byte unsigned integer giving the number of bytes in the chunk's data
+field. The length counts only the data field, not itself, the chunk type code,
+or the CRC.  Zero is a valid length.  The value must not exceed (2^31)-1
+bytes.
+@item #:type (type <symbol>)
+A chunk type code.  For convenience in description and in examining PNG files,
+type codes are restricted to consist of uppercase and lowercase ASCII letters
+(A-Z and a-z, or 65-90 and 97-122 decimal.)
+@item #:data (data <bytevector>)
+The chunk data.  This part can be of zero length.
+@item #:crc (value <number>)
+4-byte CRC Cyclic Redundancy Check) calculated on the preceding bytes in the
+chunk, including the chunk type code and chunk data fields, but not including
+the length field.  The CRC is always present, even for chunks containing no
+data.
+@end table
+
+@end deftp
+
+@deffn {Scheme Procedure} png-chunk? x
+Check if @var{x} is a @code{<png-chunk>} instance.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk>)
+Make a copy of a @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk-safe-to-copy? (bv <bytevector>)
+Check if a bytevector @var{bv} describes a chunk type that is safe to copy.
+@end deffn
+
+@deffn {Method} png-chunk-safe-to-copy? (chunk <png-chunk>)
+Check if a @var{chunk} is safe to copy.
+@end deffn
+
+@deffn {Method} png-chunk-crc-calculate (chunk <png-chunk>)
+Calculate a Cyclic Redundancy Code (CRC) for a @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk-crc-update! (chunk <png-chunk>)
+Re-calculate and update the @var{chunk} Cyclic Redundancy Code (CRC.)
+@end deffn
+
+@deffn {Method} png-chunk-valid? (chunk <png-chunk>)
+Check if a @var{chunk} has a valid Cyclic Redundancy Code (CRC.)
+@end deffn
+
+@deffn {Method} png-chunk->png (chunk <png-chunk>) (port <output-port>)
+Convert a @var{chunk} to a binary form and write it to a @var{port}.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
