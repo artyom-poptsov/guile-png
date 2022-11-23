@@ -35,6 +35,14 @@
 
 ;; Chunk naming.
 
+(test-equal "png-chunk-ancillary?: #t"
+  #t
+  (png-chunk-ancillary? (chunk-type->vector 'sRGB)))
+
+(test-equal "png-chunk-ancillary?: #f"
+  #f
+  (png-chunk-ancillary? (chunk-type->vector 'IHDR)))
+
 (test-equal "png-chunk-safe-to-copy?: #t"
   #t
   (png-chunk-safe-to-copy? #vu8(73 72 68 82)))

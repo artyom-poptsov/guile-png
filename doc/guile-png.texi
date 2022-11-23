@@ -642,6 +642,14 @@ Check if @var{x} is a @code{<png-chunk>} instance.
 Make a copy of a @var{chunk}.
 @end deffn
 
+@deffn {Method} png-chunk-ancillary? (bv <bytevector>)
+Check if a bytevector @var{bv} describes a chunk type that is ancillary.
+@end deffn
+
+@deffn {Method} png-chunk-ancillary? (chunk <png-chunk>)
+Check if a @var{chunk} is ancillary.
+@end deffn
+
 @deffn {Method} png-chunk-safe-to-copy? (bv <bytevector>)
 Check if a bytevector @var{bv} describes a chunk type that is safe to copy.
 @end deffn

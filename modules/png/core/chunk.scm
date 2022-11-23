@@ -26,6 +26,7 @@
             png-chunk-valid?
 
             ;; Chunk naming.
+            png-chunk-ancillary?
             png-chunk-safe-to-copy?
 
             ;; Chunk type/vector converters.
@@ -163,6 +164,15 @@ the list."
   (png-chunk-type-info (png-chunk-type chunk)))
 
 
+
+(define-method (png-chunk-ancillary? (bv <bytevector>))
+  "Check if a bytevector BV describes a chunk type that is ancillary."
+  (> (logand (bytevector-u8-ref bv 0) 32) 0))
+
+(define-method (png-chunk-ancillary? (chunk <png-chunk>))
+  "Check if a CHUNK is ancillary."
+  (let ((type-info (png-chunk-type-info (png-chunk-type chunk))))
+    (png-chunk-ancillary? (list-ref type-info 1))))
 
 (define-method (png-chunk-safe-to-copy? (bv <bytevector>))
   "Check if a bytevector BV describes a chunk type that is safe to copy."
