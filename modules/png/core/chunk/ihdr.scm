@@ -96,6 +96,7 @@
   ;; <number>
   (compression-method
    #:init-keyword #:compression-method
+   #:init-value   0
    #:getter       png-chunk:IHDR-compression-method
    #:setter       png-chunk:IHDR-compression-method-set!)
 
@@ -108,6 +109,7 @@
   ;; <number>
   (filter-method
    #:init-keyword #:filter-method
+   #:init-value   0
    #:getter       png-chunk:IHDR-filter-method
    #:setter       png-chunk:IHDR-filter-method-set!)
 
@@ -118,6 +120,7 @@
   ;; <number>
   (interlace-method
    #:init-keyword #:interlace-method
+   #:init-value   0
    #:getter       png-chunk:IHDR-interlace-method
    #:setter       png-chunk:IHDR-interlace-method-set!))
 
