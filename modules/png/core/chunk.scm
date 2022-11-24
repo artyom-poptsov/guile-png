@@ -65,7 +65,7 @@
     (sRGB #vu8(115 82 71 66)  "Standard RGB color space")
 
     ;; 2.1. Textual information.
-    (tEXT #vu8(116 69 88 116) "Textual data")
+    (tEXt #vu8(116 69 88 116) "Textual data")
     (zTXt #vu8(122 84 88 116) "Compressed textual data")
     (iTXt #vu8(105 84 88 116) "International textual data")
 
