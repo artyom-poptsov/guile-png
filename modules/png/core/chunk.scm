@@ -199,13 +199,13 @@ the list."
   (let* ((type      (png-chunk-type chunk))
          (type-info (png-chunk-type-info type)))
     (if type-info
-        (format port "#<png-chunk type: ~a (~a) length: ~a crc: ~a ~a>"
+        (format port "#<png-chunk type: ~a (~a) length: ~a crc: ~X ~a>"
                 type
                 (list-ref type-info 2)
                 (png-chunk-length chunk)
                 (png-chunk-crc chunk)
                 (object-address/hex-string chunk))
-        (format port "#<png-chunk type: ~a length: ~a crc: ~a ~a>"
+        (format port "#<png-chunk type: ~a length: ~a crc: ~X ~a>"
                 type
                 (png-chunk-length chunk)
                 (png-chunk-crc chunk)
