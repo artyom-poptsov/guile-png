@@ -7,6 +7,7 @@
   #:use-module (png core crc)
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 binary-ports)
+  #:use-module (ice-9 format)
   #:use-module (rnrs bytevectors)
   #:export (<png-chunk>
             png-chunk?
