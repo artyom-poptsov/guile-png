@@ -198,10 +198,18 @@ the list."
 (define-method (%display (chunk <png-chunk>) (port <port>))
   (let* ((type      (png-chunk-type chunk))
          (type-info (png-chunk-type-info type)))
-    (format port "#<png-chunk:~a ~a ~a>"
-            type
-            (list-ref type-info 2)
-            (object-address/hex-string chunk))))
+    (if type-info
+        (format port "#<png-chunk type: ~a (~a) length: ~a crc: ~a ~a>"
+                type
+                (list-ref type-info 2)
+                (png-chunk-length chunk)
+                (png-chunk-crc chunk)
+                (object-address/hex-string chunk))
+        (format port "#<png-chunk type: ~a length: ~a crc: ~a ~a>"
+                type
+                (png-chunk-length chunk)
+                (png-chunk-crc chunk)
+                (object-address/hex-string chunk)))))
 
 (define-method (display (chunk <png-chunk>) (port <port>))
   (%display chunk port))
