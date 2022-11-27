@@ -41,8 +41,6 @@
 (define-method (png-chunk->typed-chunk image
                                        (chunk <png-chunk>))
   (let ((type (png-chunk-type chunk)))
-    (display type (current-error-port))
-    (newline (current-error-port))
     (if type
         (let ((converter (assoc-ref %converters-to-typed type)))
           (if converter
