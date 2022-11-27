@@ -1,10 +1,12 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
+             (rnrs bytevectors)
              (ice-9 iconv)
              (oop goops)
              (png core common)
              (png core chunk)
-             (png core chunk ihdr))
+             (png core chunk ihdr)
+             (png core chunk plte))
 
 
 (define %test-name "chunks")
@@ -127,6 +129,23 @@
     (png-chunk-crc-update! chunk1)
     (let ((chunk2 (png-chunk-clone chunk1)))
       (equal? chunk1 chunk2))))
+
+
+;; PLTE
+
+(test-equal "data->png-chunk:PLTE"
+  #(#vu8(255 0 0) #vu8(0 255 0) #vu8(0 0 255))
+  (let* ((data #vu8(255 0 0 0 255 0 0 0 255))
+         (chunk (make <png-chunk>
+                 #:type 'PLTE
+                 #:data data
+                 #:length (bytevector-length data))))
+    (png-chunk-crc-update! chunk)
+    (let ((plte (data->png-chunk:PLTE (png-chunk-data chunk)
+                                      (png-chunk-type chunk)
+                                      (png-chunk-length chunk)
+                                      (png-chunk-crc chunk))))
+      (png-chunk:PLTE-palette-entries plte))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))

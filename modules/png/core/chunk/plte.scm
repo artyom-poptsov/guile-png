@@ -19,9 +19,9 @@
 (define-class <png-chunk:PLTE> (<png-chunk>)
   ;; This field contains a palette entries, each a three-byte vector of the form:
   ;;
-  ;;   #(red green blue)
+  ;;   #vu8(red green blue)
   ;;
-  ;; <bytevector> of <bytevector>
+  ;; <vector> of <bytevector>
   (palette-entries
    #:init-thunk   (lambda () (make-vector 0))
    #:init-keyword #:palette-entries
@@ -74,9 +74,10 @@
                (result '()))
       (if (< offset vlen)
           (loop (+ offset 3)
-                (cons (vector (bytevector-u8-ref vec (+ 0 offset))
-                              (bytevector-u8-ref vec (+ 1 offset))
-                              (bytevector-u8-ref vec (+ 2 offset)))
+                (cons (u8-list->bytevector
+                       (list (bytevector-u8-ref vec (+ 0 offset))
+                             (bytevector-u8-ref vec (+ 1 offset))
+                             (bytevector-u8-ref vec (+ 2 offset))))
                       result))
           (list->vector (reverse result))))))
 
