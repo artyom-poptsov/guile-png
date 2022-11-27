@@ -8,7 +8,7 @@
             png-chunk:tEXt?
             png-chunk:tEXt-keyword
             png-chunk:tEXt-text
-            data->png-chunk:tEXt))
+            png-chunk->png-chunk:tEXt))
 
 
 
@@ -39,33 +39,34 @@
 
 
 
-(define-method (data->png-chunk:tEXt (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (define (read-text index keyword)
-    (let loop ((text '())
-               (idx  index))
-      (if (= idx (bytevector-length data))
-          (make <png-chunk:tEXt>
-            #:length  length
-            #:type    type
-            #:data    data
-            #:crc     crc
-            #:keyword keyword
-            #:text    (utf8->string (u8-list->bytevector (reverse text))))
-          (loop (cons (bytevector-u8-ref data idx) text)
-                (+ idx 1)))))
+(define-method (png-chunk->png-chunk:tEXt (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (define (read-text index keyword)
+      (let loop ((text '())
+                 (idx  index))
+        (if (= idx (bytevector-length data))
+            (make <png-chunk:tEXt>
+              #:length  length
+              #:type    type
+              #:data    data
+              #:crc     crc
+              #:keyword keyword
+              #:text    (utf8->string (u8-list->bytevector (reverse text))))
+            (loop (cons (bytevector-u8-ref data idx) text)
+                  (+ idx 1)))))
 
-  (define (read-keyword)
-    (let loop ((keyword '())
-               (index   0))
-      (let ((byte (bytevector-u8-ref data index)))
-      (if (zero? byte)
-          (read-text index (utf8->string (u8-list->bytevector (reverse keyword))))
-          (loop (cons byte keyword)
-                (+ index 1))))))
+    (define (read-keyword)
+      (let loop ((keyword '())
+                 (index   0))
+        (let ((byte (bytevector-u8-ref data index)))
+          (if (zero? byte)
+              (read-text index (utf8->string (u8-list->bytevector (reverse keyword))))
+              (loop (cons byte keyword)
+                    (+ index 1))))))
 
-  (read-keyword))
+    (read-keyword)))
 
 ;;; chunk-text.scm ends here.

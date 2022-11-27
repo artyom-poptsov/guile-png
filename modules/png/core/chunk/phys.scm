@@ -8,7 +8,7 @@
             png-chunk:pHYs-pixels-per-unit-x-axis
             png-chunk:pHYs-pixels-per-unit-y-axis
             png-chunk:pHYs-unit-specifier
-            data->png-chunk:pHYs))
+            png-chunk->png-chunk:pHYs))
 
 
 
@@ -51,17 +51,18 @@
 (define-method (write (chunk <png-chunk:pHYs>) (port <port>))
   (%display chunk port))
 
-(define-method (data->png-chunk:pHYs (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (make <png-chunk:pHYs>
-    #:length length
-    #:type   type
-    #:data   data
-    #:crc    crc
-    #:pixels-per-unit-x-axis (vector->int32 (bytevector-copy/part data 0 4))
-    #:pixels-per-unit-y-axis (vector->int32 (bytevector-copy/part data 4 4))
-    #:unit-specifier         (bytevector-u8-ref data 8)))
+(define-method (png-chunk->png-chunk:pHYs (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (make <png-chunk:pHYs>
+      #:length length
+      #:type   type
+      #:data   data
+      #:crc    crc
+      #:pixels-per-unit-x-axis (vector->int32 (bytevector-copy/part data 0 4))
+      #:pixels-per-unit-y-axis (vector->int32 (bytevector-copy/part data 4 4))
+      #:unit-specifier         (bytevector-u8-ref data 8))))
 
 

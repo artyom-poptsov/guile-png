@@ -8,7 +8,7 @@
             png-chunk:zTXt-keyword
             png-chunk:zTXt-compression-method
             png-chunk:zTXt-text
-            data->png-chunk:zTXt))
+            png-chunk->png-chunk:zTXt))
 
 
 
@@ -47,39 +47,40 @@
 
 
 
-(define-method (data->png-chunk:zTXt (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (define (read-text index output)
-    (let loop ((text '())
-               (idx  index))
-      (if (= idx (bytevector-length data))
-          (make <png-chunk:zTXt>
-            #:length  length
-            #:type    type
-            #:data    data
-            #:crc     crc
-            #:keyword            (assoc-ref output 'keyword)
-            #:compression-method (assoc-ref output 'compression-method)
-            ;; TODO: Decompress the datastream.
-            #:text               (u8-list->bytevector text))
-          (loop (append text (list (bytevector-u8-ref data idx)))
-                (+ idx 1)))))
+(define-method (png-chunk->png-chunk:zTXt (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (define (read-text index output)
+      (let loop ((text '())
+                 (idx  index))
+        (if (= idx (bytevector-length data))
+            (make <png-chunk:zTXt>
+              #:length  length
+              #:type    type
+              #:data    data
+              #:crc     crc
+              #:keyword            (assoc-ref output 'keyword)
+              #:compression-method (assoc-ref output 'compression-method)
+              ;; TODO: Decompress the datastream.
+              #:text               (u8-list->bytevector text))
+            (loop (append text (list (bytevector-u8-ref data idx)))
+                  (+ idx 1)))))
 
 
-  (define (read-compression-method index output)
-    (read-text (+ index 1)
-               (acons 'compression-method
-                      (bytevector-u8-ref data index)
-                      output)))
+    (define (read-compression-method index output)
+      (read-text (+ index 1)
+                 (acons 'compression-method
+                        (bytevector-u8-ref data index)
+                        output)))
 
-  (define (read-keyword)
-    (let loop ((keyword '())
-               (index   0))
-      (if (zero? (bytevector-u8-ref data index))
-          (read-compression-method index `((keyword . ,(list->string keyword))))
-          (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
-                (+ index 1)))))
+    (define (read-keyword)
+      (let loop ((keyword '())
+                 (index   0))
+        (if (zero? (bytevector-u8-ref data index))
+            (read-compression-method index `((keyword . ,(list->string keyword))))
+            (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
+                  (+ index 1)))))
 
-  (read-keyword))
+    (read-keyword)))

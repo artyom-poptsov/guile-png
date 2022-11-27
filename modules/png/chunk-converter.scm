@@ -17,42 +17,24 @@
 
 (define (make-converter proc)
   (lambda (image chunk)
-    (proc (png-chunk-data   chunk)
-          (png-chunk-type   chunk)
-          (png-chunk-length chunk)
-          (png-chunk-crc    chunk))))
+    (proc chunk)))
 
 (define %converters-to-typed
-  `((IHDR . ,(make-converter data->png-chunk:IHDR))
-    (PLTE . ,(make-converter data->png-chunk:PLTE))
-    (IEND . ,(make-converter data->png-chunk:IEND))
-    (cHRM . ,(make-converter data->png-chunk:cHRM))
-    (tEXt . ,(make-converter data->png-chunk:tEXt))
-    (tEXT . ,(make-converter data->png-chunk:tEXt))
-    (zTXt . ,(make-converter data->png-chunk:zTXt))
-    (tIME . ,(make-converter data->png-chunk:tIME))
-    (iCCP . ,(make-converter data->png-chunk:iCCP))
-    (pHYs . ,(make-converter data->png-chunk:pHYs))
+  `((IHDR . ,(make-converter png-chunk->png-chunk:IHDR))
+    (PLTE . ,(make-converter png-chunk->png-chunk:PLTE))
+    (IEND . ,(make-converter png-chunk->png-chunk:IEND))
+    (cHRM . ,(make-converter png-chunk->png-chunk:cHRM))
+    (tEXt . ,(make-converter png-chunk->png-chunk:tEXt))
+    (tEXT . ,(make-converter png-chunk->png-chunk:tEXt))
+    (zTXt . ,(make-converter png-chunk->png-chunk:zTXt))
+    (tIME . ,(make-converter png-chunk->png-chunk:tIME))
+    (iCCP . ,(make-converter png-chunk->png-chunk:iCCP))
+    (pHYs . ,(make-converter png-chunk->png-chunk:pHYs))
     (bKGD . ,(lambda (image chunk)
                (let ((result (png-image-chunks-query image 'IHDR)))
                  (unless result
                    (error "Could not find IHDR chunk"))
-                 (let* ((data     (png-chunk-data   chunk))
-                        (type     (png-chunk-type   chunk))
-                        (length   (png-chunk-length chunk))
-                        (crc      (png-chunk-crc    chunk))
-                        (ihdr-raw (car result))
-                        (ihdr     (data->png-chunk:IHDR
-                                   (png-chunk-data   ihdr-raw)
-                                   (png-chunk-type   ihdr-raw)
-                                   (png-chunk-length ihdr-raw)
-                                   (png-chunk-crc    ihdr-raw)))
-                        (ctype   (png-chunk:IHDR-color-type ihdr)))
-                   (data->png-chunk:bKGD data
-                                         type
-                                         length
-                                         crc
-                                         ctype)))))))
+                 (data->png-chunk:bKGD chunk (car result)))))))
 
 
 

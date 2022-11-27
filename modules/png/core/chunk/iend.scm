@@ -4,7 +4,7 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:IEND>
-            data->png-chunk:IEND))
+            png-chunk->png-chunk:IEND))
 
 
 
@@ -28,12 +28,13 @@
 
 
 
-(define-method (data->png-chunk:IEND (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (make <png-chunk:IEND>
-    #:length             length
-    #:type               type))
+(define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (make <png-chunk:IEND>
+      #:length             length
+      #:type               type)))
 
 ;;; chunk-iend.scm ends here.

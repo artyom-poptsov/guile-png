@@ -26,7 +26,7 @@
             data:compression-method
             data:filter-method
             data:interlace-method
-            data->png-chunk:IHDR))
+            png-chunk->png-chunk:IHDR))
 
 
 (define-class <png-chunk:IHDR> (<png-chunk>)
@@ -204,22 +204,23 @@
 
 
 
-(define-method (data->png-chunk:IHDR (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (make <png-chunk:IHDR>
-    #:length             length
-    #:type               type
-    #:data               data
-    #:crc                crc
-    #:width              (data:width data)
-    #:height             (data:heigth data)
-    #:bit-depth          (data:bit-depth data)
-    #:color-type        (data:color-type data)
-    #:compression-method (data:compression-method data)
-    #:filter-method      (data:filter-method data)
-    #:interlace-method   (data:interlace-method data)))
+(define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (make <png-chunk:IHDR>
+      #:length             length
+      #:type               type
+      #:data               data
+      #:crc                crc
+      #:width              (data:width data)
+      #:height             (data:heigth data)
+      #:bit-depth          (data:bit-depth data)
+      #:color-type        (data:color-type data)
+      #:compression-method (data:compression-method data)
+      #:filter-method      (data:filter-method data)
+      #:interlace-method   (data:interlace-method data))))
 
 (define-method (png-chunk-clone (chunk <png-chunk:IHDR>))
   (make <png-chunk:IHDR>

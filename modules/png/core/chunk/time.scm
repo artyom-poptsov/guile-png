@@ -12,7 +12,7 @@
             png-chunk:tIME-hour
             png-chunk:tIME-minute
             png-chunk:tIME-second
-            data->png-chunk:tIME))
+            png-chunk->png-chunk:tIME))
 
 
 
@@ -73,18 +73,19 @@
 
 
 
-(define-method (data->png-chunk:tIME (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (make <png-chunk:tIME>
-    #:length length
-    #:type   type
-    #:data   data
-    #:crc    crc
-    #:year   (vector->int16 (bytevector-copy/part data 0 2))
-    #:month  (bytevector-u8-ref data 2)
-    #:day    (bytevector-u8-ref data 3)
-    #:hour   (bytevector-u8-ref data 4)
-    #:minute (bytevector-u8-ref data 5)
-    #:second (bytevector-u8-ref data 6)))
+(define-method (png-chunk->png-chunk:tIME (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (make <png-chunk:tIME>
+      #:length length
+      #:type   type
+      #:data   data
+      #:crc    crc
+      #:year   (vector->int16 (bytevector-copy/part data 0 2))
+      #:month  (bytevector-u8-ref data 2)
+      #:day    (bytevector-u8-ref data 3)
+      #:hour   (bytevector-u8-ref data 4)
+      #:minute (bytevector-u8-ref data 5)
+      #:second (bytevector-u8-ref data 6))))

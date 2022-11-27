@@ -23,7 +23,7 @@
             data:blue-x
             data:blue-y
 
-            data->png-chunk:cHRM))
+            png-chunk->png-chunk:cHRM))
 
 
 
@@ -105,22 +105,23 @@
 (define-method (data:blue-y (vec <bytevector>))
   (vector->int32 (bytevector-copy/part vec 28 4)))
 
-(define-method (data->png-chunk:cHRM (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (make <png-chunk:cHRM>
-    #:length             length
-    #:type               type
-    #:data               data
-    #:crc                crc
-    #:white-point-x      (data:white-point-x data)
-    #:white-point-y      (data:white-point-y data)
-    #:red-x              (data:red-x data)
-    #:red-y              (data:red-y data)
-    #:green-x            (data:green-x data)
-    #:green-y            (data:green-y data)
-    #:blue-x             (data:blue-x data)
-    #:blue-y             (data:blue-y data)))
+(define-method (png-chunk->png-chunk:cHRM (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (make <png-chunk:cHRM>
+      #:length             length
+      #:type               type
+      #:data               data
+      #:crc                crc
+      #:white-point-x      (data:white-point-x data)
+      #:white-point-y      (data:white-point-y data)
+      #:red-x              (data:red-x data)
+      #:red-y              (data:red-y data)
+      #:green-x            (data:green-x data)
+      #:green-y            (data:green-y data)
+      #:blue-x             (data:blue-x data)
+      #:blue-y             (data:blue-y data))))
 
 ;;; chunk-iend.scm ends here.

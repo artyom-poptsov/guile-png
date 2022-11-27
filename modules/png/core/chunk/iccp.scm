@@ -8,7 +8,7 @@
             png-chunk:iCCP-profile-name
             png-chunk:iCCP-compression-method
             png-chunk:iCCP-profile
-            data->png-chunk:iCCP))
+            png-chunk->png-chunk:iCCP))
 
 
 
@@ -48,42 +48,44 @@
 
 
 
-(define-method (data->png-chunk:iCCP (data   <bytevector>)
-                                     (type   <symbol>)
-                                     (length <number>)
-                                     (crc    <number>))
-  (define (read-profile index output)
-    (let loop ((profile '())
-               (idx  index))
-      (if (= idx (bytevector-length data))
-          (make <png-chunk:iCCP>
-            #:length  length
-            #:type    type
-            #:data    data
-            #:crc     crc
-            #:profile-name       (assoc-ref output 'profile-name)
-            #:compression-method (assoc-ref output 'compression-method)
-            ;; TODO: Decompress the datastream.
-            #:profile            (u8-list->bytevector profile))
-          (loop (append profile (list (bytevector-u8-ref data idx)))
-                (+ idx 1)))))
+(define-method (png-chunk->png-chunk:iCCP (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+
+    (define (read-profile index output)
+      (let loop ((profile '())
+                 (idx  index))
+        (if (= idx (bytevector-length data))
+            (make <png-chunk:iCCP>
+              #:length  length
+              #:type    type
+              #:data    data
+              #:crc     crc
+              #:profile-name       (assoc-ref output 'profile-name)
+              #:compression-method (assoc-ref output 'compression-method)
+              ;; TODO: Decompress the datastream.
+              #:profile            (u8-list->bytevector profile))
+            (loop (append profile (list (bytevector-u8-ref data idx)))
+                  (+ idx 1)))))
 
 
-  (define (read-compression-method index output)
-    (read-profile (+ index 1)
-                  (acons 'compression-method
-                         (bytevector-u8-ref data index)
-                         output)))
+    (define (read-compression-method index output)
+      (read-profile (+ index 1)
+                    (acons 'compression-method
+                           (bytevector-u8-ref data index)
+                           output)))
 
-  (define (read-profile-name)
-    (let loop ((profile-name '())
-               (index   0))
-      (if (zero? (bytevector-u8-ref data index))
-          (read-compression-method
-           index
-           `((profile-name . ,(list->string profile-name))))
-          (loop (append profile-name
-                        (list (integer->char (bytevector-u8-ref data index))))
-                (+ index 1)))))
+    (define (read-profile-name)
+      (let loop ((profile-name '())
+                 (index   0))
+        (if (zero? (bytevector-u8-ref data index))
+            (read-compression-method
+             index
+             `((profile-name . ,(list->string profile-name))))
+            (loop (append profile-name
+                          (list (integer->char (bytevector-u8-ref data index))))
+                  (+ index 1)))))
 
-  (read-profile-name))
+    (read-profile-name)))

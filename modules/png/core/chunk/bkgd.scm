@@ -32,6 +32,7 @@
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
+  #:use-module (png core chunk ihdr)
   #:export (<png-chunk:bKGD>
             png-chunk:bKGD-color-type
             png-chunk:bKGD-grayscale
@@ -103,39 +104,41 @@
 
 
 
-(define-method (data->png-chunk:bKGD (data        <bytevector>)
-                                     (type        <symbol>)
-                                     (length      <number>)
-                                     (crc         <number>)
-                                     (color-type  <number>))
+(define-method (data->png-chunk:bKGD (chunk <png-chunk>)
+                                     (ihdr  <png-chunk>))
   "Convert a PNG chunk data to a bKGD chunk instance."
-  (case color-type
-    ((0 4)
-     (make <png-chunk:bKGD>
-       #:length             length
-       #:type               type
-       #:data               data
-       #:crc                crc
-       #:color-type        color-type
-       #:greyscale          (vector->int16 data)))
-    ((2 6)
-     (make <png-chunk:bKGD>
-       #:length             length
-       #:type               type
-       #:data               data
-       #:crc                crc
-       #:color-type        color-type
-       #:red                (vector->int16 (bytevector-copy/part data 0 2))
-       #:green              (vector->int16 (bytevector-copy/part data 2 2))
-       #:blue               (vector->int16 (bytevector-copy/part data 4 2))))
-    ((3)
-     (make <png-chunk:bKGD>
-       #:length             length
-       #:type               type
-       #:data               data
-       #:crc                crc
-       #:color-type        color-type
-       #:palette-index      (vector-ref data 0)))))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk))
+        (color-type (png-chunk:IHDR-color-type ihdr)))
+    (case color-type
+      ((0 4)
+       (make <png-chunk:bKGD>
+         #:length             length
+         #:type               type
+         #:data               data
+         #:crc                crc
+         #:color-type        color-type
+         #:greyscale          (vector->int16 data)))
+      ((2 6)
+       (make <png-chunk:bKGD>
+         #:length             length
+         #:type               type
+         #:data               data
+         #:crc                crc
+         #:color-type        color-type
+         #:red                (vector->int16 (bytevector-copy/part data 0 2))
+         #:green              (vector->int16 (bytevector-copy/part data 2 2))
+         #:blue               (vector->int16 (bytevector-copy/part data 4 2))))
+      ((3)
+       (make <png-chunk:bKGD>
+         #:length             length
+         #:type               type
+         #:data               data
+         #:crc                crc
+         #:color-type        color-type
+         #:palette-index      (vector-ref data 0))))))
 
 (define-method (png-chunk-clone (chunk <png-chunk:bKGD>))
   (make <png-chunk:bKGD>
