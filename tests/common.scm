@@ -15,6 +15,10 @@
   #vu8(0 0 1 0)
   (int32->bytevector 256))
 
+(test-equal "constructor-argument"
+  'value
+  (constructor-argument #:keyword '(#:keyword value)))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 

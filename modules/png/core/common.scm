@@ -32,7 +32,8 @@
             vector->int16
             int32->bytevector
             bytevector-copy/part
-            bytevector-split))
+            bytevector-split
+            constructor-argument))
 
 
 (define (object-address/hex-string object)
@@ -80,5 +81,9 @@ bytevectors."
                                             (calculate-length index))
                       result))
           (reverse result)))))
+
+(define (constructor-argument keyword initargs)
+  (and (memq keyword initargs)
+       (cadr (memq keyword initargs))))
 
 ;;; common.scm ends here.
