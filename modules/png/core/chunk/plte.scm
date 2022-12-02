@@ -69,6 +69,13 @@
 
 
 (define-method (vector->PLTE-palette-entries (vec <bytevector>))
+  "Return a vector of palette entries, each of which is represented as a
+three-byte bytevector of the following format:
+
+  Red:   1 byte (0 = black, 255 = red)
+  Green: 1 byte (0 = black, 255 = green)
+  Blue:  1 byte (0 = black, 255 = blue)
+"
   (let ((vlen (bytevector-length vec)))
     (let loop ((offset 0)
                (result '()))
