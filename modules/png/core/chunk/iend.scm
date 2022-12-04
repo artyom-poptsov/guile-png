@@ -4,7 +4,8 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:IEND>
-            png-chunk->png-chunk:IEND))
+            png-chunk->png-chunk:IEND
+            png-chunk-encode))
 
 
 
@@ -36,5 +37,11 @@
     (make <png-chunk:IEND>
       #:length             length
       #:type               type)))
+
+(define-method (png-chunk-encode (chunk <png-chunk:IEND>))
+  (let ((encoded-chunk (make <png-chunk>
+                         #:type 'IEND)))
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
 
 ;;; chunk-iend.scm ends here.
