@@ -47,6 +47,10 @@
             png-image-width
             png-image-height
             png-image-bit-depth
+            png-image-compression-method
+            png-image-filter-method
+            png-image-interlace-method
+            png-image-palette
             png-image-color-type
             png-image-pixel-size
             png-image-pixels
@@ -157,6 +161,15 @@
 (define-method (png-image-color-type (image <png-compressed-image>))
   (png-chunk:IHDR-color-type (png-image-header image)))
 
+(define-method (png-image-compression-method (image <png-compressed-image>))
+  (png-chunk:IHDR-compression-method (png-image-header image)))
+
+(define-method (png-image-filter-method (image <png-compressed-image>))
+  (png-chunk:IHDR-filter-method (png-image-header image)))
+
+(define-method (png-image-interlace-method (image <png-compressed-image>))
+  (png-chunk:IHDR-interlace-method (png-image-header image)))
+
 
 
 (define-method (png-image-data (image <png-compressed-image>) (uncompress? <boolean>))
@@ -190,7 +203,7 @@ set to #t, the procedure returns data in uncompressed form."
 
 
 
-(define-class <png-image> (<png-compressed-image>)
+(define-class <png-image> ()
   ;; IDAT: Image data.
   (data
    #:init-thunk   (lambda () (make-bytevector 0))
@@ -201,7 +214,73 @@ set to #t, the procedure returns data in uncompressed form."
   (data-chunk-size
    #:init-value   256
    #:init-keyword #:data-chunk-size
-   #:getter       png-image-data-chunk-size))
+   #:getter       png-image-data-chunk-size)
+
+  (width
+   #:init-value   0
+   #:init-keyword #:width
+   #:getter       png-image-width)
+
+  (height
+   #:init-value   0
+   #:init-keyword #:height
+   #:getter       png-image-height)
+
+  (bit-depth
+   #:init-value   8
+   #:init-keyword #:bit-depth
+   #:getter       png-image-bit-depth)
+
+  (color-type
+   #:init-value   0
+   #:init-keyword #:color-type
+   #:getter       png-image-color-type)
+
+  (compression-method
+   #:init-value   0
+   #:init-keyword #:compression-method
+   #:getter       png-image-compression-method)
+
+  (filter-method
+   #:init-value   0
+   #:init-keyword #:filter-method
+   #:getter       png-image-filter-method)
+
+  (interlace-method
+   #:init-value   0
+   #:init-keyword #:interlace-method
+   #:getter       png-image-interlace-method)
+
+  ;; A vector of PNG image palette entries, each a three-byte bytevector in
+  ;; the form:
+  ;;
+  ;;   Red:   1 byte (0 = black, 255 = red)
+  ;;   Green: 1 byte (0 = black, 255 = green)
+  ;;   Blue:  1 byte (0 = black, 255 = blue)
+  ;;
+  ;; <vector> of <bytevector>
+  (palette
+   #:init-value   #()
+   #:init-keyword #:palette
+   #:getter       png-image-palette)
+
+  ;; Extra chunks.
+  ;;
+  ;; <list> of <png-chunk>
+  (chunks
+   #:init-value   '()
+   #:init-keyword #:chunks
+   #:getter       png-image-chunks))
+
+
+(define-method (initialize (image <png-image>) initargs)
+  (next-method)
+  (let ((data (constructor-argument #:data initargs)))
+    (unless data
+      (png-image-data-set! image (make-bytevector (* (png-image-width image)
+                                                     (png-image-height image)
+                                                     3)
+                                                  0)))))
 
 
 (define (png-image? x)
@@ -217,6 +296,19 @@ set to #t, the procedure returns data in uncompressed form."
             (png-chunk:IHDR-height ihdr)
             (png-chunk:IHDR-bit-depth ihdr)
             (object-address/hex-string image))))
+
+
+
+(define-method (png-image-chunks-query (image <png-image>) (predicate <procedure>))
+  (filter predicate (png-image-chunks image)))
+
+(define-method (png-image-chunks-query (image <png-image>) (chunk <symbol>))
+  (png-image-chunks-query image (lambda (c)
+                                  (equal? (png-chunk-type c) chunk))))
+
+(define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
+  (png-image-chunks-query image (lambda (c)
+                                  (equal? (png-chunk-type c) chunk))))
 
 
 
@@ -403,8 +495,14 @@ data."
                        (png-chunk->typed-chunk image chunk))
                      (map png-chunk-clone (png-image-chunks image)))))
     (make <png-image>
-      #:chunks chunks
-      #:header (car (png-image-chunks-query chunks 'IHDR))
+      #:chunks             chunks
+      #:width              (png-image-width image)
+      #:height             (png-image-height image)
+      #:bit-depth          (png-image-bit-depth image)
+      #:color-type         (png-image-color-type image)
+      #:compression-method (png-image-compression-method image)
+      #:filter-method      (png-image-filter-method image)
+      #:interlace-method   (png-image-interlace-method image)
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
@@ -433,17 +531,30 @@ data."
                                    (png-chunk-crc-update! chunk)
                                    chunk))
                                (bytevector-split compressed-data chunk-size)))
-         (old-chunks (png-image-chunks-query image
-                                             (lambda (chunk)
-                                               (and (not (equal? (png-chunk-type chunk)
-                                                                 'IDAT))
-                                                    (not (equal? (png-chunk-type chunk)
-                                                                 'IEND))))))
-         (iend-chunk (let ((ch (make <png-chunk:IEND>)))
-                       (png-chunk-crc-update! ch)
-                       ch)))
+         (header (make <png-chunk:IHDR>
+                   #:width              (png-image-width image)
+                   #:height             (png-image-height image)
+                   #:bit-depth          (png-image-bit-depth image)
+                   #:color-type         (png-image-color-type image)
+                   #:compression-method (png-image-compression-method image)
+                   #:filter-method      (png-image-filter-method image)
+                   #:interlace-method   (png-image-interlace-method image)))
+         (extra-chunks (png-image-chunks-query image
+                                               (lambda (chunk)
+                                                 (and (not (equal? (png-chunk-type chunk)
+                                                                   'IHDR))
+                                                      (not (equal? (png-chunk-type chunk)
+                                                                   'PLTE))
+                                                      (not (equal? (png-chunk-type chunk)
+                                                                   'IDAT))
+                                                      (not (equal? (png-chunk-type chunk)
+                                                                   'IEND))))))
+         (iend-chunk (make <png-chunk:IEND>)))
+    (png-chunk-crc-update! iend-chunk)
+    (png-chunk-crc-update! header)
     (make <png-compressed-image>
-      #:chunks (append old-chunks (append segments (list iend-chunk))))))
+      #:chunks (cons (png-chunk-encode header)
+                     (append extra-chunks (append segments (list iend-chunk)))))))
 
 (define-method (png-image->png (image <png-image>) (port <output-port>))
   (let ((compressed-image (png-image-compress image)))
@@ -456,8 +567,17 @@ data."
   "Copy a PNG IMAGE, return a new copy."
   (let ((chunks (map png-chunk-clone (png-image-chunks image))))
     (make <png-image>
-      #:chunks chunks
-      #:header (car (png-image-chunks-query chunks 'IHDR))
+      #:chunks             chunks
+      #:data               (png-image-data image)
+      #:data-chunk-size    (png-image-data-chunk-size image)
+      #:width              (png-image-width image)
+      #:height             (png-image-height image)
+      #:bit-depth          (png-image-bit-depth image)
+      #:color-type         (png-image-color-type image)
+      #:compression-method (png-image-compression-method image)
+      #:filter-method      (png-image-filter-method image)
+      #:interlace-method   (png-image-interlace-method image)
+      #:palette            (png-image-palette image)
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
                        (car plte-chunks)))
