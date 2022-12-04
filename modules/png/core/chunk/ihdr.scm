@@ -51,8 +51,7 @@
             data:compression-method
             data:filter-method
             data:interlace-method
-            png-chunk->png-chunk:IHDR
-            png-chunk-encode))
+            png-chunk->png-chunk:IHDR))
 
 
 ;; IHDR chunk layout:

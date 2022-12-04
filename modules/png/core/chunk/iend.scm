@@ -4,8 +4,7 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:IEND>
-            png-chunk->png-chunk:IEND
-            png-chunk-encode))
+            png-chunk->png-chunk:IEND))
 
 
 

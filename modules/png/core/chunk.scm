@@ -25,6 +25,7 @@
             png-chunk-crc-update!
             png-chunk->png
             png-chunk-valid?
+            png-chunk-encode
 
             ;; Chunk naming.
             png-chunk-ancillary?
@@ -251,5 +252,7 @@ string."
   (put-bytevector port (chunk-type->vector (png-chunk-type chunk)))
   (put-bytevector port (png-chunk-data chunk))
   (put-bytevector port (int32->bytevector (png-chunk-crc chunk))))
+
+(define-generic png-chunk-encode)
 
 ;;; png-chunk.scm ends here.
