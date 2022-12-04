@@ -88,6 +88,22 @@ three-byte bytevector of the following format:
                       result))
           (list->vector (reverse result))))))
 
+(define-method (PLTE-palette-entries->vector (vec <vector>))
+  "Convert a vector VEC to a PLTE chunk data."
+  (let* ((bv-length (* (vector-length vec) 3))
+         (result (make-bytevector bv-length 0)))
+    (let loop ((index 0))
+      (if (< index bv-length)
+          (let* ((v (vector-ref vec index))
+                 (r (bytevector-u8-ref v 0))
+                 (g (bytevector-u8-ref v 1))
+                 (b (bytevector-u8-ref v 3)))
+            (bytevector-u8-set! result (+ (* index 3) 0) r)
+            (bytevector-u8-set! result (+ (* index 3) 1) g)
+            (bytevector-u8-set! result (+ (* index 3) 2) b)
+            (loop (+ index 1)))
+          result))))
+
 (define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
@@ -101,6 +117,17 @@ three-byte bytevector of the following format:
       #:data               data
       #:crc                crc
       #:palette-entries    (vector->PLTE-palette-entries data))))
+
+(define-method (png-chunk-encode (chunk <png-chunk:PLTE>))
+  (let* ((entries       (png-chunk:PLTE-palette-entries chunk))
+         (count         (png-chunk:PLTE-palette-entries-count chunk))
+         (length        (* count 3))
+         (encoded-chunk (make <png-chunk>
+                          #:type   'PLTE
+                          #:length length
+                          #:data   (PLTE-palette-entries->vector entries))))
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
 
 ;;; chunk-plte.scm ends here.
 
