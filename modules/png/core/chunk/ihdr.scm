@@ -26,8 +26,8 @@
             data:compression-method
             data:filter-method
             data:interlace-method
-            png-chunk->png-chunk:IHDR))
-
+            png-chunk->png-chunk:IHDR
+            png-chunk-encode))
 
 (define-class <png-chunk:IHDR> (<png-chunk>)
   ;; Image width in pixels.
@@ -221,6 +221,29 @@
       #:compression-method (data:compression-method data)
       #:filter-method      (data:filter-method data)
       #:interlace-method   (data:interlace-method data))))
+
+(define-method (png-chunk-encode (chunk <png-chunk:IHDR>))
+  (let* ((data               (make-bytevector 13 0))
+         (width              (int32->bytevector (png-chunk:IHDR-width chunk)))
+         (height             (int32->bytevector (png-chunk:IHDR-height chunk)))
+         (bit-depth          (png-chunk:IHDR-bit-depth chunk))
+         (color-type         (png-chunk:IHDR-color-type chunk))
+         (compression-method (png-chunk:IHDR-compression-method chunk))
+         (filter-method      (png-chunk:IHDR-filter-method chunk))
+         (interlace-method   (png-chunk:IHDR-interlace-method chunk))
+         (encoded-chunk (make <png-chunk>
+                          #:type   'IHDR
+                          #:length 13
+                          #:data   data)))
+    (bytevector-copy! width  0 data 0 4)
+    (bytevector-copy! height 0 data 4 4)
+    (bytevector-u8-set! data 8 bit-depth)
+    (bytevector-u8-set! data 9 color-type)
+    (bytevector-u8-set! data 10 compression-method)
+    (bytevector-u8-set! data 11 filter-method)
+    (bytevector-u8-set! data 12 interlace-method)
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
 
 (define-method (png-chunk-clone (chunk <png-chunk:IHDR>))
   (make <png-chunk:IHDR>
