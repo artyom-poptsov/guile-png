@@ -1,3 +1,28 @@
+;;; ihdr.scm -- IHDR chunk.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; PNG image header (IHDR) chunk.  The IHDR chunk must appear first.
+
+
+;;; Code:
+
 (define-module (png core chunk ihdr)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
@@ -29,6 +54,20 @@
             png-chunk->png-chunk:IHDR
             png-chunk-encode))
 
+
+;; IHDR chunk layout:
+;;
+;;   Width:              4 bytes
+;;   Height:             4 bytes
+;;   Bit depth:          1 byte
+;;   Color type:         1 byte
+;;   Compression method: 1 byte
+;;   Filter method:      1 byte
+;;   Interlace method:   1 byte
+
+(define %IHDR-chunk-length 13)
+
+
 (define-class <png-chunk:IHDR> (<png-chunk>)
   ;; Image width in pixels.
   ;;
@@ -233,7 +272,7 @@
          (interlace-method   (png-chunk:IHDR-interlace-method chunk))
          (encoded-chunk (make <png-chunk>
                           #:type   'IHDR
-                          #:length 13
+                          #:length %IHDR-chunk-length
                           #:data   data)))
     (bytevector-copy! width  0 data 0 4)
     (bytevector-copy! height 0 data 4 4)
@@ -258,4 +297,4 @@
     #:filter-method      (png-chunk:IHDR-filter-method chunk)
     #:interlace-method   (png-chunk:IHDR-interlace-method chunk)))
 
-;;; chunk-ihdr.scm ends here.
+;;; ihdr.scm ends here.
