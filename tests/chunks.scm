@@ -134,6 +134,14 @@
     (let ((chunk2 (png-chunk-clone chunk1)))
       (equal? chunk1 chunk2))))
 
+(test-equal "png-chunk-encode: IHDR"
+  %ihdr-data
+  (let ((chunk (png-chunk->png-chunk:IHDR (make <png-chunk:IHDR>
+                                            #:data   %ihdr-data
+                                            #:length 13))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data chunk)))
+
 
 ;; PLTE
 
