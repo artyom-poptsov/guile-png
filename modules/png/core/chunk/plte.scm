@@ -90,14 +90,14 @@ three-byte bytevector of the following format:
 
 (define-method (PLTE-palette-entries->vector (vec <vector>))
   "Convert a vector VEC to a PLTE chunk data."
-  (let* ((bv-length (* (vector-length vec) 3))
-         (result (make-bytevector bv-length 0)))
+  (let* ((data-length (vector-length vec))
+         (result      (make-bytevector (* data-length 3) 0)))
     (let loop ((index 0))
-      (if (< index bv-length)
+      (if (< index data-length)
           (let* ((v (vector-ref vec index))
                  (r (bytevector-u8-ref v 0))
                  (g (bytevector-u8-ref v 1))
-                 (b (bytevector-u8-ref v 3)))
+                 (b (bytevector-u8-ref v 2)))
             (bytevector-u8-set! result (+ (* index 3) 0) r)
             (bytevector-u8-set! result (+ (* index 3) 1) g)
             (bytevector-u8-set! result (+ (* index 3) 2) b)

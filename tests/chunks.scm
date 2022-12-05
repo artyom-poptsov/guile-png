@@ -142,6 +142,15 @@
     (png-chunk-crc-update! chunk)
     (png-chunk-data chunk)))
 
+(define %plte-data #vu8(255 0 0 0 255 0 0 0 255))
+(test-equal "png-chunk-encode: PLTE"
+  %plte-data
+  (let ((chunk (png-chunk->png-chunk:PLTE (make <png-chunk>
+                                            #:data   %plte-data
+                                            #:length (bytevector-length %plte-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
 
 ;; PLTE
 
