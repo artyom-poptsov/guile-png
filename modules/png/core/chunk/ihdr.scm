@@ -51,7 +51,7 @@
             data:compression-method
             data:filter-method
             data:interlace-method
-            png-chunk->png-chunk:IHDR))
+            png-chunk-decode-IHDR))
 
 
 ;; IHDR chunk layout:
@@ -242,7 +242,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:IHDR (chunk <png-chunk>))
+(define-method (png-chunk-decode-IHDR (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

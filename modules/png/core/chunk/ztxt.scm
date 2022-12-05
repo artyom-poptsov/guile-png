@@ -8,8 +8,7 @@
             png-chunk:zTXt-keyword
             png-chunk:zTXt-compression-method
             png-chunk:zTXt-text
-            png-chunk->png-chunk:zTXt))
-
+            png-chunk-decode-zTXt))
 
 
 (define-class <png-chunk:zTXt> (<png-chunk>)
@@ -47,7 +46,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:zTXt (chunk <png-chunk>))
+(define-method (png-chunk-decode-zTXt (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

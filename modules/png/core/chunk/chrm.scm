@@ -23,7 +23,7 @@
             data:blue-x
             data:blue-y
 
-            png-chunk->png-chunk:cHRM))
+            png-chunk-decode-cHRM))
 
 
 
@@ -105,7 +105,7 @@
 (define-method (data:blue-y (vec <bytevector>))
   (vector->int32 (bytevector-copy/part vec 28 4)))
 
-(define-method (png-chunk->png-chunk:cHRM (chunk <png-chunk>))
+(define-method (png-chunk-decode-cHRM (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

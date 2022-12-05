@@ -68,32 +68,32 @@
 
 (define %ihdr-data #vu8(0 0 13 180 0 0 9 176 8 2 0 0 0))
 
-(test-equal "png-chunk->png-chunk:IHDR: width"
+(test-equal "png-chunk-decode-IHDR: width"
   3508
   (png-chunk:IHDR-width
-   (png-chunk->png-chunk:IHDR (make <png-chunk>
-                                #:data   %ihdr-data
-                                #:type   'IHDR
-                                #:length 13
-                                #:crc    (vector->int32 #vu8(119 50 219 167))))))
+   (png-chunk-decode-IHDR (make <png-chunk>
+                            #:data   %ihdr-data
+                            #:type   'IHDR
+                            #:length 13
+                            #:crc    (vector->int32 #vu8(119 50 219 167))))))
 
-(test-equal "png-chunk->png-chunk:IHDR: height"
+(test-equal "png-chunk-decode-IHDR: height"
   2480
   (png-chunk:IHDR-height
-   (png-chunk->png-chunk:IHDR (make <png-chunk>
-                                #:data   %ihdr-data
-                                #:type   'IHDR
-                                #:length 13
-                                #:crc    (vector->int32 #vu8(119 50 219 167))))))
+   (png-chunk-decode-IHDR (make <png-chunk>
+                            #:data   %ihdr-data
+                            #:type   'IHDR
+                            #:length 13
+                            #:crc    (vector->int32 #vu8(119 50 219 167))))))
 
-(test-equal "png-chunk->png-chunk:IHDR: bit-depth"
+(test-equal "png-chunk-decode-IHDR: bit-depth"
   8
   (png-chunk:IHDR-bit-depth
-   (png-chunk->png-chunk:IHDR (make <png-chunk>
-                                #:data   %ihdr-data
-                                #:type   'IHDR
-                                #:length 13
-                                #:crc    (vector->int32 #vu8(119 50 219 167))))))
+   (png-chunk-decode-IHDR (make <png-chunk>
+                            #:data   %ihdr-data
+                            #:type   'IHDR
+                            #:length 13
+                            #:crc    (vector->int32 #vu8(119 50 219 167))))))
 
 
 ;; CRC
@@ -137,18 +137,18 @@
 
 (test-equal "png-chunk-encode: IHDR"
   %ihdr-data
-  (let ((chunk (png-chunk->png-chunk:IHDR (make <png-chunk:IHDR>
-                                            #:data   %ihdr-data
-                                            #:length 13))))
+  (let ((chunk (png-chunk-decode-IHDR (make <png-chunk:IHDR>
+                                        #:data   %ihdr-data
+                                        #:length 13))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
 (define %plte-data #vu8(255 0 0 0 255 0 0 0 255))
 (test-equal "png-chunk-encode: PLTE"
   %plte-data
-  (let ((chunk (png-chunk->png-chunk:PLTE (make <png-chunk>
-                                            #:data   %plte-data
-                                            #:length (bytevector-length %plte-data)))))
+  (let ((chunk (png-chunk-decode-PLTE (make <png-chunk>
+                                        #:data   %plte-data
+                                        #:length (bytevector-length %plte-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
@@ -163,16 +163,16 @@
          0 0 0 8))                      ; 28..31 blue-y
 (test-equal "png-chunk-encode: cHRM"
   %cHRM-data
-  (let ((chunk (png-chunk->png-chunk:cHRM (make <png-chunk>
-                                            #:data   %cHRM-data
-                                            #:length (bytevector-length %cHRM-data)))))
+  (let ((chunk (png-chunk-decode-cHRM (make <png-chunk>
+                                        #:data   %cHRM-data
+                                        #:length (bytevector-length %cHRM-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
 
 ;; PLTE
 
-(test-equal "png-chunk->png-chunk:PLTE"
+(test-equal "png-chunk-decode-PLTE"
   #(#vu8(255 0 0) #vu8(0 255 0) #vu8(0 0 255))
   (let* ((data #vu8(255 0 0 0 255 0 0 0 255))
          (chunk (make <png-chunk>
@@ -180,7 +180,7 @@
                  #:data data
                  #:length (bytevector-length data))))
     (png-chunk-crc-update! chunk)
-    (let ((plte (png-chunk->png-chunk:PLTE chunk)))
+    (let ((plte (png-chunk-decode-PLTE chunk)))
       (png-chunk:PLTE-palette-entries plte))))
 
 

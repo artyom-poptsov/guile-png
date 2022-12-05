@@ -20,21 +20,21 @@
     (proc chunk)))
 
 (define %converters-to-typed
-  `((IHDR . ,(make-converter png-chunk->png-chunk:IHDR))
-    (PLTE . ,(make-converter png-chunk->png-chunk:PLTE))
-    (IEND . ,(make-converter png-chunk->png-chunk:IEND))
-    (cHRM . ,(make-converter png-chunk->png-chunk:cHRM))
-    (tEXt . ,(make-converter png-chunk->png-chunk:tEXt))
-    (tEXT . ,(make-converter png-chunk->png-chunk:tEXt))
-    (zTXt . ,(make-converter png-chunk->png-chunk:zTXt))
-    (tIME . ,(make-converter png-chunk->png-chunk:tIME))
-    (iCCP . ,(make-converter png-chunk->png-chunk:iCCP))
-    (pHYs . ,(make-converter png-chunk->png-chunk:pHYs))
+  `((IHDR . ,(make-converter png-chunk-decode-IHDR))
+    (PLTE . ,(make-converter png-chunk-decode-PLTE))
+    (IEND . ,(make-converter png-chunk-decode-IEND))
+    (cHRM . ,(make-converter png-chunk-decode-cHRM))
+    (tEXt . ,(make-converter png-chunk-decode-tEXt))
+    (tEXT . ,(make-converter png-chunk-decode-tEXt))
+    (zTXt . ,(make-converter png-chunk-decode-zTXt))
+    (tIME . ,(make-converter png-chunk-decode-tIME))
+    (iCCP . ,(make-converter png-chunk-decode-iCCP))
+    (pHYs . ,(make-converter png-chunk-decode-pHYs))
     (bKGD . ,(lambda (image chunk)
                (let ((result (png-image-chunks-query image 'IHDR)))
                  (unless result
                    (error "Could not find IHDR chunk"))
-                 (data->png-chunk:bKGD chunk (car result)))))))
+                 (png-chunk-decode-bKGD chunk (car result)))))))
 
 
 

@@ -40,7 +40,7 @@
             png-chunk:bKGD-green
             png-chunk:bKGD-blue
             png-chunk:bKGD-palette-index
-            data->png-chunk:bKGD))
+            png-chunk-decode-bKGD))
 
 
 
@@ -104,8 +104,8 @@
 
 
 
-(define-method (data->png-chunk:bKGD (chunk <png-chunk>)
-                                     (ihdr  <png-chunk>))
+(define-method (png-chunk-decode-bKGD (chunk <png-chunk>)
+                                      (ihdr  <png-chunk>))
   "Convert a PNG chunk data to a bKGD chunk instance."
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))

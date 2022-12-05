@@ -12,7 +12,7 @@
             png-chunk:tIME-hour
             png-chunk:tIME-minute
             png-chunk:tIME-second
-            png-chunk->png-chunk:tIME))
+            png-chunk-decode-tIME))
 
 
 
@@ -73,7 +73,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:tIME (chunk <png-chunk>))
+(define-method (png-chunk-decode-tIME (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

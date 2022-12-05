@@ -4,7 +4,7 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:IEND>
-            png-chunk->png-chunk:IEND))
+            png-chunk-decode-IEND))
 
 
 
@@ -28,7 +28,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:IEND (chunk <png-chunk>))
+(define-method (png-chunk-decode-IEND (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

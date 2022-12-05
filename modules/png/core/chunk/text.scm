@@ -8,7 +8,7 @@
             png-chunk:tEXt?
             png-chunk:tEXt-keyword
             png-chunk:tEXt-text
-            png-chunk->png-chunk:tEXt))
+            png-chunk-decode-tEXt))
 
 
 
@@ -39,7 +39,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:tEXt (chunk <png-chunk>))
+(define-method (png-chunk-decode-tEXt (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

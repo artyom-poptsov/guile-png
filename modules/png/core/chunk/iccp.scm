@@ -8,7 +8,7 @@
             png-chunk:iCCP-profile-name
             png-chunk:iCCP-compression-method
             png-chunk:iCCP-profile
-            png-chunk->png-chunk:iCCP))
+            png-chunk-decode-iCCP))
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-(define-method (png-chunk->png-chunk:iCCP (chunk <png-chunk>))
+(define-method (png-chunk-decode-iCCP (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

@@ -12,7 +12,7 @@
             palette:green
             palette:blue
             vector->PLTE-palette-entries
-            png-chunk->png-chunk:PLTE))
+            png-chunk-decode-PLTE))
 
 
 
@@ -104,7 +104,7 @@ three-byte bytevector of the following format:
             (loop (+ index 1)))
           result))))
 
-(define-method (png-chunk->png-chunk:PLTE (chunk <png-chunk>))
+(define-method (png-chunk-decode-PLTE (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))

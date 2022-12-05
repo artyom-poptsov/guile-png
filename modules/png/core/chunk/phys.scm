@@ -8,7 +8,7 @@
             png-chunk:pHYs-pixels-per-unit-x-axis
             png-chunk:pHYs-pixels-per-unit-y-axis
             png-chunk:pHYs-unit-specifier
-            png-chunk->png-chunk:pHYs))
+            png-chunk-decode-pHYs))
 
 
 
@@ -51,7 +51,7 @@
 (define-method (write (chunk <png-chunk:pHYs>) (port <port>))
   (%display chunk port))
 
-(define-method (png-chunk->png-chunk:pHYs (chunk <png-chunk>))
+(define-method (png-chunk-decode-pHYs (chunk <png-chunk>))
   (let ((length (png-chunk-length chunk))
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))
