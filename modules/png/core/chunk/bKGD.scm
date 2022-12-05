@@ -1,4 +1,4 @@
-;;; chunk-bkgd.scm -- bKGD chunk.
+;;; bKGD.scm -- bKGD chunk.
 
 ;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk bkgd)
+(define-module (png core chunk bKGD)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
   #:use-module (png core common)
@@ -152,4 +152,4 @@
     #:blue       (png-chunk:bKGD-blue chunk)
     #:palette-index (png-chunk:bKGD-palette-index chunk)))
 
-;;; chunk-bkgd.scm ends here.
+;;; bKGD.scm ends here.

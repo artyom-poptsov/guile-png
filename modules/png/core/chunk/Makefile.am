@@ -28,7 +28,7 @@ SOURCES = \
 	ztxt.scm	\
 	time.scm	\
 	iccp.scm	\
-	bkgd.scm	\
+	bKGD.scm	\
 	phys.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)

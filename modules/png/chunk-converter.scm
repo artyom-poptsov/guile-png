@@ -10,7 +10,7 @@
   #:use-module (png core chunk time)
   #:use-module (png core chunk iccp)
   #:use-module (png core chunk phys)
-  #:use-module (png core chunk bkgd)
+  #:use-module (png core chunk bKGD)
   #:use-module (png image)
   #:export (png-chunk->typed-chunk))
 
