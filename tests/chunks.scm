@@ -140,7 +140,7 @@
                                             #:data   %ihdr-data
                                             #:length 13))))
     (png-chunk-crc-update! chunk)
-    (png-chunk-data chunk)))
+    (png-chunk-data (png-chunk-encode chunk))))
 
 (define %plte-data #vu8(255 0 0 0 255 0 0 0 255))
 (test-equal "png-chunk-encode: PLTE"
