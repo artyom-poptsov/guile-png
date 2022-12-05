@@ -124,4 +124,30 @@
       #:blue-x             (data:blue-x data)
       #:blue-y             (data:blue-y data))))
 
+(define-method (png-chunk-encode (chunk <png-chunk:cHRM>))
+  "Encode a cHRM CHUNK."
+  (let* ((white-point-x (png-chunk:cHRM-white-point-x chunk))
+         (white-point-y (png-chunk:cHRM-white-point-y chunk))
+         (red-x         (png-chunk:cHRM-red-x chunk))
+         (red-y         (png-chunk:cHRM-red-y chunk))
+         (green-x       (png-chunk:cHRM-green-x chunk))
+         (green-y       (png-chunk:cHRM-green-y chunk))
+         (blue-x        (png-chunk:cHRM-blue-x chunk))
+         (blue-y        (png-chunk:cHRM-blue-y chunk))
+         (data          (make-bytevector 32 0))
+         (encoded-chunk (make <png-chunk>
+                          #:data   data
+                          #:length (bytevector-length data)
+                          #:type   'cHRM)))
+    (bytevector-copy! (int32->bytevector white-point-x) 0 data 0 4)
+    (bytevector-copy! (int32->bytevector white-point-y) 0 data 4 4)
+    (bytevector-copy! (int32->bytevector red-x)         0 data 8 4)
+    (bytevector-copy! (int32->bytevector red-y)         0 data 12 4)
+    (bytevector-copy! (int32->bytevector green-x)       0 data 16 4)
+    (bytevector-copy! (int32->bytevector green-y)       0 data 20 4)
+    (bytevector-copy! (int32->bytevector blue-x)        0 data 24 4)
+    (bytevector-copy! (int32->bytevector blue-y)        0 data 28 4)
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
+
 ;;; chunk-iend.scm ends here.

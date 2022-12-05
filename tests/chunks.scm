@@ -6,7 +6,8 @@
              (png core common)
              (png core chunk)
              (png core chunk ihdr)
-             (png core chunk plte))
+             (png core chunk plte)
+             (png core chunk chrm))
 
 
 (define %test-name "chunks")
@@ -148,6 +149,23 @@
   (let ((chunk (png-chunk->png-chunk:PLTE (make <png-chunk>
                                             #:data   %plte-data
                                             #:length (bytevector-length %plte-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
+(define %cHRM-data
+  #vu8(0 0 0 1                          ; 00..03 white-point-x
+         0 0 0 2                        ; 04..07 white-point-y
+         0 0 0 3                        ; 08..11 red-x
+         0 0 0 4                        ; 12..15 red-y
+         0 0 0 5                        ; 16..19 green-x
+         0 0 0 6                        ; 20..23 green-y
+         0 0 0 7                        ; 24..27 blue-x
+         0 0 0 8))                      ; 28..31 blue-y
+(test-equal "png-chunk-encode: cHRM"
+  %cHRM-data
+  (let ((chunk (png-chunk->png-chunk:cHRM (make <png-chunk>
+                                            #:data   %cHRM-data
+                                            #:length (bytevector-length %cHRM-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
