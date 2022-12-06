@@ -8,7 +8,7 @@
   #:use-module (png core chunk text)
   #:use-module (png core chunk ztxt)
   #:use-module (png core chunk time)
-  #:use-module (png core chunk iccp)
+  #:use-module (png core chunk iCCP)
   #:use-module (png core chunk phys)
   #:use-module (png core chunk bKGD)
   #:use-module (png image)

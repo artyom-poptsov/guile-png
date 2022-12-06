@@ -27,7 +27,7 @@ SOURCES = \
 	text.scm	\
 	ztxt.scm	\
 	time.scm	\
-	iccp.scm	\
+	iCCP.scm	\
 	bKGD.scm	\
 	phys.scm
 
