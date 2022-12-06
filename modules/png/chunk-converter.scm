@@ -6,7 +6,7 @@
   #:use-module (png core chunk IEND)
   #:use-module (png core chunk cHRM)
   #:use-module (png core chunk tEXt)
-  #:use-module (png core chunk ztxt)
+  #:use-module (png core chunk zTXt)
   #:use-module (png core chunk tIME)
   #:use-module (png core chunk iCCP)
   #:use-module (png core chunk pHYs)

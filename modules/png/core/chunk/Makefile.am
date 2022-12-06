@@ -25,7 +25,7 @@ SOURCES = \
 	IEND.scm	\
 	cHRM.scm	\
 	tEXt.scm	\
-	ztxt.scm	\
+	zTXt.scm	\
 	tIME.scm	\
 	iCCP.scm	\
 	bKGD.scm	\
