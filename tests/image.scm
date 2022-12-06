@@ -3,7 +3,7 @@
              (oop goops)
              (png image)
              (png core chunk)
-             (png core chunk ihdr)
+             (png core chunk IHDR)
              (png core chunk iend))
 
 

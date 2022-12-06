@@ -32,7 +32,7 @@
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
-  #:use-module (png core chunk ihdr)
+  #:use-module (png core chunk IHDR)
   #:export (<png-chunk:bKGD>
             png-chunk:bKGD-color-type
             png-chunk:bKGD-grayscale

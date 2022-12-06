@@ -33,7 +33,7 @@
   #:use-module (png core common)
   #:use-module (png core filter)
   #:use-module (png core chunk)
-  #:use-module (png core chunk ihdr)
+  #:use-module (png core chunk IHDR)
   #:use-module (png core chunk iend)
   #:use-module (png chunk-converter)
   #:export (<png-compressed-image>

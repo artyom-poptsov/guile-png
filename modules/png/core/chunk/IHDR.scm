@@ -1,4 +1,4 @@
-;;; ihdr.scm -- IHDR chunk.
+;;; IHDR.scm -- IHDR chunk.
 
 ;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk ihdr)
+(define-module (png core chunk IHDR)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -296,4 +296,4 @@
     #:filter-method      (png-chunk:IHDR-filter-method chunk)
     #:interlace-method   (png-chunk:IHDR-interlace-method chunk)))
 
-;;; ihdr.scm ends here.
+;;; IHDR.scm ends here.

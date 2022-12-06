@@ -5,7 +5,7 @@
              (oop goops)
              (png core common)
              (png core chunk)
-             (png core chunk ihdr)
+             (png core chunk IHDR)
              (png core chunk plte)
              (png core chunk cHRM))
 
