@@ -37,6 +37,9 @@
             (png-chunk:tEXt-keyword chunk)
             (object-address/hex-string chunk))))
 
+(define-method (display (chunk <png-chunk:tEXt>) (port <port>))
+  (%display chunk port))
+
 
 
 (define-method (png-chunk-decode-tEXt (chunk <png-chunk>))
