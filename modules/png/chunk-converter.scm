@@ -4,7 +4,7 @@
   #:use-module (png core chunk ihdr)
   #:use-module (png core chunk plte)
   #:use-module (png core chunk iend)
-  #:use-module (png core chunk chrm)
+  #:use-module (png core chunk cHRM)
   #:use-module (png core chunk text)
   #:use-module (png core chunk ztxt)
   #:use-module (png core chunk time)

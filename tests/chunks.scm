@@ -7,7 +7,7 @@
              (png core chunk)
              (png core chunk ihdr)
              (png core chunk plte)
-             (png core chunk chrm))
+             (png core chunk cHRM))
 
 
 (define %test-name "chunks")

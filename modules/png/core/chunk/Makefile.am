@@ -23,7 +23,7 @@ SOURCES = \
 	ihdr.scm	\
 	plte.scm	\
 	iend.scm	\
-	chrm.scm	\
+	cHRM.scm	\
 	text.scm	\
 	ztxt.scm	\
 	time.scm	\
