@@ -1,4 +1,4 @@
-(define-module (png core chunk iend)
+(define-module (png core chunk IEND)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)

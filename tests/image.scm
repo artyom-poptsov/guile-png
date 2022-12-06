@@ -4,7 +4,7 @@
              (png image)
              (png core chunk)
              (png core chunk IHDR)
-             (png core chunk iend))
+             (png core chunk IEND))
 
 
 (define %test-name "image")

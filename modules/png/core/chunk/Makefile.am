@@ -22,7 +22,7 @@ include $(top_srcdir)/build-aux/am/guilec
 SOURCES = \
 	IHDR.scm	\
 	plte.scm	\
-	iend.scm	\
+	IEND.scm	\
 	cHRM.scm	\
 	text.scm	\
 	ztxt.scm	\
