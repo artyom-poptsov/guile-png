@@ -1,3 +1,33 @@
+;;; PLTE.scm -- PLTE chunk.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; PNG image palette (PLTE) chunk.  The chunk contains from 1 to 256 palette
+;; entries, , each a three-byte series of the form:
+;;
+;;   Red:   1 byte (0 = black, 255 = red)
+;;   Green: 1 byte (0 = black, 255 = green)
+;;   Blue:  1 byte (0 = black, 255 = blue)
+
+
+;;; Code:
+
 (define-module (png core chunk PLTE)
   #:use-module (ice-9 format)
   #:use-module (rnrs bytevectors)
@@ -129,5 +159,4 @@ three-byte bytevector of the following format:
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
-;;; chunk-plte.scm ends here.
-
+;;; PLTE.scm ends here.
