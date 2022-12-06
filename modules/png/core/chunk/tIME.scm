@@ -1,4 +1,4 @@
-(define-module (png core chunk time)
+(define-module (png core chunk tIME)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)

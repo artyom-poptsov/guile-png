@@ -26,7 +26,7 @@ SOURCES = \
 	cHRM.scm	\
 	tEXt.scm	\
 	ztxt.scm	\
-	time.scm	\
+	tIME.scm	\
 	iCCP.scm	\
 	bKGD.scm	\
 	pHYs.scm
