@@ -24,7 +24,7 @@ SOURCES = \
 	PLTE.scm	\
 	IEND.scm	\
 	cHRM.scm	\
-	text.scm	\
+	tEXt.scm	\
 	ztxt.scm	\
 	time.scm	\
 	iCCP.scm	\
