@@ -1,4 +1,4 @@
-(define-module (png core chunk plte)
+(define-module (png core chunk PLTE)
   #:use-module (ice-9 format)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)

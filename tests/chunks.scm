@@ -6,7 +6,7 @@
              (png core common)
              (png core chunk)
              (png core chunk IHDR)
-             (png core chunk plte)
+             (png core chunk PLTE)
              (png core chunk cHRM))
 
 

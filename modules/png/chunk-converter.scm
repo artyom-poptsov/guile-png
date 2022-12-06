@@ -2,7 +2,7 @@
   #:use-module (oop goops)
   #:use-module (png core chunk)
   #:use-module (png core chunk IHDR)
-  #:use-module (png core chunk plte)
+  #:use-module (png core chunk PLTE)
   #:use-module (png core chunk IEND)
   #:use-module (png core chunk cHRM)
   #:use-module (png core chunk text)
