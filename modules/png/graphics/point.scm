@@ -1,6 +1,7 @@
 (define-module (png graphics point)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics pixel)
   #:use-module (png graphics graphic)
   #:export (<point>
@@ -16,6 +17,13 @@
    #:init-value   0
    #:init-keyword #:y
    #:getter       point-y))
+
+
+(define-method (display (point <point>) (port <port>))
+  (format port "#<point x: ~a y: ~a ~a>"
+          (point-x point)
+          (point-y point)
+          (object-address/hex-string point)))
 
 
 
