@@ -38,6 +38,7 @@
                    (png graphics point)
                    (png graphics line)
                    (png graphics multiline)
+                   (png graphics polygon)
                    (png graphics rectangle)
                    (png graphics ellipse)
                    (png graphics circle))
