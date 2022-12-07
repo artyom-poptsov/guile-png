@@ -35,7 +35,7 @@
   #:use-module (png core chunk)
   #:use-module (png core chunk IHDR)
   #:use-module (png core chunk IEND)
-  #:use-module (png chunk-converter)
+  #:use-module (png chunk-decoder)
   #:export (<png-compressed-image>
             png-compressed-image?
             png-compressed-image-decompress

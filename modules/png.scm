@@ -32,7 +32,7 @@
   #:use-module (png fsm png-context)
   #:use-module (png fsm png-parser)
   #:use-module (png core chunk)
-  #:use-module (png chunk-converter)
+  #:use-module (png chunk-decoder)
   #:export (png->scm
             scm->png))
 

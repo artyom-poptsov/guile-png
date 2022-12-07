@@ -1,4 +1,4 @@
-(define-module (png chunk-converter)
+(define-module (png chunk-decoder)
   #:use-module (oop goops)
   #:use-module (png core chunk)
   #:use-module (png core chunk IHDR)
