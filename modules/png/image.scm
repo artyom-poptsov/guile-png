@@ -492,7 +492,7 @@ new bytevector with image data with filter type bytes removed."
   "Decompress an IMAGE, return a new <png-image> instance with uncompressed
 data."
   (let ((chunks (map (lambda (chunk)
-                       (png-chunk->typed-chunk image chunk))
+                       (png-chunk-decode image chunk))
                      (map png-chunk-clone (png-image-chunks image)))))
     (make <png-image>
       #:chunks             chunks

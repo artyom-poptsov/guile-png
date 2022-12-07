@@ -13,7 +13,7 @@
   #:use-module (png core chunk pHYs)
   #:use-module (png core chunk bKGD)
   #:use-module (png image)
-  #:export (png-chunk->typed-chunk))
+  #:export (png-chunk-decode))
 
 
 (define (make-converter proc)
@@ -39,8 +39,7 @@
 
 
 
-(define-method (png-chunk->typed-chunk image
-                                       (chunk <png-chunk>))
+(define-method (png-chunk-decode image (chunk <png-chunk>))
   (let ((type (png-chunk-type chunk)))
     (if type
         (let ((converter (assoc-ref %converters-to-typed type)))
