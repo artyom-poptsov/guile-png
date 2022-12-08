@@ -16,17 +16,18 @@
 
 (define-method (draw! (image <png-image>) (polygon <polygon>))
   (let ((color (graphic-color polygon)))
-    (let loop ((points (multiline-points polygon)))
+    (let loop ((points (polygon-points polygon)))
       (unless (< (length points) 2)
         (let ((line (make <line>
                       #:p1 (car points)
                       #:p2 (cadr points)
                       #:color color)))
           (draw! image line))
-        (draw! image (make <line>
-                       #:p1 (car points)
-                       #:p2 (car (reverse points))
-                       #:color color))
-        (loop (cdr points))))))
+        (loop (cdr points))))
+    (let ((points (multiline-points polygon)))
+      (draw! image (make <line>
+                     #:p1 (car points)
+                     #:p2 (car (reverse points))
+                     #:color color)))))
 
 ;;; polygon.scm ends here.
