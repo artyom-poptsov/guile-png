@@ -40,6 +40,7 @@
                    (png graphics multiline)
                    (png graphics polygon)
                    (png graphics rectangle)
+                   (png graphics filled-rectangle)
                    (png graphics ellipse)
                    (png graphics circle))
 
