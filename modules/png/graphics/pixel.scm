@@ -50,6 +50,13 @@
                                 (bytevector-u8-ref data (+ offset index)))
             (loop (+ index 1)))))))
 
+(define-method (png-image-pixel-ref (image <png-image>)
+                                    (x     <number>)
+                                    (y     <number>))
+  (png-image-pixel-ref image
+                       (+ (* y (png-image-width image))
+                          x)))
+
 (define-method (png-image-pixel-set! (image <png-image>)
                                      (x     <number>)
                                      (pixel <bytevector>))
