@@ -341,6 +341,16 @@ Set the @var{pixel} value for a pixel referenced by @var{x} from an
 
 @end deffn
 
+@deffn {Method} png-image-pixel-set! (image <png-image>) @
+                                     (x     <number>) @
+                                     (y     <number>) @
+                                     (pixel <bytevector>)
+
+Set the @var{pixel} value for a pixel referenced by @var{x} and @var{y} from
+an @var{image}. The return value is undefined.
+
+@end deffn
+
 @subsection Graphic Objects
 
 @code{(png graphics graphic)} contains @code{<graphic>} class which is the
