@@ -541,6 +541,51 @@ Get the width of a @var{rectangle}.
 Get the height of a @var{rectangle}.
 @end deffn
 
+@subsection Filled Rectangle
+
+@code{(png graphics filled-rectangle)} contains a @code{<filled-rectangle>}
+class.
+
+@deftp {Class} <filled-rectangle> [#:color=#u8(0 0 0 0)] @
+                                  [#:position=(lambda () (make <point>))] @
+                                  [#:width=0] @
+                                  [#:height=0]
+
+This class describes a filled rectangle.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:position (point <point>)
+The position of the upper left angle of the rectangle.
+@item #:width (width <number>)
+The width of the rectangle.
+@item #:height (height <number>)
+The height of the rectangle.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (rectangle <rectangle>)
+
+Draw a @var{rectangle} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} filled-rectangle-position (rectangle <rectangle>)
+Get the position of a @var{rectangle}.
+@end deffn
+
+@deffn {Method} filled-rectangle-width (rectangle <rectangle>)
+Get the width of a @var{rectangle}.
+@end deffn
+
+@deffn {Method} filled-rectangle-height (rectangle <rectangle>)
+Get the height of a @var{rectangle}.
+@end deffn
+
 @subsection Ellipse
 
 @code{(png graphics ellipse)} contains an @code{<ellipse>} class.
