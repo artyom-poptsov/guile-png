@@ -448,6 +448,36 @@ Draw a @var{multiline} on an @var{image}.
 Get the points of a @var{multiline}.
 @end deffn
 
+@subsection Polygon
+
+@code{(png graphics polygon)} contains a @code{<polygon>} class.
+
+@deftp {Class} <polygon> [#:color=#u8(0 0 0 0)] @
+                         [#:points='()]
+
+This class describes a polygon.
+
+Constructor parameters:
+@table @asis
+@item #:color (color <bytevector>)
+Graphic object color. The number of bytes in the vector must be the same as
+the number of bytes per pixel in an image.
+@item #:points (points <list>)
+The list of @code{<point>} instances that describe the points of the polygon.
+@end table
+
+@end deftp
+
+@deffn {Method} draw! (image <png-image>) (polygon <polygon>)
+
+Draw a @var{polygon} on an @var{image}.
+
+@end deffn
+
+@deffn {Method} polygon-points (multiline <multiline>)
+Get the points of a @var{polygon}.
+@end deffn
+
 @subsection Rectangle
 
 @code{(png graphics rectangle)} contains a @code{<rectangle>} class.
