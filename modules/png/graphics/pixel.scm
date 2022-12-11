@@ -34,6 +34,8 @@
 
 (define-method (png-image-pixel-ref (image <png-image>)
                                     (x     <number>))
+  "Get a pixel of an IMAGE by its X position in the bytevector of the IMAGE
+pixels."
   (let* ((data        (png-image-data image))
          (pixel-count (* (png-image-width image) (png-image-height image)))
          (bpp         (png-image-pixel-size image))
@@ -53,6 +55,7 @@
 (define-method (png-image-pixel-ref (image <png-image>)
                                     (x     <number>)
                                     (y     <number>))
+  "Get a pixel of an IMAGE by its X and Y position on the IMAGE."
   (png-image-pixel-ref image
                        (+ (* y (png-image-width image))
                           x)))
@@ -60,6 +63,8 @@
 (define-method (png-image-pixel-set! (image <png-image>)
                                      (x     <number>)
                                      (pixel <bytevector>))
+  "Set a pixel of an IMAGE, referenced by the X position in the IMAGE bytevector
+of pixels."
   (let* ((data        (png-image-data image))
          (pixel-count (* (png-image-width image) (png-image-height image)))
          (bpp         (png-image-pixel-size image))
@@ -77,6 +82,7 @@
                                      (x     <number>)
                                      (y     <number>)
                                      (pixel <bytevector>))
+  "Set a pixel of an IMAGE, referenced by the X and Y position in the IMAGE."
   (png-image-pixel-set! image
                         (+ (* y (png-image-width image))
                            x)
