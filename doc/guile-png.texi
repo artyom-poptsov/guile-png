@@ -323,6 +323,15 @@ is returned as a byte vector.
 
 @end deffn
 
+@deffn {Method} png-image-pixel-ref (image <png-image>) @
+                                    (x <number>) @
+                                    (y <number>)
+
+Get the value of a pixel referenced by @var{x} and @var{y} from an
+@var{image}. The pixel is returned as a byte vector.
+
+@end deffn
+
 @deffn {Method} png-image-pixel-set! (image <png-image>) @
                                      (x     <number>) @
                                      (pixel <bytevector>)
