@@ -26,7 +26,9 @@
 (define-module (png graphics circle)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics pixel)
+  #:use-module (png graphics point)
   #:use-module (png graphics graphic)
   #:use-module (png graphics ellipse)
   #:export (<circle>
@@ -43,6 +45,13 @@
    #:init-keyword #:radius
    #:init-value   0
    #:getter       circle-radius))
+
+(define-method (display (circle <circle>) (port <port>))
+  (format port "#<circle cx: ~a cy: ~a r: ~a ~a>"
+          (point-x (ellipse-center circle))
+          (point-y (ellipse-center circle))
+          (circle-radius circle)
+          (object-address/hex-string circle)))
 
 
 (define-method (initialize (circle <circle>) initargs)
