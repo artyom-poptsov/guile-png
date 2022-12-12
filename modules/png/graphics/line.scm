@@ -28,7 +28,9 @@
          (p2 (line-p2 line))
          (x1 (point-x p1))
          (y1 (point-y p1))
-         (x2 (point-x p2))
+         ;; XXX: We need to add 1 to the x2 the algorithm so it will reach the
+         ;; final pixel of the line.
+         (x2 (+ (point-x p2) 1))
          (y2 (point-y p2))
          (dx (- x2 x1))
          (dy (- y2 y1))
