@@ -22,7 +22,8 @@ SCM_TESTS = \
 	common.scm	\
 	chunks.scm \
 	fsm-context.scm	\
-	image.scm
+	image.scm	\
+	graphics.scm
 
 TESTS = ${SCM_TESTS}
 
