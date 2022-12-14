@@ -1,3 +1,32 @@
+;;; zTXt.scm -- Compressed text chunk.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; The zTXt chunk contains textual data, just as tEXt does; however, zTXt
+;; takes advantage of compression. zTXt and tEXt chunks are semantically
+;; equivalent, but zTXt is recommended for storing large blocks of text.
+;;
+;; <https://www.rfc-editor.org/rfc/rfc2083#page-27>
+
+
+;;; Code:
+
 (define-module (png core chunk zTXt)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
@@ -110,3 +139,4 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+;;; zTXt.scm ends here.
