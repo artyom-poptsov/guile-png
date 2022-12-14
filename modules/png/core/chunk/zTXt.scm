@@ -1,6 +1,7 @@
 (define-module (png core chunk zTXt)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
+  #:use-module (zlib)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -51,34 +52,32 @@
         (type   (png-chunk-type chunk))
         (data   (png-chunk-data chunk))
         (crc    (png-chunk-crc chunk)))
-    (define (read-text index output)
-      (let loop ((text '())
-                 (idx  index))
-        (if (= idx (bytevector-length data))
-            (make <png-chunk:zTXt>
-              #:length  length
-              #:type    type
-              #:data    data
-              #:crc     crc
-              #:keyword            (assoc-ref output 'keyword)
-              #:compression-method (assoc-ref output 'compression-method)
-              ;; TODO: Decompress the datastream.
-              #:text               (u8-list->bytevector text))
-            (loop (append text (list (bytevector-u8-ref data idx)))
-                  (+ idx 1)))))
 
+    (define (read-text index keyword compression-method)
+      (let* ((compressed-text (bytevector-copy/part data
+                                                    index
+                                                    (- (bytevector-length data)
+                                                       index)))
+             (text (uncompress compressed-text)))
+        (make <png-chunk:zTXt>
+          #:length  length
+          #:type    type
+          #:data    data
+          #:crc     crc
+          #:keyword            keyword
+          #:compression-method compression-method
+          #:text               text)))
 
-    (define (read-compression-method index output)
+    (define (read-compression-method index keyword)
       (read-text (+ index 1)
-                 (acons 'compression-method
-                        (bytevector-u8-ref data index)
-                        output)))
+                 keyword
+                 (bytevector-u8-ref data index)))
 
     (define (read-keyword)
       (let loop ((keyword '())
                  (index   0))
         (if (zero? (bytevector-u8-ref data index))
-            (read-compression-method index `((keyword . ,(list->string keyword))))
+            (read-compression-method (+ index 1) (list->string keyword))
             (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
                   (+ index 1)))))
 
