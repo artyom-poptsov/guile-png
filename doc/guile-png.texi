@@ -768,6 +768,81 @@ Check if a @var{chunk} has a valid Cyclic Redundancy Code (CRC.)
 Convert a @var{chunk} to a binary form and write it to a @var{port}.
 @end deffn
 
+@subsection IHDR
+PNG image header (IHDR) chunk.  The IHDR chunk must appear first.
+
+Note that the setter methods below do not update the CRC of a PNG image.
+
+@deffn {Method} png-chunk:IHDR-width (chunk <png-chunk:IHDR>)
+Get the image width from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-width-set! (chunk <png-chunk:IHDR>)
+Set the image width for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-height (chunk <png-chunk:IHDR>)
+Get the image height from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-height-set! (chunk <png-chunk:IHDR>)
+Set the image height for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-bit-depth (chunk <png-chunk:IHDR>)
+Get the image bit depth from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-bit-depth-set! (chunk <png-chunk:IHDR>)
+Set the image bit depth for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-color-type (chunk <png-chunk:IHDR>)
+Get the image color type from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-color-type-set! (chunk <png-chunk:IHDR>)
+Set the image color type for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-compression-method (chunk <png-chunk:IHDR>)
+Get the image compression method from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-compression-method-set! (chunk <png-chunk:IHDR>)
+Set the image compression method for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-filter-method (chunk <png-chunk:IHDR>)
+Get the image filtering method from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-filter-method-set! (chunk <png-chunk:IHDR>)
+Set the image filtering method for an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-interlace-method (chunk <png-chunk:IHDR>)
+Get the image interlace method from an IHDR @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:IHDR-interlace-method-set! (chunk <png-chunk:IHDR>)
+Set the image interlace method for an IHDR @var{chunk}.
+@end deffn
+
+@deffn  {Method} data:width (data <bytevector>)
+@deffnx {Method} data:height (data <bytevector>)
+@deffnx {Method} data:bit-depth (data <bytevector>)
+@deffnx {Method} data:color-type (data <bytevector>)
+@deffnx {Method} data:compression-method (data <bytevector>)
+@deffnx {Method} data:filter-method (data <bytevector>)
+@deffnx {Method} data:interlace-method (data <bytevector>)
+Those methods are the accessors for the specific parts of IHDR chunk data.
+@end deffn
+            
+@deffn {Method} png-chunk-decode-IHDR (chunk <png-chunk>)
+Decode an IHDR chunk from a plain PNG @var{chunk}.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
