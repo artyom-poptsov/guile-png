@@ -2,6 +2,7 @@
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (zlib)
+  #:use-module (ice-9 iconv)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -82,3 +83,30 @@
                   (+ index 1)))))
 
     (read-keyword)))
+
+(define-method (png-chunk-encode (chunk <png-chunk:zTXt>))
+  (let* ((keyword            (string->bytevector (png-chunk:zTXt-keyword chunk)
+                                                 "US-ASCII"))
+         (keyword-length     (bytevector-length keyword))
+         (compression-method (png-chunk:zTXt-compression-method chunk))
+         (uncompressed-text  (png-chunk:zTXt-text chunk))
+         (compressed-text    (compress (string->bytevector uncompressed-text
+                                                           "US-ASCII")))
+         (chunk-length       (+ (string-length keyword)
+                                1
+                                (bytevector-length compressed-text)))
+         (data               (make-bytevector chunk-length 0))
+         (encoded-chunk      (make <png-chunk>
+                               #:type   'zTXt
+                               #:length chunk-length
+                               #:data   data)))
+    (bytevector-copy! keyword 0 data 0 keyword-length)
+    (bytevector-u8-set! data keyword-length compression-method)
+    (bytevector-copy! compressed-text
+                      0
+                      data
+                      (+ keyword-length 1)
+                      (bytevector-length compressed-text))
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
+
