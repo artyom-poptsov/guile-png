@@ -72,6 +72,7 @@
   (make <png-chunk:IEND>
     #:length (png-chunk-length chunk)
     #:type   (png-chunk-type   chunk)
-    #:data   (png-chunk-data   chunk)))
+    #:data   (png-chunk-data   chunk)
+    #:crc    (png-chunk-crc    chunk)))
 
 ;;; IEND.scm ends here.
