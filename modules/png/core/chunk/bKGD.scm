@@ -30,6 +30,7 @@
 (define-module (png core chunk bKGD)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
+  #:use-module (rnrs bytevectors)
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:use-module (png core chunk IHDR)
@@ -139,6 +140,43 @@
          #:crc                crc
          #:color-type        color-type
          #:palette-index      (vector-ref data 0))))))
+
+(define-method (png-chunk-encode (chunk <png-chunk:bKGD>))
+  (let ((color-type (png-chunk:bKGD-color-type chunk)))
+    (case color-type
+      ((0 4)
+       (let* ((grayscale-value (png-chunk:bKGD-grayscale chunk))
+              (data            (int16->bytevector grayscale-value))
+              (encoded-chunk   (make <png-chunk>
+                                 #:type   'bKGD
+                                 #:data   data
+                                 #:length (bytevector-length data))))
+         (png-chunk-crc-update! encoded-chunk)
+         encoded-chunk))
+      ((2 6)
+       (let* ((r (png-chunk:bKGD-red chunk))
+              (g (png-chunk:bKGD-green chunk))
+              (b (png-chunk:bKGD-blue chunk))
+              (data (make-bytevector 6 0))
+              (encoded-chunk   (make <png-chunk>
+                                 #:type   'bKGD
+                                 #:data   data
+                                 #:length (bytevector-length data))))
+         (bytevector-copy! (int16->bytevector r) 0 data 0 2)
+         (bytevector-copy! (int16->bytevector g) 0 data 2 2)
+         (bytevector-copy! (int16->bytevector b) 0 data 4 2)
+         (png-chunk-crc-update! encoded-chunk)
+         encoded-chunk))
+      ((3)
+       (let* ((palette-index (png-chunk:bKGD-palette-index chunk))
+              (data          (make-bytevector 1 0))
+              (encoded-chunk   (make <png-chunk>
+                                 #:type   'bKGD
+                                 #:data   data
+                                 #:length (bytevector-length data))))
+         (bytevector-u8-set! data 0 palette-index)
+         (png-chunk-crc-update! encoded-chunk)
+         encoded-chunk)))))
 
 (define-method (png-chunk-clone (chunk <png-chunk:bKGD>))
   (make <png-chunk:bKGD>

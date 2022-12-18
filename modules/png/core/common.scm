@@ -30,6 +30,7 @@
   #:export (object-address/hex-string
             vector->int32
             vector->int16
+            int16->bytevector
             int32->bytevector
             bytevector-copy/part
             bytevector-split
@@ -57,6 +58,12 @@
          (ash (logand number #x00FF0000) -16)
          (ash (logand number #x0000FF00) -8)
          (logand number #x000000FF))))
+
+(define-method (int16->bytevector (number <number>))
+  "Convert a NUMBER to a byte vector."
+  (u8-list->bytevector
+   (list (ash (logand number #xFF00) -8)
+         (logand number #xFF))))
 
 (define-method (bytevector-copy/part bv source-start len)
   (let ((result (make-bytevector len)))
