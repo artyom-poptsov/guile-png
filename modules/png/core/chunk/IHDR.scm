@@ -286,7 +286,7 @@
 (define-method (png-chunk-clone (chunk <png-chunk:IHDR>))
   (make <png-chunk:IHDR>
     #:length (png-chunk-length chunk)
-    #:data   (png-chunk-data   chunk)
+    #:data   (bytevector-copy (png-chunk-data chunk))
     #:crc    (png-chunk-crc    chunk)
     #:width              (png-chunk:IHDR-width chunk)
     #:height             (png-chunk:IHDR-height chunk)
