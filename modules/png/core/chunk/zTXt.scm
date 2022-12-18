@@ -96,7 +96,7 @@
           #:crc     crc
           #:keyword            keyword
           #:compression-method compression-method
-          #:text               text)))
+          #:text               (bytevector->string text "US-ASCII"))))
 
     (define (read-compression-method index keyword)
       (read-text (+ index 1)
@@ -107,7 +107,7 @@
       (let loop ((keyword '())
                  (index   0))
         (if (zero? (bytevector-u8-ref data index))
-            (read-compression-method (+ index 1) (list->string keyword))
+            (read-compression-method index (list->string keyword))
             (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
                   (+ index 1)))))
 
@@ -121,7 +121,7 @@
          (uncompressed-text  (png-chunk:zTXt-text chunk))
          (compressed-text    (compress (string->bytevector uncompressed-text
                                                            "US-ASCII")))
-         (chunk-length       (+ (string-length keyword)
+         (chunk-length       (+ (bytevector-length keyword)
                                 1
                                 (bytevector-length compressed-text)))
          (data               (make-bytevector chunk-length 0))

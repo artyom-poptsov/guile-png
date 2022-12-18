@@ -7,7 +7,8 @@
              (png core chunk)
              (png core chunk IHDR)
              (png core chunk PLTE)
-             (png core chunk cHRM))
+             (png core chunk cHRM)
+             (png core chunk zTXt))
 
 
 (define %test-name "chunks")
@@ -166,6 +167,18 @@
   (let ((chunk (png-chunk-decode-cHRM (make <png-chunk>
                                         #:data   %cHRM-data
                                         #:length (bytevector-length %cHRM-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
+(define %zTXt-data
+  #vu8(102 111 111                          ; "foo"
+           0                                ; compression method
+           120 156 75 74 44 2 0 2 93 1 54)) ; "bar"
+(test-equal "png-chunk-encode: zTXt"
+  %zTXt-data
+  (let ((chunk (png-chunk-decode-zTXt (make <png-chunk>
+                                        #:data %zTXt-data
+                                        #:length (bytevector-length %zTXt-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
