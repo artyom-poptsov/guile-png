@@ -126,3 +126,15 @@
     (bytevector-u8-set! data 6 second)
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
+
+(define-method (png-chunk-clone (chunk <png-chunk:tIME>))
+  (make <png-chunk:tIME>
+    #:type   (png-chunk-type chunk)
+    #:data   (bytevector-copy (png-chunk-data chunk))
+    #:crc    (png-chunk-crc chunk)
+    #:year   (png-chunk:tIME-year chunk)
+    #:month  (png-chunk:tIME-month chunk)
+    #:day    (png-chunk:tIME-day chunk)
+    #:hour   (png-chunk:tIME-hour chunk)
+    #:minute (png-chunk:tIME-minute chunk)
+    #:second (png-chunk:tIME-second chunk)))
