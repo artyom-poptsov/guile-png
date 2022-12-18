@@ -112,7 +112,13 @@ png-context.scm: signature-parser.scm chunk-parser.scm
 # XXX: Automake does not remove those files for some reason.
 uninstall-hook:
 	rm -f $(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/context.scm \
-		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/context.scm
+		$(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/signature-parser.scm \
+		$(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/chunk-parser.scm \
+		$(DESTDIR)$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/fsm/png-parser.scm \
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/context.scm \
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/signature-parser.scm \
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/chunk-parser.scm \
+		$(DESTDIR)$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/fsm/png-parser.scm
 
 CLEANFILES += \
 	context.log	\
