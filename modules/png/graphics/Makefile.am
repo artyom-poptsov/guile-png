@@ -27,6 +27,7 @@ SOURCES = \
 	multiline.scm	\
 	polygon.scm	\
 	rectangle.scm	\
+	filled-rectangle.scm	\
 	ellipse.scm	\
 	circle.scm
 
