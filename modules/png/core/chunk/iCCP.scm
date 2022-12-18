@@ -89,3 +89,31 @@
                   (+ index 1)))))
 
     (read-profile-name)))
+
+(define-method (png-chunk-encode (chunk <png-chunk:iCCP>))
+  "Encode an iCCP CHUNK to a plain PNG chunk, return the new chunk."
+  (let* ((profile-name (string->bytevector (png-chunk:iCCP-profile-name chunk)
+                                           "US-ASCII"))
+         (profile-name-length (bytevector-length profile-name))
+         (compression-method (png-chunk:iCCP-compression-method chunk))
+         (profile            (png-chunk:iCCP-profile chunk))
+         (compressed-profile (compress (string->bytevector profile)
+                                       "US-ASCII"))
+         (compressed-profile-length (bytevector-length compressed-profile))
+         (chunk-length       (+ profile-name-length
+                                1
+                                compressed-profile-length))
+         (data               (make-bytevector chunk-length 0))
+         (encoded-chunk      (make <png-chunk>
+                               #:type 'iCCP
+                               #:length chunk-length
+                               #:data data)))
+    (bytevector-copy! profile-name 0 data 0 profile-name-length)
+    (bytevector-u8-set! data profile-name-length compression-method)
+    (bytevector-copy! compressed-profile
+                      0
+                      data
+                      (+ profile-name-length 1)
+                      (compressed-profile-length))
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
