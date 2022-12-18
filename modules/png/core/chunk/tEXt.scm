@@ -103,5 +103,12 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:tEXt>))
+  (make <png-chunk:tEXt>
+    #:type    (png-chunk-type   chunk)
+    #:data    (bytevector-copy (png-chunk-data chunk))
+    #:length  (png-chunk-length chunk)
+    #:keyword (string-copy (png-chunk:tEXt-keyword chunk))
+    #:text    (string-copy (png-chunk:tEXt-text chunk))))
 
 ;;; chunk-text.scm ends here.
