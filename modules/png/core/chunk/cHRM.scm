@@ -150,4 +150,18 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:cHRM>))
+  (make <png-chunk:cHRM>
+    #:type   (png-chunk-type chunk)
+    #:data   (bytevector-copy (png-chunk-data chunk))
+    #:length (png-chunk-length chunk)
+    #:white-point-x (png-chunk:cHRM-white-point-x chunk)
+    #:white-point-y (png-chunk:cHRM-white-point-y chunk)
+    #:red-x         (png-chunk:cHRM-red-x chunk)
+    #:red-y         (png-chunk:cHRM-red-y chunk)
+    #:green-x       (png-chunk:cHRM-green-x chunk)
+    #:green-y       (png-chunk:cHRM-green-y chunk)
+    #:blue-x        (png-chunk:cHRM-blue-x chunk)
+    #:blue-y        (png-chunk:cHRM-blue-y chunk)))
+
 ;;; cHRM.scm ends here.
