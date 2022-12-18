@@ -145,4 +145,13 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:iCCP>))
+  (make <png-chunk:iCCP>
+    #:length             (png-chunk-length chunk)
+    #:data               (bytevector-copy (png-chunk-data chunk))
+    #:crc                (png-chunk-crc chunk)
+    #:profile-name       (string-copy (png-chunk:iCCP-profile-name chunk))
+    #:compression-method (png-chunk:iCCP-compression-method chunk)
+    #:profile            (bytevector-copy (png-chunk:iCCP-profile chunk))))
+
 ;;; iCCP.scm ends here.
