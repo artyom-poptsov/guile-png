@@ -43,10 +43,12 @@ SCM_LOG_COMPILER = \
 
 AM_SCM_LOG_FLAGS = \
 	-L "$(top_srcdir)/modules" \
+	-L "$(abs_top_builddir)/modules"	\
 	-s
 
 EXTRA_DIST = \
-	${SCM_TESTS}
+	${SCM_TESTS}	\
+	example-rainbow.png
 
 CLEANFILES = \
 	*.log
