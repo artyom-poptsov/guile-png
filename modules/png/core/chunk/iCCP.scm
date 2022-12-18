@@ -85,7 +85,7 @@
         (data   (png-chunk-data chunk))
         (crc    (png-chunk-crc chunk)))
 
-    (define (read-profile index output)
+    (define (read-profile index profile-name compression-method)
       (let loop ((profile '())
                  (idx  index))
         (if (= idx (bytevector-length data))
@@ -94,27 +94,23 @@
               #:type    type
               #:data    data
               #:crc     crc
-              #:profile-name       (assoc-ref output 'profile-name)
-              #:compression-method (assoc-ref output 'compression-method)
-              ;; TODO: Decompress the datastream.
-              #:profile            (u8-list->bytevector profile))
+              #:profile-name       profile-name
+              #:compression-method compression-method
+              #:profile            (uncompress (u8-list->bytevector profile)))
             (loop (append profile (list (bytevector-u8-ref data idx)))
                   (+ idx 1)))))
 
-
-    (define (read-compression-method index output)
+    (define (read-compression-method index profile-name)
       (read-profile (+ index 1)
-                    (acons 'compression-method
-                           (bytevector-u8-ref data index)
-                           output)))
+                    profile-name
+                    (bytevector-u8-ref data index)))
 
     (define (read-profile-name)
       (let loop ((profile-name '())
                  (index   0))
         (if (zero? (bytevector-u8-ref data index))
-            (read-compression-method
-             index
-             `((profile-name . ,(list->string profile-name))))
+            (read-compression-method (+ index 1)
+                                     (list->string profile-name))
             (loop (append profile-name
                           (list (integer->char (bytevector-u8-ref data index))))
                   (+ index 1)))))
