@@ -68,4 +68,10 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:IEND>))
+  (make <png-chunk:IEND>
+    #:length (png-chunk-length chunk)
+    #:type   (png-chunk-type   chunk)
+    #:data   (png-chunk-data   chunk)))
+
 ;;; IEND.scm ends here.
