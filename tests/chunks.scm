@@ -9,7 +9,8 @@
              (png core chunk PLTE)
              (png core chunk cHRM)
              (png core chunk zTXt)
-             (png core chunk pHYs))
+             (png core chunk pHYs)
+             (png core chunk tEXt))
 
 
 (define %test-name "chunks")
@@ -192,6 +193,18 @@
   (let ((chunk (png-chunk-decode-pHYs (make <png-chunk>
                                         #:data %pHYs-data
                                         #:length (bytevector-length %pHYs-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
+(define %tEXt-data
+  #vu8(102 111 111                      ; "foo"
+         0                              ; NUL-separator
+         98 97 114))                    ; "bar"
+(test-equal "png-chunk-encode: tEXt"
+  %tEXt-data
+  (let ((chunk (png-chunk-decode-tEXt (make <png-chunk>
+                                        #:data   %tEXt-data
+                                        #:length (bytevector-length %tEXt-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
