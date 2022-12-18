@@ -864,6 +864,74 @@ Decode an IEND chunk from a PNG @var{chunk}.
 Encode an IEND @var{chunk} into a plain @code{<png-chunk>}.
 @end deffn
 
+@subsection PLTE
+PNG image palette (PLTE) chunk.  The chunk contains from 1 to 256 palette
+entries, each a three-byte series of the form:
+
+@example
+   Red:   1 byte (0 = black, 255 = red)
+   Green: 1 byte (0 = black, 255 = green)
+   Blue:  1 byte (0 = black, 255 = blue)
+@end example
+
+@deftp {Class} <png-chunk:PLTE> [#:palette-entries=(lambda () (make-vector 0))]
+PLTE chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:palette-entries (entries <vector>)
+This field contains a palette entries, each a three-byte vector of the form:
+@example
+#vu8(red green blue)
+@end example
+@end table
+@end deftp
+
+@deffn {Method} png-chunk:PLTE-palette-entries (chunk <png-chunk:PLTE>)
+Get all palette entries from a @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk:PLTE-palette-entry (chunk <png-chunk:PLTE>) @
+                                             (index <number>)
+Get a palette entry from a @var{chunk} by its @var{index}.
+@end deffn
+
+@deffn {Method} png-chunk:PLTE-palette-entries-count (chunk <png-chunk:PLTE>)
+Get the count of palette entries from a @var{chunk}.
+@end deffn
+
+@deffn  {Method} palette:red (plte <bytevector>)
+@deffnx {Method} palette:green (plte <bytevector>)
+@deffnx {Method} palette:blue (plte <bytevector>)
+Get the color value from a palette entry.
+@end deffn
+
+@deffn {Method} vector->PLTE-palette-entries (vec <bytevector>)
+Convert a bytevector @var{vec} of PLTE data to a palette entries for a PLTE
+chunk.
+
+Return a vector of palette entries, each of which is represented as a
+three-byte bytevector of the following format:
+
+@example
+  Red:   1 byte (0 = black, 255 = red)
+  Green: 1 byte (0 = black, 255 = green)
+  Blue:  1 byte (0 = black, 255 = blue)
+@end example
+@end deffn
+
+@deffn {Method} PLTE-palette-entries->vector (vec <vector>)
+Convert a vector @var{vec} to a PLTE chunk data.
+@end deffn
+
+@deffn {Method} png-chunk-decode-PLTE (chunk <png-chunk>)
+Decode a PLTE chunk from a plain PNG @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:PLTE>)
+Convert a PLTE @var{chunk} to a plain @code{<png-chunk>} instance.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
