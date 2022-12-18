@@ -8,7 +8,8 @@
              (png core chunk IHDR)
              (png core chunk PLTE)
              (png core chunk cHRM)
-             (png core chunk zTXt))
+             (png core chunk zTXt)
+             (png core chunk pHYs))
 
 
 (define %test-name "chunks")
@@ -179,6 +180,18 @@
   (let ((chunk (png-chunk-decode-zTXt (make <png-chunk>
                                         #:data %zTXt-data
                                         #:length (bytevector-length %zTXt-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
+(define %pHYs-data
+  #vu8(0 0 0 8                          ; Pixels per unit, X axis
+         0 0 0 16                       ; Pixels per unit, Y axis
+         1))                            ; Unit specifier (meter)
+(test-equal "png-chunk-encode: pHYs"
+  %pHYs-data
+  (let ((chunk (png-chunk-decode-pHYs (make <png-chunk>
+                                        #:data %pHYs-data
+                                        #:length (bytevector-length %pHYs-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 

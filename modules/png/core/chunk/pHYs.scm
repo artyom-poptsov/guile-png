@@ -49,6 +49,14 @@
             png-chunk-decode-pHYs))
 
 
+;; pHYs chunk layout:
+;;
+;;    Pixels per unit, X axis: 4 bytes (unsigned integer)
+;;    Pixels per unit, Y axis: 4 bytes (unsigned integer)
+;;    Unit specifier:          1 byte
+(define %pHYs-chunk-length 9)
+
+
 
 (define-class <png-chunk:pHYs> (<png-chunk>)
   ;; <number>
@@ -102,6 +110,29 @@
       #:pixels-per-unit-x-axis (vector->int32 (bytevector-copy/part data 0 4))
       #:pixels-per-unit-y-axis (vector->int32 (bytevector-copy/part data 4 4))
       #:unit-specifier         (bytevector-u8-ref data 8))))
+
+(define-method (png-chunk-encode (chunk <png-chunk:pHYs>))
+  (let* ((pixels-per-unit-x (png-chunk:pHYs-pixels-per-unit-x-axis chunk))
+         (pixels-per-unit-y (png-chunk:pHYs-pixels-per-unit-y-axis chunk))
+         (unit-specifier    (png-chunk:pHYs-unit-specifier chunk))
+         (data              (make-bytevector %pHYs-chunk-length 0))
+         (encoded-chunk     (make <png-chunk>
+                              #:type   'pHYs
+                              #:data   data
+                              #:length %pHYs-chunk-length)))
+    (bytevector-copy! (int32->bytevector pixels-per-unit-x)
+                      0
+                      data
+                      0
+                      4)
+    (bytevector-copy! (int32->bytevector pixels-per-unit-y)
+                      0
+                      data
+                      4
+                      4)
+    (bytevector-u8-set! data 8 unit-specifier)
+    (png-chunk-crc-update! encoded-chunk)
+    encoded-chunk))
 
 
 ;;; pHYs.scm ends here.
