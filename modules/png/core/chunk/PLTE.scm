@@ -162,7 +162,7 @@ three-byte bytevector of the following format:
 (define-method (png-chunk-clone (chunk <png-chunk:PLTE>))
   (make <png-chunk:PLTE>
     #:type   (png-chunk-type   chunk)
-    #:data   (png-chunk-data   chunk)
+    #:data   (bytevector-copy (png-chunk-data   chunk))
     #:length (png-chunk-length chunk)
     #:crc    (png-chunk-crc    chunk)
     #:palette-entries (bytevector-copy (png-chunk:PLTE-palette-entries))))
