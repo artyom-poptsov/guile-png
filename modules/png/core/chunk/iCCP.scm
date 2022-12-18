@@ -1,3 +1,32 @@
+;;; iCCP.scm -- ICC Profile chunk.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; ICC profile is a set of data that characterizes a color input or output
+;; device, or a color space, according to standards promulgated by the
+;; International Color Consortium (ICC).
+;;
+;; <https://en.wikipedia.org/wiki/ICC_profile>
+
+
+;;; Code:
+
 (define-module (png core chunk iCCP)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
@@ -117,3 +146,5 @@
                       (compressed-profile-length))
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
+
+;;; iCCP.scm ends here.
