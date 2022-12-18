@@ -107,7 +107,7 @@
       (let loop ((keyword '())
                  (index   0))
         (if (zero? (bytevector-u8-ref data index))
-            (read-compression-method index (list->string keyword))
+            (read-compression-method (+ index 1) (list->string keyword))
             (loop (append keyword (list (integer->char (bytevector-u8-ref data index))))
                   (+ index 1)))))
 
