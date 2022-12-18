@@ -59,7 +59,8 @@
                  (index   0))
         (let ((byte (bytevector-u8-ref data index)))
           (if (zero? byte)
-              (read-text index (utf8->string (u8-list->bytevector (reverse keyword))))
+              (read-text (+ index 1)
+                         (utf8->string (u8-list->bytevector (reverse keyword))))
               (loop (cons byte keyword)
                     (+ index 1))))))
 
