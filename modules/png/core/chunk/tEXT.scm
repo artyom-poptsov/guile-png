@@ -66,4 +66,12 @@
 
     (read-keyword)))
 
+(define-method (png-chunk-clone (chunk <png-chunk:tEXT>))
+  (make <png-chunk:tEXT>
+    #:type    (png-chunk-type   chunk)
+    #:data    (bytevector-copy (png-chunk-data chunk))
+    #:length  (png-chunk-length chunk)
+    #:keyword (string-copy (png-chunk:tEXT-keyword chunk))
+    #:text    (string-copy (png-chunk:tEXT-text chunk))))
+
 ;;; chunk-text.scm ends here.
