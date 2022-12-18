@@ -122,7 +122,7 @@
          (compressed-text    (compress (string->bytevector uncompressed-text
                                                            "US-ASCII")))
          (chunk-length       (+ (bytevector-length keyword)
-                                1
+                                2
                                 (bytevector-length compressed-text)))
          (data               (make-bytevector chunk-length 0))
          (encoded-chunk      (make <png-chunk>
@@ -130,11 +130,11 @@
                                #:length chunk-length
                                #:data   data)))
     (bytevector-copy! keyword 0 data 0 keyword-length)
-    (bytevector-u8-set! data keyword-length compression-method)
+    (bytevector-u8-set! data (+ keyword-length 1) compression-method)
     (bytevector-copy! compressed-text
                       0
                       data
-                      (+ keyword-length 1)
+                      (+ keyword-length 2)
                       (bytevector-length compressed-text))
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))

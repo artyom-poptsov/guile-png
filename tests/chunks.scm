@@ -174,6 +174,7 @@
 
 (define %zTXt-data
   #vu8(102 111 111                          ; "foo"
+           0                                ; NUL-separator
            0                                ; compression method
            120 156 75 74 44 2 0 2 93 1 54)) ; "bar"
 (test-equal "png-chunk-encode: zTXt"
