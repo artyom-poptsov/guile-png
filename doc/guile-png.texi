@@ -843,6 +843,10 @@ Those methods are the accessors for the specific parts of IHDR chunk data.
 Decode an IHDR chunk from a plain PNG @var{chunk}.
 @end deffn
 
+@deffn {Method} png-chunk-encode (chunk <png-chunk:IHDR>)
+Encode an IHDR @var{chunk} into a plain @code{<png-chunk>}.
+@end deffn
+
 @subsection IEND
 PNG image final chunk (IEND).  The IEND chunk must appear last.
 
@@ -854,6 +858,10 @@ IEND chunk implementation.
 
 @deffn {Method} png-chunk-decode-IEND (chunk <png-chunk>)
 Decode an IEND chunk from a PNG @var{chunk}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:IEND>)
+Encode an IEND @var{chunk} into a plain @code{<png-chunk>}.
 @end deffn
 
 @node GNU Free Documentation License
