@@ -165,6 +165,6 @@ three-byte bytevector of the following format:
     #:data   (png-chunk-data   chunk)
     #:length (png-chunk-length chunk)
     #:crc    (png-chunk-crc    chunk)
-    #:palette-entries (png-chunk:PLTE-palette-entries)))
+    #:palette-entries (bytevector-copy (png-chunk:PLTE-palette-entries))))
 
 ;;; PLTE.scm ends here.
