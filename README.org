@@ -18,6 +18,11 @@ License.
 
 ** Installation
 *** GNU Guix
+Stable version:
+#+BEGIN_EXAMPLE shell
+$ guix install guile-png
+#+END_EXAMPLE
+
 Development version from =guix.scm=:
 #+BEGIN_EXAMPLE shell
 $ guix build -f guix.scm
