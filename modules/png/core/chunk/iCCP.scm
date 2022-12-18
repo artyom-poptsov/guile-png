@@ -31,6 +31,8 @@
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
+  #:use-module (zlib)
+  #:use-module (ice-9 iconv)
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:iCCP>
@@ -126,8 +128,8 @@
          (profile-name-length (bytevector-length profile-name))
          (compression-method (png-chunk:iCCP-compression-method chunk))
          (profile            (png-chunk:iCCP-profile chunk))
-         (compressed-profile (compress (string->bytevector profile)
-                                       "US-ASCII"))
+         (compressed-profile (compress (string->bytevector profile
+                                                           "US-ASCII")))
          (compressed-profile-length (bytevector-length compressed-profile))
          (chunk-length       (+ profile-name-length
                                 1
