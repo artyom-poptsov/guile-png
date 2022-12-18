@@ -10,7 +10,8 @@
              (png core chunk cHRM)
              (png core chunk zTXt)
              (png core chunk pHYs)
-             (png core chunk tEXt))
+             (png core chunk tEXt)
+             (png core chunk tIME))
 
 
 (define %test-name "chunks")
@@ -206,6 +207,21 @@
   (let ((chunk (png-chunk-decode-tEXt (make <png-chunk>
                                         #:data   %tEXt-data
                                         #:length (bytevector-length %tEXt-data)))))
+    (png-chunk-crc-update! chunk)
+    (png-chunk-data (png-chunk-encode chunk))))
+
+(define %tIME-data
+  #vu8(7 230                            ; year (2022)
+         12                             ; month (12)
+         18                             ; day (18)
+         19                             ; hour (19)
+         42                             ; minute (42)
+         55))                           ; second (55)
+(test-equal "png-chunk-encode: tIME"
+  %tIME-data
+  (let ((chunk (png-chunk-decode-tIME (make <png-chunk>
+                                        #:data   %tIME-data
+                                        #:length (bytevector-length %tIME-data)))))
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
