@@ -54,7 +54,7 @@
    #:getter       png-chunk:iCCP-compression-method)
 
   (profile
-   #:init-keyword #:text
+   #:init-keyword #:profile
    #:getter       png-chunk:iCCP-profile))
 
 
