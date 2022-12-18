@@ -139,4 +139,13 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:zTXt>))
+  (make <png-chunk:zTXt>
+    #:type               (png-chunk-type chunk)
+    #:data               (bytevector-copy (png-chunk-data chunk))
+    #:length             (png-chunk-length chunk)
+    #:keyword            (string-copy (png-chunk:zTXt-keyword chunk))
+    #:compression-method (png-chunk:zTXt-compression-method chunk)
+    #:text               (string-copy (png-chunk:zTXt-text chunk))))
+
 ;;; zTXt.scm ends here.
