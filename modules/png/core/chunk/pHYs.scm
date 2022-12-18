@@ -134,5 +134,14 @@
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
+(define-method (png-chunk-clone (chunk <png-chunk:pHYs>))
+  (make <png-chunk:pHYs>
+    #:type (png-chunk-type chunk)
+    #:data (bytevector-copy (png-chunk-data chunk))
+    #:crc  (png-chunk-crc chunk)
+    #:pixels-per-unit-x-axis (png-chunk:pHYs-pixels-per-unit-x-axis chunk)
+    #:pixels-per-unit-y-axis (png-chunk:pHYs-pixels-per-unit-y-axis chunk)
+    #:unit-specifier         (png-chunk:pHYs-unit-specifier chunk)))
+
 
 ;;; pHYs.scm ends here.
