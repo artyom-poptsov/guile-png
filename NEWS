@@ -7,6 +7,23 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.3.0 (2022-12-18)
+** Improve the image parser
+PNG chunks are now decoded properly, including data decompression.
+** Improve the image encoder
+Implement proper encoders for PNG chunks, including compression.
+** Guile-PNG now allows to create PNG images from scratch
+This also means that Guile-PNG now allows to create PNG images and draw some
+graphics over them (using =(png graphics)= module.)
+** =(png graphics)=: Fix line drawing algorithm
+Re-implement the better version of Bresenham's line drawing algorithm based on
+the GNU Octave code from
+<https://www.markwrobel.dk/post/amiga-machine-code-letter12-linedraw/>
+** =(png graphics)=: Add "<filled-rectangle>"
+** =(png graphics)=: Add "<polygon>"
+** Update the documentation
+** Add new tests
+
 * Changes in version 0.2.0 (2022-11-13)
 ** =(png graphics ...)=: New modules
 There's now a set of classes that allow to draw graphical primitives like
