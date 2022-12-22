@@ -60,7 +60,18 @@
                      #:select? (git-predicate %source-dir)))
  (build-system gnu-build-system)
  (arguments
-  `(#:make-flags '("GUILE_AUTO_COMPILE=0")))     ;to prevent guild warnings
+  `(#:make-flags '("GUILE_AUTO_COMPILE=0") ;to prevent guild warnings
+    #:phases
+    (modify-phases %standard-phases
+      ;; Guile-PNG tries to log parser messages to the syslog which is not
+      ;; available during the build.
+      (add-after 'unpack 'fix-tests
+        (lambda* (#:key inputs outputs #:allow-other-keys)
+          (substitute* "tests/graphics.scm"
+            (("             \\(png graphics\\)\\)")
+             (string-append "             (png graphics)\n"
+                            "             (png fsm context))\n"
+                            "(log-clear-handlers!)"))))))))
  (native-inputs
   (list autoconf automake pkg-config texinfo texlive))
  (inputs
