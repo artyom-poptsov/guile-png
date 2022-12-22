@@ -13,7 +13,7 @@
 (define-class <rectangle> (<graphic>)
   (position
    #:init-keyword #:position
-   #:init-value   (lambda () (make <point>))
+   #:init-thunk   (lambda () (make <point>))
    #:getter       rectangle-position)
 
   (width
