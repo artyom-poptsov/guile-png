@@ -4,7 +4,8 @@
              (oop goops)
              (png)
              (png image)
-             (png graphics))
+             (png graphics)
+             (png fsm context))
 
 (define %topdir (getenv "abs_top_srcdir"))
 (define %example-rainbow (format #f "~a/tests/example-rainbow.png" %topdir))
@@ -12,6 +13,12 @@
 (define %test-name "graphics")
 
 
+
+(define-method (configure-test-logging! (test-suite-name <string>))
+  (smc-log-init! "file" `((file . ,(string-append test-suite-name "-smc.log")))))
+
+
+(configure-test-logging! %test-name)
 (test-begin %test-name)
 
 (test-assert "rainbow 10x7"
