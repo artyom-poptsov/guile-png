@@ -11,16 +11,25 @@
 
 
 (define-class <rectangle> (<graphic>)
+  ;; The position of the rectangle.
+  ;;
+  ;; <point>
   (position
    #:init-keyword #:position
    #:init-thunk   (lambda () (make <point>))
    #:getter       rectangle-position)
 
+  ;; The width of the rectangle.
+  ;;
+  ;; <number>
   (width
    #:init-keyword #:width
    #:init-value   0
    #:getter       rectangle-width)
 
+  ;; The height of the rectangle.
+  ;;
+  ;; <number>
   (height
    #:init-keyword #:height
    #:init-value   0
