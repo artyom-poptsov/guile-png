@@ -34,6 +34,7 @@
             %tEXt-predefined-keywords
             png-chunk:tEXt?
             png-chunk:tEXt-keyword
+            png-chunk:tEXt-keyword-description
             png-chunk:tEXt-text
             png-chunk-decode-tEXt))
 
@@ -45,16 +46,16 @@
 ;; the text string.  The following keywords are predefined and
 ;; should be used where appropriate.
 (define %tEXt-predefined-keywords
-  '(("Title"         "Short (one line) title or caption for image")
-    ("Author"        "Name of image's creator")
-    ("Description"   "Description of image (possibly long)")
-    ("Copyright"     "Copyright notice")
-    ("Creation Time" "Time of original image creation")
-    ("Software"      "Software used to create the image")
-    ("Disclaimer"    "Legal disclaimer")
-    ("Warning"       "Warning of nature of content")
-    ("Source"        "Device used to create the image")
-    ("Comment"       "Miscellaneous comment; conversion from GIF comment")))
+  '(("Title"         . "Short (one line) title or caption for image")
+    ("Author"        . "Name of image's creator")
+    ("Description"   . "Description of image (possibly long)")
+    ("Copyright"     . "Copyright notice")
+    ("Creation Time" . "Time of original image creation")
+    ("Software"      . "Software used to create the image")
+    ("Disclaimer"    . "Legal disclaimer")
+    ("Warning"       . "Warning of nature of content")
+    ("Source"        . "Device used to create the image")
+    ("Comment"       . "Miscellaneous comment; conversion from GIF comment")))
 
 
 
@@ -78,13 +79,21 @@
 (define (png-chunk:tEXt? x)
   (is-a? x <png-chunk:tEXt>))
 
+(define-method (png-chunk:tEXt-keyword-description (chunk <png-chunk:tEXt>))
+  (assoc-ref %tEXt-predefined-keywords
+             (png-chunk:tEXt-keyword chunk)))
+
 
 
 (define-method (%display (chunk <png-chunk:tEXt>) (port <port>))
   (let ((type (png-chunk-type-info chunk)))
-    (format port "#<png-chunk:tEXt ~a: ~a ~a>"
+    (format port "#<png-chunk:tEXt ~a: ~a ~a ~a>"
             (list-ref type 2)
             (png-chunk:tEXt-keyword chunk)
+            (let ((description (png-chunk:tEXt-keyword-description chunk)))
+              (if description
+                  (format #f "(~a)" description)
+                  ""))
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk:tEXt>) (port <port>))
