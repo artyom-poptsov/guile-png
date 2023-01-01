@@ -1,3 +1,28 @@
+;;; tEXt.scm -- Text chunk.
+
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; PNG image textual data (tEXt).
+
+
+;;; Code:
+
 (define-module (png core chunk tEXt)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
@@ -111,4 +136,4 @@
     #:keyword (string-copy (png-chunk:tEXt-keyword chunk))
     #:text    (string-copy (png-chunk:tEXt-text chunk))))
 
-;;; chunk-text.scm ends here.
+;;; tEXt.scm ends here.
