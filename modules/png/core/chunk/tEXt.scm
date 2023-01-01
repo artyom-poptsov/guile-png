@@ -31,10 +31,30 @@
   #:use-module (png core common)
   #:use-module (png core chunk)
   #:export (<png-chunk:tEXt>
+            %tEXt-predefined-keywords
             png-chunk:tEXt?
             png-chunk:tEXt-keyword
             png-chunk:tEXt-text
             png-chunk-decode-tEXt))
+
+
+;; RFC 2083, "Textual data"
+;;   <https://www.rfc-editor.org/rfc/rfc2083#page-24>
+;;
+;; The keyword indicates the type of information represented by
+;; the text string.  The following keywords are predefined and
+;; should be used where appropriate.
+(define %tEXt-predefined-keywords
+  '(("Title"         "Short (one line) title or caption for image")
+    ("Author"        "Name of image's creator")
+    ("Description"   "Description of image (possibly long)")
+    ("Copyright"     "Copyright notice")
+    ("Creation Time" "Time of original image creation")
+    ("Software"      "Software used to create the image")
+    ("Disclaimer"    "Legal disclaimer")
+    ("Warning"       "Warning of nature of content")
+    ("Source"        "Device used to create the image")
+    ("Comment"       "Miscellaneous comment; conversion from GIF comment")))
 
 
 
