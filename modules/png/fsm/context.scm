@@ -9,13 +9,169 @@
   #:use-module
   (smc context context)
   #:use-module
+  (smc context port)
+  #:use-module
   (smc context char-context)
+  #:use-module
+  (smc context binary)
   #:use-module
   (smc core config)
   #:use-module
   (smc core log)
   #:re-export
-  (guard:eof-object?
+  (u8:eof-object?
+    u8:newline?
+    u8:ascii?
+    u8:hex-digit?
+    u8:symbol?
+    u8:punctuation?
+    u8:blank?
+    u8:whitespace?
+    u8:printing?
+    u8:graphic?
+    u8:letter+digit?
+    u8:digit?
+    u8:upper-case?
+    u8:lower-case?
+    u8:letter?
+    u8:del?
+    u8:tilde?
+    u8:right-curly-bracket?
+    u8:vertical-line?
+    u8:left-curly-bracket?
+    u8:letter-z?
+    u8:letter-y?
+    u8:letter-x?
+    u8:letter-w?
+    u8:letter-v?
+    u8:letter-u?
+    u8:letter-t?
+    u8:letter-s?
+    u8:letter-r?
+    u8:letter-q?
+    u8:letter-p?
+    u8:letter-o?
+    u8:letter-n?
+    u8:letter-m?
+    u8:letter-l?
+    u8:letter-k?
+    u8:letter-j?
+    u8:letter-i?
+    u8:letter-h?
+    u8:letter-g?
+    u8:letter-f?
+    u8:letter-e?
+    u8:letter-d?
+    u8:letter-c?
+    u8:letter-b?
+    u8:letter-a?
+    u8:grave-accent?
+    u8:low-line?
+    u8:circumflex-accent?
+    u8:right-square-bracket?
+    u8:reverse-solidus?
+    u8:left-square-bracket?
+    u8:letter-Z?
+    u8:letter-Y?
+    u8:letter-X?
+    u8:letter-W?
+    u8:letter-V?
+    u8:letter-U?
+    u8:letter-T?
+    u8:letter-S?
+    u8:letter-R?
+    u8:letter-Q?
+    u8:letter-P?
+    u8:letter-O?
+    u8:letter-N?
+    u8:letter-M?
+    u8:letter-L?
+    u8:letter-K?
+    u8:letter-J?
+    u8:letter-I?
+    u8:letter-H?
+    u8:letter-G?
+    u8:letter-F?
+    u8:letter-E?
+    u8:letter-D?
+    u8:letter-C?
+    u8:letter-B?
+    u8:letter-A?
+    u8:at-symbol?
+    u8:question-mark?
+    u8:more-than-sign?
+    u8:equals-sign?
+    u8:less-than-sign?
+    u8:semicolon?
+    u8:colon?
+    u8:digit-nine?
+    u8:digit-eight?
+    u8:digit-seven?
+    u8:digit-six?
+    u8:digit-five?
+    u8:digit-four?
+    u8:digit-three?
+    u8:digit-two?
+    u8:digit-one?
+    u8:digit-zero?
+    u8:solidus?
+    u8:full-stop?
+    u8:hyphen-minus?
+    u8:comma?
+    u8:plus-sign?
+    u8:asterisk?
+    u8:right-parenthesis?
+    u8:left-parenthesis?
+    u8:single-quote?
+    u8:ampersand?
+    u8:percent-sign?
+    u8:dollar-sign?
+    u8:number-sign?
+    u8:double-quote?
+    u8:exclamation-mark?
+    u8:space?
+    u8:us?
+    u8:rs?
+    u8:gs?
+    u8:fs?
+    u8:esc?
+    u8:sub?
+    u8:em?
+    u8:can?
+    u8:etb?
+    u8:syn?
+    u8:nak?
+    u8:dc4?
+    u8:dc3?
+    u8:dc2?
+    u8:dc1?
+    u8:dle?
+    u8:si?
+    u8:so?
+    u8:cr?
+    u8:ff?
+    u8:vt?
+    u8:lf?
+    u8:tab?
+    u8:bs?
+    u8:bel?
+    u8:ack?
+    u8:enq?
+    u8:eot?
+    u8:etx?
+    u8:stx?
+    u8:soh?
+    u8:nul?
+    <binary-context>
+    binary-context-port
+    binary-context-counter
+    binary-context-event-source
+    action:syntax-error
+    binary-context-log-error
+    binary-context-log-warning
+    binary-context-log-info
+    binary-context-log-debug
+    guard:eof-object?
     guard:newline?
     guard:ascii?
     guard:hex-digit?
@@ -164,7 +320,7 @@
     char-context-row
     char-context-col
     char-context-update-counters!
-    event-source
+    char-context-event-source
     action:syntax-error
     context-log-error
     context-log-warning
@@ -172,10 +328,11 @@
     context-log-debug
     make-char-guard
     make-charset-guard
-    <context>
-    context?
-    context-debug-mode?
-    context-debug-mode-set!
+    <port-context>
+    context-port
+    context-counter
+    context-counter-set!
+    context-counter++!
     context-stanza
     context-stanza-set!
     context-stanza-add!
@@ -185,11 +342,15 @@
     context-buffer-add!
     context-buffer-clear!
     context-clear!
-    #{guard:#t}#
-    action:no-op
     action:store
     action:clear-buffer
     action:update-stanza
+    <context>
+    context?
+    context-debug-mode?
+    context-debug-mode-set!
+    #{guard:#t}#
+    action:no-op
     <precise-logger>
     precise-logger?
     <system-log>
