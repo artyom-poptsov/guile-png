@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -49,6 +49,7 @@ SUFFIXES = .puml
 GUILE_SMC_CONTEXT_ARGS = \
 	--log-driver file \
 	--log-opt "file=context.log" \
+	--type oop \
 	-m "(png fsm context)"
 
 GUILE_SMC_SIGNATURE_PARSER_ARGS = \
