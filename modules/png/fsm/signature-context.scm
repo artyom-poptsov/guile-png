@@ -19,7 +19,7 @@
             action:unexpected-eof-error
             action:unexpected-byte-error))
 
-(define-class <signature-context> (<binary-context>))
+(define-class <signature-context> (<u8-context>))
 
 (define event-source binary-context-event-source)
 
