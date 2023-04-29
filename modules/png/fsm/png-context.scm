@@ -95,7 +95,7 @@
         (let ((chunk-ctx (fsm-run! fsm (make <chunk-context>
                                          #:port        (png-context-port ctx)
                                          #:debug-mode? (png-context-debug-mode? ctx)))))
-          (png-context-current-chunk-set! ctx (fsm-chunk-context-chunk chunk-ctx))))
+          (png-context-current-chunk-set! ctx (context-result chunk-ctx))))
       (lambda (key . args)
         (png-context-errors-add! ctx key args)))
     ctx))
