@@ -5,8 +5,6 @@
   #:use-module (png fsm context)
   #:use-module (png core common)
   #:use-module (png core chunk)
-  #:re-export (guard:#t
-               action:no-op)
   #:export (<chunk-context>
             context-buffer-index
             context-buffer-index-set!
@@ -38,13 +36,9 @@
   (context-result-set! context (make <png-chunk>)))
 
 
-(define fsm-chunk-context-port context-port)
-
-
 
 (define-method (%buffer-index++! ctx)
-  (context-buffer-index-set! ctx
-                                       (+ (context-buffer-index ctx) 1)))
+  (context-buffer-index-set! ctx (+ (context-buffer-index ctx) 1)))
 
 (define-method (%buffer-reset! (ctx <chunk-context>) (bytes <number>))
   (context-buffer-index-set! ctx 0)
@@ -53,7 +47,7 @@
 
 ;; Event source.
 (define (event-source ctx)
-  (get-u8 (fsm-chunk-context-port ctx)))
+  (get-u8 (context-port ctx)))
 
 (define (event-source:no-op ctx)
   #t)
