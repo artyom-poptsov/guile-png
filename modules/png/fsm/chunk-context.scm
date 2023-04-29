@@ -8,6 +8,8 @@
   #:re-export (guard:#t
                action:no-op)
   #:export (<chunk-context>
+            context-buffer-index
+            context-buffer-index-set!
             event-source
             event-source:no-op
             guard:length-read?
@@ -27,8 +29,8 @@
   ;; <number>
   (buffer-index
    #:init-value   0
-   #:getter       fsm-chunk-context-buffer-index
-   #:setter       fsm-chunk-context-buffer-index-set!))
+   #:getter       context-buffer-index
+   #:setter       context-buffer-index-set!))
 
 (define-method (initialize (context <chunk-context>) initargs)
   (next-method)
@@ -41,11 +43,11 @@
 
 
 (define-method (%buffer-index++! ctx)
-  (fsm-chunk-context-buffer-index-set! ctx
-                                       (+ (fsm-chunk-context-buffer-index ctx) 1)))
+  (context-buffer-index-set! ctx
+                                       (+ (context-buffer-index ctx) 1)))
 
 (define-method (%buffer-reset! (ctx <chunk-context>) (bytes <number>))
-  (fsm-chunk-context-buffer-index-set! ctx 0)
+  (context-buffer-index-set! ctx 0)
   (context-buffer-set! ctx (make-bytevector bytes 0)))
 
 
@@ -59,10 +61,10 @@
 
 ;; Guards.
 (define (guard:length-read? ctx event)
-  (= (fsm-chunk-context-buffer-index ctx) 3))
+  (= (context-buffer-index ctx) 3))
 
 (define (guard:type-read? ctx event)
-  (= (fsm-chunk-context-buffer-index ctx) 3))
+  (= (context-buffer-index ctx) 3))
 
 (define (guard:iend-chunk? ctx event)
   (equal? (png-chunk-type (context-result ctx))
@@ -71,17 +73,17 @@
 (define (guard:data-read? ctx event)
   (let ((chunk (context-result ctx)))
     (= (- (png-chunk-length chunk) 1)
-       (fsm-chunk-context-buffer-index ctx))))
+       (context-buffer-index ctx))))
 
 (define (guard:crc-read? ctx event)
-  (= (fsm-chunk-context-buffer-index ctx) 3))
+  (= (context-buffer-index ctx) 3))
 
 
 ;; Actions.
 
 (define (action:store ctx byte)
   (let ((buf (context-buffer ctx)))
-    (bytevector-u8-set! buf (fsm-chunk-context-buffer-index ctx) byte)
+    (bytevector-u8-set! buf (context-buffer-index ctx) byte)
     (%buffer-index++! ctx)
     ctx))
 
