@@ -25,14 +25,6 @@
 
 
 (define-class <chunk-context> (<port-context>)
-  ;; Buffer to store the temporary data.
-  ;;
-  ;; <bytevector>
-  (buffer
-   #:init-thunk   (lambda () (make-bytevector %png-chunk-length-bytes 0))
-   #:getter       fsm-chunk-context-buffer
-   #:setter       fsm-chunk-context-buffer-set!)
-
   ;; <number>
   (buffer-index
    #:init-value   0
@@ -42,6 +34,10 @@
   (chunk
    #:init-thunk   (lambda () (make <png-chunk>))
    #:getter       fsm-chunk-context-chunk))
+
+(define-method (initialize (context <chunk-context>) initargs)
+  (next-method)
+  (context-buffer-set! context (make-bytevector %png-chunk-length-bytes 0)))
 
 
 (define fsm-chunk-context-port context-port)
@@ -54,7 +50,7 @@
 
 (define-method (%buffer-reset! (ctx <chunk-context>) (bytes <number>))
   (fsm-chunk-context-buffer-index-set! ctx 0)
-  (fsm-chunk-context-buffer-set! ctx (make-bytevector bytes 0)))
+  (context-buffer-set! ctx (make-bytevector bytes 0)))
 
 
 ;; Event source.
@@ -88,7 +84,7 @@
 ;; Actions.
 
 (define (action:store ctx byte)
-  (let ((buf (fsm-chunk-context-buffer ctx)))
+  (let ((buf (context-buffer ctx)))
     (bytevector-u8-set! buf (fsm-chunk-context-buffer-index ctx) byte)
     (%buffer-index++! ctx)
     ctx))
@@ -96,7 +92,7 @@
 (define (action:store-length ctx byte)
   (action:store ctx byte)
   (let ((chunk        (fsm-chunk-context-chunk ctx))
-        (data         (fsm-chunk-context-buffer ctx)))
+        (data         (context-buffer ctx)))
     (png-chunk-length-set! chunk (vector->int32 data))
     (%buffer-reset! ctx %png-chunk-type-bytes)
     ctx))
@@ -104,7 +100,7 @@
 (define (action:store-type ctx byte)
   (action:store ctx byte)
   (let ((chunk (fsm-chunk-context-chunk ctx))
-        (data  (fsm-chunk-context-buffer ctx)))
+        (data  (context-buffer ctx)))
     (png-chunk-type-set! chunk (car (vector->chunk-type data)))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
@@ -112,16 +108,16 @@
 (define (action:store-crc ctx byte)
   (action:store ctx byte)
   (let ((chunk (fsm-chunk-context-chunk ctx))
-        (data  (fsm-chunk-context-buffer ctx)))
+        (data  (context-buffer ctx)))
     (%png-chunk-crc-set! chunk (vector->int32 data))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
 
 (define (action:store-data ctx byte)
-  (unless (zero? (bytevector-length (fsm-chunk-context-buffer ctx)))
+  (unless (zero? (bytevector-length (context-buffer ctx)))
     (action:store ctx byte)
     (let ((chunk (fsm-chunk-context-chunk ctx))
-          (data  (fsm-chunk-context-buffer ctx)))
+          (data  (context-buffer ctx)))
       (png-chunk-data-set! chunk data)
       (%buffer-reset! ctx %png-chunk-crc-bytes)))
   ctx)
