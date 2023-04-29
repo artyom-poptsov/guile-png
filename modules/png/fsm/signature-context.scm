@@ -2,13 +2,6 @@
   #:use-module (oop goops)
   #:use-module (ice-9 binary-ports)
   #:use-module (png fsm context)
-  #:re-export (guard:#t
-               action:no-op
-               u8:letter-P?
-               u8:letter-N?
-               u8:letter-G?
-               u8:cr?
-               u8:lf?)
   #:export (<signature-context>
             guard:correct-first-byte?
             guard:letter-ctrl-z?
