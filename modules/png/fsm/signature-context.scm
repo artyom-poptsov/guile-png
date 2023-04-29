@@ -21,7 +21,7 @@
 
 (define-class <signature-context> (<u8-context>))
 
-(define event-source binary-context-event-source)
+(define event-source u8-context-event-source)
 
 
 (define-public (guard:correct-first-byte? ctx byte)
