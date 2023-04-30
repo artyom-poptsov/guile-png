@@ -13,7 +13,7 @@ License.
 ** Requirements
    - [[https://www.gnu.org/software/guile/][GNU Guile]] 2.2+
    - [[http://www.nongnu.org/guile-lib/][Guile Library]] 0.1.9+
-   - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]]
+   - [[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]] 0.6.0+
    - [[https://notabug.org/guile-zlib/guile-zlib][Guile-ZLIB]] 0.1.0+
 
 ** Installation
