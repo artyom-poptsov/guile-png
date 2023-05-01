@@ -7,6 +7,15 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.4.0 (2023-05-01)
+** Bugfix: Init =position= slot of =<rectangle>= to a =<point>= instance
+The =position= slot would be always initialized to a procedure instead of a
+=<point>= instance.  Now this should be fixed.
+** Bugfix: Setup =graphics= test suite logging properly
+** Update to work with Guile-SMC 0.6.0
+** =(png core chunk tEXt)=
+*** New method: =png-chunk:tEXt-keyword-description=
+
 * Changes in version 0.3.0 (2022-12-18)
 ** Improve the image parser
 PNG chunks are now decoded properly, including data decompression.
