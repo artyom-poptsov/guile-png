@@ -142,7 +142,6 @@
          (chunk-length   (+ keyword-length
                             1
                             text-length))
-         (d (format (current-error-port) "keyword: ~a; text: ~a~%~%" keyword text))
          (data           (make-bytevector chunk-length 0))
          (encoded-chunk  (make <png-chunk>
                            #:type   'tEXt
