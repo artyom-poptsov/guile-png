@@ -61,7 +61,8 @@
 
 (define-method (initialize (chunk <png-chunk:tIME>) initargs)
   (next-method)
-  (slot-set! chunk 'type 'tIME))
+  (slot-set! chunk 'type 'tIME)
+  (slot-set! chunk 'length %tIME-chunk-length))
 
 
 
@@ -129,6 +130,7 @@
 
 (define-method (png-chunk-clone (chunk <png-chunk:tIME>))
   (make <png-chunk:tIME>
+    #:length (png-chunk-length chunk)
     #:type   (png-chunk-type chunk)
     #:data   (bytevector-copy (png-chunk-data chunk))
     #:crc    (png-chunk-crc chunk)
