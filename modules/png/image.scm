@@ -568,7 +568,7 @@ data."
   (let ((chunks (map png-chunk-clone (png-image-chunks image))))
     (make <png-image>
       #:chunks             chunks
-      #:data               (png-image-data image)
+      #:data               (bytevector-copy (png-image-data image))
       #:data-chunk-size    (png-image-data-chunk-size image)
       #:width              (png-image-width image)
       #:height             (png-image-height image)
