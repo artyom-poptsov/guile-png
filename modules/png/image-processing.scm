@@ -1,6 +1,6 @@
 ;;; image-processing.scm -- Image processing procedures.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 
 (define-method (png-image-filter-invert-colors (image <png-image>))
-  "Copy IMAGE and its colors.  Return new image."
+  "Copy an IMAGE and invert its colors.  Return the new image."
   (let* ((image-clone (png-image-clone image))
          (pixel-count (png-image-pixels image)))
     (let loop ((index 0))
@@ -52,6 +52,8 @@
 
 (define-method (png-image-filter-solarize (image     <png-image>)
                                           (threshold <number>))
+  "Copy an IMAGE and apply 'solarize' effect on the copy.  Return the new
+image."
   (let ((image-clone (png-image-clone image))
         (pixel-count (png-image-pixels image)))
     (let loop ((index 0))
