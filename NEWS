@@ -7,6 +7,15 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.4.1 (2023-05-06)
+** Bugfix: =png-image-clone= now clones image data
+=png-image-clone= now produces full clone of the image data as expected.
+** Bugfix: =png-chunk-clone= now clones chunks properly
+Now =png-chunk-clone= creates correct copies of pHYs, tIME, tEXt, tEXT and
+zTEXt chunks.
+** New procedure: =png-image-filter-grayscale=
+This procedure allows to convert image to grayscale colors.
+
 * Changes in version 0.4.0 (2023-05-01)
 ** Bugfix: Init =position= slot of =<rectangle>= to a =<point>= instance
 The =position= slot would be always initialized to a procedure instead of a

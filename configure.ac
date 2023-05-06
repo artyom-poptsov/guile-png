@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with Guile-PNG.  If not, see <http://www.gnu.org/licenses/>.
 ]])
 
-AC_INIT([Guile-PNG], [0.4.0], [poptsov.artyom@gmail.com], [guile-png],
+AC_INIT([Guile-PNG], [0.4.1], [poptsov.artyom@gmail.com], [guile-png],
                      [https://github.com/artyom-poptsov/guile-png])
 
 AC_COPYRIGHT(GUILE_PNG_CONFIGURE_COPYRIGHT)
