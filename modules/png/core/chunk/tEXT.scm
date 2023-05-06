@@ -71,6 +71,7 @@
     #:type    (png-chunk-type   chunk)
     #:data    (bytevector-copy (png-chunk-data chunk))
     #:length  (png-chunk-length chunk)
+    #:crc     (png-chunk-crc chunk)
     #:keyword (string-copy (png-chunk:tEXT-keyword chunk))
     #:text    (string-copy (png-chunk:tEXT-text chunk))))
 
