@@ -29,7 +29,8 @@
   #:use-module (png image)
   #:use-module (png graphics pixel)
   #:export (png-image-filter-invert-colors
-            png-image-filter-solarize))
+            png-image-filter-solarize
+            png-image-filter-grayscale))
 
 
 (define-method (png-image-filter-invert-colors (image <png-image>))
@@ -70,6 +71,49 @@ image."
             (when (< blue threshold)
               (bytevector-u8-set! pixel 2 (- 255 blue)))
             (png-image-pixel-set! image-clone index pixel)
+            (loop (+ index 1)))))))
+
+(define* (png-image-filter-grayscale image
+                                     #:key
+                                     (method 'weighted))
+  "Copy an IMAGE and apply 'grayscale' effect on the copy.  Return the new
+image.
+
+A METHOD is a symbol that is expected to be either 'weighted' (default) or
+'average'."
+  (let ((image-clone (png-image-clone image))
+        (pixel-count (png-image-pixels image))
+        (pixel-converter (case method
+                           ((weighted)
+                            (lambda (red green blue)
+                              (inexact->exact
+                               (round
+                                (+ (* red 0.299)
+                                   (* green 0.587)
+                                   (* blue 0.114))))))
+                           ((average)
+                            (lambda (red green blue)
+                              (inexact->exact
+                               (round
+                                (+ (/ red 3) (/ green 3) (/ blue 3))))))
+                           (else
+                            (error "Unknown grayscale conversion method"
+                                   image
+                                   method)))))
+    (slot-set! image-clone 'color-type 0)
+    (slot-set! image-clone
+               'data
+               (make-bytevector pixel-count 0))
+    (let loop ((index 0))
+      (if (= index pixel-count)
+          image-clone
+          (let* ((pixel (png-image-pixel-ref image index))
+                 (red   (bytevector-u8-ref pixel 0))
+                 (green (bytevector-u8-ref pixel 1))
+                 (blue  (bytevector-u8-ref pixel 2))
+                 (grayscale-value (pixel-converter red green blue))
+                 (new-pixel (make-bytevector 1 grayscale-value)))
+            (png-image-pixel-set! image-clone index new-pixel)
             (loop (+ index 1)))))))
 
 ;;; image-processing.scm ends here.
