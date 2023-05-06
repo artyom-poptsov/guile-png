@@ -565,9 +565,7 @@ data."
 
 (define-method (png-image-clone (image <png-image>))
   "Copy a PNG IMAGE, return a new copy."
-  (format (current-error-port) "DEBUG 0~%")
   (let ((chunks (map png-chunk-clone (png-image-chunks image))))
-    (format (current-error-port) "DEBUG 1~%")
     (make <png-image>
       #:chunks             chunks
       #:data-chunk-size    (png-image-data-chunk-size image)
