@@ -77,6 +77,23 @@
                   #:chunks    (list ihdr iend))))
     (png-image-color-type image)))
 
+(test-assert "<png-image>: png-image-clone"
+  (let* ((ihdr  (make <png-chunk:IHDR>
+                  #:width     200
+                  #:height    100
+                  #:bit-depth 8
+                  #:color-type 8
+                  #:type      'IHDR))
+         (iend  (make <png-chunk:IEND>))
+         (image (make <png-image>
+                  #:chunks    (list ihdr iend)
+                  #:data      #vu8(255 255 255 255)))
+         (image-clone (png-image-clone image)))
+    (and (not (eq? (png-image-chunks image)
+                   (png-image-chunks image-clone)))
+         (not (eq? (png-image-data image)
+                   (png-image-data image-clone))))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
