@@ -1,6 +1,6 @@
 ;;; pHYs.scm -- pHYs (Physical pixel dimensions) chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -136,6 +136,7 @@
 
 (define-method (png-chunk-clone (chunk <png-chunk:pHYs>))
   (make <png-chunk:pHYs>
+    #:length (png-chunk-length chunk)
     #:type (png-chunk-type chunk)
     #:data (bytevector-copy (png-chunk-data chunk))
     #:crc  (png-chunk-crc chunk)

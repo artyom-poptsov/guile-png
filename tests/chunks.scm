@@ -240,6 +240,28 @@
       (png-chunk:PLTE-palette-entries plte))))
 
 
+;; Chunk cloning.
+
+(test-assert "png-chunk-clone: pHYs"
+  (let* ((chunk (make <png-chunk:pHYs>
+                  #:length 9
+                  #:type   'pHYs
+                  #:data   #vu8(0 0 0 0 0 0 0 0 0)
+                  #:crc    0
+                  #:pixels-per-unit-x-axis 11811
+                  #:pixels-per-unit-y-axis 11811
+                  #:unit-specifier         1))
+         (chunk-clone (png-chunk-clone chunk)))
+    (and (equal? (png-chunk-length chunk) (png-chunk-length chunk-clone))
+         (equal? (png-chunk-crc chunk) (png-chunk-crc chunk-clone))
+         (equal? (png-chunk-data chunk) (png-chunk-data chunk-clone))
+         (not (eq? (png-chunk-data chunk) (png-chunk-data chunk-clone)))
+         (equal? (png-chunk:pHYs-pixels-per-unit-x-axis chunk)
+                 (png-chunk:pHYs-pixels-per-unit-x-axis chunk-clone))
+         (equal? (png-chunk:pHYs-pixels-per-unit-y-axis chunk)
+                 (png-chunk:pHYs-pixels-per-unit-y-axis chunk-clone)))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
