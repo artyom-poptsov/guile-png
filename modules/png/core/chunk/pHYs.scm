@@ -76,7 +76,8 @@
 
 (define-method (initialize (chunk <png-chunk:pHYs>) initargs)
   (next-method)
-  (slot-set! chunk 'type 'pHYs))
+  (slot-set! chunk 'type 'pHYs)
+  (slot-set! chunk 'length %pHYs-chunk-length))
 
 
 
