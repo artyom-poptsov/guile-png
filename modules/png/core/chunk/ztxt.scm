@@ -1,6 +1,6 @@
-;;; zTXt.scm -- Compressed text chunk.
+;;; ztxt.scm -- Compressed text chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk zTXt)
+(define-module (png core chunk ztxt)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (zlib)
@@ -149,4 +149,4 @@
     #:compression-method (png-chunk:zTXt-compression-method chunk)
     #:text               (string-copy (png-chunk:zTXt-text chunk))))
 
-;;; zTXt.scm ends here.
+;;; ztxt.scm ends here.

@@ -7,6 +7,17 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Bugfix: Rename chunk modules                                  :API_CHANGE:
+Now chunk modules in =(png core chunk ...)= are renamed in the lowercase
+manner.  Also =tEXT= and =tEXt= classes are placed in the same module to
+address the issue with case-insensitive filesystems where "tEXT.scm" and
+"tEXt.scm" considered the same file.
+
+Reported by Aleix Conchillo Flaqué in here:
+https://github.com/artyom-poptsov/guile-png/issues/2
+
+ 
 * Changes in version 0.4.1 (2023-05-06)
 ** Bugfix: =png-image-clone= now clones image data
 =png-image-clone= now produces full clone of the image data as expected.

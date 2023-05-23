@@ -1,4 +1,4 @@
-;;; pHYs.scm -- pHYs (Physical pixel dimensions) chunk.
+;;; phys.scm -- pHYs (Physical pixel dimensions) chunk.
 
 ;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -36,7 +36,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk pHYs)
+(define-module (png core chunk phys)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -146,4 +146,4 @@
     #:unit-specifier         (png-chunk:pHYs-unit-specifier chunk)))
 
 
-;;; pHYs.scm ends here.
+;;; phys.scm ends here.

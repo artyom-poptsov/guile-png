@@ -1,6 +1,6 @@
-;;; iCCP.scm -- ICC Profile chunk.
+;;; iccp.scm -- ICC Profile chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk iCCP)
+(define-module (png core chunk iccp)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -154,4 +154,4 @@
     #:compression-method (png-chunk:iCCP-compression-method chunk)
     #:profile            (bytevector-copy (png-chunk:iCCP-profile chunk))))
 
-;;; iCCP.scm ends here.
+;;; iccp.scm ends here.

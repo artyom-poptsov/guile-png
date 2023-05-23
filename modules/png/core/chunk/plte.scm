@@ -1,6 +1,6 @@
-;;; PLTE.scm -- PLTE chunk.
+;;; plte.scm -- PLTE chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk PLTE)
+(define-module (png core chunk plte)
   #:use-module (ice-9 format)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -167,4 +167,4 @@ three-byte bytevector of the following format:
     #:crc    (png-chunk-crc    chunk)
     #:palette-entries (bytevector-copy (png-chunk:PLTE-palette-entries))))
 
-;;; PLTE.scm ends here.
+;;; plte.scm ends here.

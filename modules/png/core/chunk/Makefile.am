@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -20,17 +20,16 @@
 include $(top_srcdir)/build-aux/am/guilec
 
 SOURCES = \
-	IHDR.scm	\
-	PLTE.scm	\
-	IEND.scm	\
-	cHRM.scm	\
-	tEXt.scm	\
-	tEXT.scm	\
-	zTXt.scm	\
-	tIME.scm	\
-	iCCP.scm	\
-	bKGD.scm	\
-	pHYs.scm
+	ihdr.scm	\
+	plte.scm	\
+	iend.scm	\
+	chrm.scm	\
+	text.scm	\
+	ztxt.scm	\
+	time.scm	\
+	iccp.scm	\
+	bkgd.scm	\
+	phys.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

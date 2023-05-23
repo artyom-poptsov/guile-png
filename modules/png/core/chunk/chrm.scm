@@ -1,4 +1,4 @@
-(define-module (png core chunk cHRM)
+(define-module (png core chunk chrm)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -164,4 +164,4 @@
     #:blue-x        (png-chunk:cHRM-blue-x chunk)
     #:blue-y        (png-chunk:cHRM-blue-y chunk)))
 
-;;; cHRM.scm ends here.
+;;; chrm.scm ends here.

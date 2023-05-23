@@ -1,4 +1,4 @@
-;;; tEXt.scm -- Text chunk.
+;;; text.scm -- Text chunk.
 
 ;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk tEXt)
+(define-module (png core chunk text)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (ice-9 iconv)
@@ -36,7 +36,13 @@
             png-chunk:tEXt-keyword
             png-chunk:tEXt-keyword-description
             png-chunk:tEXt-text
-            png-chunk-decode-tEXt))
+            png-chunk-decode-tEXt
+
+            <png-chunk:tEXT>
+            png-chunk:tEXT?
+            png-chunk:tEXT-keyword
+            png-chunk:tEXT-text
+            png-chunk-decode-tEXT))
 
 
 ;; RFC 2083, "Textual data"
@@ -165,4 +171,68 @@
     #:keyword (string-copy (png-chunk:tEXt-keyword chunk))
     #:text    (string-copy (png-chunk:tEXt-text chunk))))
 
-;;; tEXt.scm ends here.
+
+
+(define-class <png-chunk:tEXT> (<png-chunk:tEXt>))
+
+(define (png-chunk:tEXT? x)
+  (is-a? x <png-chunk:tEXT>))
+
+(define png-chunk:tEXT-keyword png-chunk:tEXt-keyword)
+(define png-chunk:tEXT-text    png-chunk:tEXt-text)
+
+
+
+(define-method (%display (chunk <png-chunk:tEXT>) (port <port>))
+  (let ((type (png-chunk-type-info chunk)))
+    (format port "#<png-chunk:tEXT ~a: ~a ~a>"
+            (list-ref type 2)
+            (png-chunk:tEXT-keyword chunk)
+            (object-address/hex-string chunk))))
+
+(define-method (display (chunk <png-chunk:tEXT>) (port <port>))
+  (%display chunk port))
+
+
+
+(define-method (png-chunk-decode-tEXT (chunk <png-chunk>))
+  (let ((length (png-chunk-length chunk))
+        (type   (png-chunk-type chunk))
+        (data   (png-chunk-data chunk))
+        (crc    (png-chunk-crc chunk)))
+    (define (read-text index keyword)
+      (let loop ((text '())
+                 (idx  index))
+        (if (= idx (bytevector-length data))
+            (make <png-chunk:tEXT>
+              #:length  length
+              #:type    type
+              #:data    data
+              #:crc     crc
+              #:keyword keyword
+              #:text    (utf8->string (u8-list->bytevector (reverse text))))
+            (loop (cons (bytevector-u8-ref data idx) text)
+                  (+ idx 1)))))
+
+    (define (read-keyword)
+      (let loop ((keyword '())
+                 (index   0))
+        (let ((byte (bytevector-u8-ref data index)))
+          (if (zero? byte)
+              (read-text (+ index 1)
+                         (utf8->string (u8-list->bytevector (reverse keyword))))
+              (loop (cons byte keyword)
+                    (+ index 1))))))
+
+    (read-keyword)))
+
+(define-method (png-chunk-clone (chunk <png-chunk:tEXT>))
+  (make <png-chunk:tEXT>
+    #:type    (png-chunk-type   chunk)
+    #:data    (bytevector-copy (png-chunk-data chunk))
+    #:length  (png-chunk-length chunk)
+    #:crc     (png-chunk-crc chunk)
+    #:keyword (string-copy (png-chunk:tEXT-keyword chunk))
+    #:text    (string-copy (png-chunk:tEXT-text chunk))))
+
+;;; text.scm ends here.

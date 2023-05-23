@@ -1,6 +1,6 @@
-;;; IEND.scm -- IEND chunk.
+;;; iend.scm -- IEND chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (png core chunk IEND)
+(define-module (png core chunk iend)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)
@@ -75,4 +75,4 @@
     #:data   (bytevector-copy (png-chunk-data chunk))
     #:crc    (png-chunk-crc    chunk)))
 
-;;; IEND.scm ends here.
+;;; iend.scm ends here.

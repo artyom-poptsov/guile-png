@@ -1,6 +1,6 @@
 ;;; image.scm -- Guile-PNG Image procedures.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@
   #:use-module (png core common)
   #:use-module (png core filter)
   #:use-module (png core chunk)
-  #:use-module (png core chunk IHDR)
-  #:use-module (png core chunk IEND)
+  #:use-module (png core chunk ihdr)
+  #:use-module (png core chunk iend)
   #:use-module (png chunk-decoder)
   #:export (<png-compressed-image>
             png-compressed-image?

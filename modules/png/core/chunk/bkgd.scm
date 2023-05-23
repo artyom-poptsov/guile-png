@@ -1,6 +1,6 @@
-;;; bKGD.scm -- bKGD chunk.
+;;; bkgd.scm -- bKGD chunk.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,13 +27,13 @@
 
 ;;; Code:
 
-(define-module (png core chunk bKGD)
+(define-module (png core chunk bkgd)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)
   #:use-module (png core chunk)
-  #:use-module (png core chunk IHDR)
+  #:use-module (png core chunk ihdr)
   #:export (<png-chunk:bKGD>
             png-chunk:bKGD-color-type
             png-chunk:bKGD-grayscale
@@ -190,4 +190,4 @@
     #:blue       (png-chunk:bKGD-blue chunk)
     #:palette-index (png-chunk:bKGD-palette-index chunk)))
 
-;;; bKGD.scm ends here.
+;;; bkgd.scm ends here.

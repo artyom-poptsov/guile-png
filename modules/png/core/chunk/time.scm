@@ -1,4 +1,4 @@
-(define-module (png core chunk tIME)
+(define-module (png core chunk time)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
@@ -140,3 +140,6 @@
     #:hour   (png-chunk:tIME-hour chunk)
     #:minute (png-chunk:tIME-minute chunk)
     #:second (png-chunk:tIME-second chunk)))
+
+;;; time.scm ends here.
+
