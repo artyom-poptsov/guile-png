@@ -37,6 +37,7 @@
   #:use-module (png core chunk phys)
   #:use-module (png core chunk bkgd)
   #:use-module (png core chunk gama)
+  #:use-module (png core chunk hist)
   #:use-module (png image)
   #:export (png-chunk-decode))
 
@@ -57,6 +58,7 @@
     (iCCP . ,(make-converter png-chunk-decode-iCCP))
     (pHYs . ,(make-converter png-chunk-decode-pHYs))
     (gAMA . ,(make-converter png-chunk-decode-gAMA))
+    (hIST . ,(make-converter png-chunk-decode-hIST))
     (bKGD . ,(lambda (image chunk)
                (let ((result (png-image-chunks-query image 'IHDR)))
                  (unless result
