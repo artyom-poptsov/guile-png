@@ -42,7 +42,7 @@
 (define-class <png-chunk:gAMA> (<png-chunk>)
   (value
    #:init-value   0
-   #:init-keyword #:year
+   #:init-keyword #:value
    #:getter       png-chunk:gAMA-value))
 
 (define-method (initialize (chunk <png-chunk:gAMA>) initargs)
