@@ -7,8 +7,8 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
-** Bugfix: Rename chunk modules                                  :API_CHANGE:
+* Changes in version 0.5.0 (2023-05-29)
+** Bugfix: Rename chunk modules                           :API_CHANGE:BUGFIX:
 Now chunk modules in =(png core chunk ...)= are renamed in the lowercase
 manner.  Also =tEXT= and =tEXt= classes are placed in the same module to
 address the issue with case-insensitive filesystems where "tEXT.scm" and
@@ -16,6 +16,7 @@ address the issue with case-insensitive filesystems where "tEXT.scm" and
 
 Reported by Aleix Conchillo Flaqué in here:
 https://github.com/artyom-poptsov/guile-png/issues/2
+** Fix color type 3 handling in "bKGD" decoder                       :BUGFIX:
 ** Fix "PLTE" chunk cloning                                          :BUGFIX:
 =png-chunk-clone= for =<png-chunk:PLTE>= would fail to clone a chunk.  Now
 that should be fixed.
