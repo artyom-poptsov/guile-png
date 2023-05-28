@@ -16,7 +16,10 @@ address the issue with case-insensitive filesystems where "tEXT.scm" and
 
 Reported by Aleix Conchillo Flaqué in here:
 https://github.com/artyom-poptsov/guile-png/issues/2
-
+** Fix "PLTE" chunk cloning                                          :BUGFIX:
+=png-chunk-clone= for =<png-chunk:PLTE>= would fail to clone a chunk.  Now
+that should be fixed.
+** Add "gAMA" and "hIST" chunk decoders
  
 * Changes in version 0.4.1 (2023-05-06)
 ** Bugfix: =png-image-clone= now clones image data
