@@ -139,7 +139,7 @@
          #:data               data
          #:crc                crc
          #:color-type        color-type
-         #:palette-index      (vector-ref data 0))))))
+         #:palette-index      (bytevector-u8-ref data 0))))))
 
 (define-method (png-chunk-encode (chunk <png-chunk:bKGD>))
   (let ((color-type (png-chunk:bKGD-color-type chunk)))
