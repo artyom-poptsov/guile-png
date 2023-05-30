@@ -31,7 +31,8 @@ SOURCES = \
 	bkgd.scm	\
 	phys.scm	\
 	gama.scm	\
-	hist.scm
+	hist.scm	\
+	trns.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 
