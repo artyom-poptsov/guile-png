@@ -56,7 +56,7 @@
   (let ((type (png-chunk-type-info chunk)))
     (format port "#<png-chunk:gAMA value: ~a (~a) ~a>"
             (png-chunk:gAMA-value chunk)
-            (/ (png-chunk:gAMA-value chunk) 100000)
+            (/ (png-chunk:gAMA-value chunk) 100000.0)
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk:gAMA>) (port <port>))
