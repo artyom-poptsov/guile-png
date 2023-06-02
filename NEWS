@@ -7,6 +7,9 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Add "tRNS" and "iTXt" chunks decoders
+
 * Changes in version 0.5.0 (2023-05-29)
 ** Bugfix: Rename chunk modules                           :API_CHANGE:BUGFIX:
 Now chunk modules in =(png core chunk ...)= are renamed in the lowercase
