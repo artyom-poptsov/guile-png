@@ -582,9 +582,16 @@ data."
          (iend-chunk (make <png-chunk:IEND>)))
     (png-chunk-crc-update! iend-chunk)
     (png-chunk-crc-update! header)
-    (make <png-compressed-image>
-      #:chunks (cons (png-chunk-encode header)
-                     (append extra-chunks (append segments (list iend-chunk)))))))
+    (if (= (png-image-color-type image) 3)
+        (make <png-compressed-image>
+          #:chunks (cons (png-chunk-encode header)
+                         (cons (png-chunk-encode
+                                (make <png-chunk:PLTE>
+                                  #:palette-entries (png-image-palette image)))
+                               (append extra-chunks (append segments (list iend-chunk))))))
+        (make <png-compressed-image>
+          #:chunks (cons (png-chunk-encode header)
+                         (append extra-chunks (append segments (list iend-chunk))))))))
 
 (define-method (png-image->png (image <png-image>) (port <output-port>))
   (let ((compressed-image (png-image-compress image)))
