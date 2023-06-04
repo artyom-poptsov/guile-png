@@ -205,47 +205,76 @@ set to #t, the procedure returns data in uncompressed form."
 
 (define-class <png-image> ()
   ;; IDAT: Image data.
+  ;;
+  ;; <bytevector>
   (data
    #:init-thunk   (lambda () (make-bytevector 0))
    #:init-keyword #:data
    #:setter       png-image-data-set!
    #:getter       png-image-data)
 
+  ;; <number>
   (data-chunk-size
    #:init-value   256
    #:init-keyword #:data-chunk-size
    #:getter       png-image-data-chunk-size)
 
+  ;; <number>
   (width
    #:init-value   0
    #:init-keyword #:width
    #:getter       png-image-width)
 
+  ;; <number>
   (height
    #:init-value   0
    #:init-keyword #:height
    #:getter       png-image-height)
 
+  ;; <number>
   (bit-depth
    #:init-value   8
    #:init-keyword #:bit-depth
    #:getter       png-image-bit-depth)
 
+  ;; Color type is a single-byte integer that describes the interpretation of
+  ;; the image data.  Color type codes represent sums of the following values:
+  ;; 1 (palette used), 2 (color used), and 4 (alpha channel used).  Valid
+  ;; values are 0, 2, 3, 4, and 6.
+  ;;
+  ;; <number>
   (color-type
    #:init-value   0
    #:init-keyword #:color-type
    #:getter       png-image-color-type)
 
+  ;; Compression method is a single-byte integer that indicates the method
+  ;; used to compress the image data.  At present, only compression method 0
+  ;; (deflate/inflate compression with a 32K sliding window) is defined.
+  ;;
+  ;; <number>
   (compression-method
    #:init-value   0
    #:init-keyword #:compression-method
    #:getter       png-image-compression-method)
 
+  ;; Filter method is a single-byte integer that indicates the preprocessing
+  ;; method applied to the image data before compression.  At present, only
+  ;; filter method 0 (adaptive filtering with five basic filter types) is
+  ;; defined.
+  ;;
+  ;; <number>
   (filter-method
    #:init-value   0
    #:init-keyword #:filter-method
    #:getter       png-image-filter-method)
 
+
+  ;; Interlace method is a single-byte integer that indicates the transmission
+  ;; order of the image data.  Two values are currently defined: 0 (no
+  ;; interlace) or 1 (Adam7 interlace).
+  ;;
+  ;; <number>
   (interlace-method
    #:init-value   0
    #:init-keyword #:interlace-method
