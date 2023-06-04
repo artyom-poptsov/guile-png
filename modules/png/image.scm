@@ -534,8 +534,9 @@ data."
       #:filter-method      (png-image-filter-method image)
       #:interlace-method   (png-image-interlace-method image)
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
-                  (and (not (null? plte-chunks))
-                       (png-chunk:PLTE-palette-entries (car plte-chunks))))
+                  (if (null? plte-chunks)
+                      #()
+                      (png-chunk:PLTE-palette-entries (car plte-chunks))))
       #:data (if remove-filter?
                  (png-image-data/remove-filter image
                                                (png-image-data image))
