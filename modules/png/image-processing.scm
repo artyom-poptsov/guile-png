@@ -28,6 +28,7 @@
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
   #:use-module (png graphics pixel)
+  #:use-module (png core chunk plte)
   #:export (png-image-filter-invert-colors
             png-image-filter-solarize
             png-image-filter-grayscale))
@@ -100,20 +101,35 @@ A METHOD is a symbol that is expected to be either 'weighted' (default) or
                             (error "Unknown grayscale conversion method"
                                    image
                                    method)))))
-    (slot-set! image-clone 'color-type 0)
-    (slot-set! image-clone
-               'data
-               (make-bytevector pixel-count 0))
-    (let loop ((index 0))
-      (if (= index pixel-count)
-          image-clone
-          (let* ((pixel (png-image-pixel-ref image index))
-                 (red   (bytevector-u8-ref pixel 0))
-                 (green (bytevector-u8-ref pixel 1))
-                 (blue  (bytevector-u8-ref pixel 2))
-                 (grayscale-value (pixel-converter red green blue))
-                 (new-pixel (make-bytevector 1 grayscale-value)))
-            (png-image-pixel-set! image-clone index new-pixel)
-            (loop (+ index 1)))))))
+    (if (= (png-image-color-type image) 3)
+        (let* ((palette       (png-image-palette image-clone))
+               (palette-count (vector-length palette)))
+          (let loop ((index 0))
+            (if (= index palette-count)
+                image-clone
+                (let* ((color (vector-ref palette index))
+                       (red   (bytevector-u8-ref color 0))
+                       (green (bytevector-u8-ref color 1))
+                       (blue  (bytevector-u8-ref color 2))
+                       (grayscale-value (pixel-converter red green blue)))
+                  (bytevector-u8-set! color 0 grayscale-value)
+                  (bytevector-u8-set! color 1 grayscale-value)
+                  (bytevector-u8-set! color 2 grayscale-value)
+                  (loop (+ index 1))))))
+        (begin
+          (slot-set! image-clone
+                     'data
+                     (make-bytevector pixel-count 0))
+          (let loop ((index 0))
+            (if (= index pixel-count)
+                image-clone
+                (let* ((pixel (png-image-pixel-ref image index))
+                       (red   (bytevector-u8-ref pixel 0))
+                       (green (bytevector-u8-ref pixel 1))
+                       (blue  (bytevector-u8-ref pixel 2))
+                       (grayscale-value (pixel-converter red green blue))
+                       (new-pixel (make-bytevector 1 grayscale-value)))
+                  (png-image-pixel-set! image-clone index new-pixel)
+                  (loop (+ index 1)))))))))
 
 ;;; image-processing.scm ends here.
