@@ -35,6 +35,7 @@
   #:use-module (png core chunk)
   #:use-module (png core chunk ihdr)
   #:use-module (png core chunk iend)
+  #:use-module (png core chunk plte)
   #:use-module (png chunk-decoder)
   #:export (<png-compressed-image>
             png-compressed-image?
@@ -534,7 +535,7 @@ data."
       #:interlace-method   (png-image-interlace-method image)
       #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
                   (and (not (null? plte-chunks))
-                       (car plte-chunks)))
+                       (png-chunk:PLTE-palette-entries (car plte-chunks))))
       #:data (if remove-filter?
                  (png-image-data/remove-filter image
                                                (png-image-data image))
@@ -605,10 +606,9 @@ data."
       #:compression-method (png-image-compression-method image)
       #:filter-method      (png-image-filter-method image)
       #:interlace-method   (png-image-interlace-method image)
-      #:palette            (png-image-palette image)
-      #:palette (let ((plte-chunks (png-image-chunks-query chunks 'PLTE)))
-                  (and (not (null? plte-chunks))
-                       (car plte-chunks)))
+      #:palette            (list->vector
+                            (map bytevector-copy
+                                 (vector->list (png-image-palette image))))
       #:data   (bytevector-copy (png-image-data image)))))
 
 
