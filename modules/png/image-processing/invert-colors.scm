@@ -29,11 +29,11 @@
   #:use-module (png image)
   #:use-module (png graphics pixel)
   #:use-module (png core chunk plte)
-  #:export (png-image-filter-invert-colors))
+  #:export (png-image-invert-colors))
 
 
 
-(define-method (png-image-filter-invert-colors (image <png-image>))
+(define-method (png-image-invert-colors (image <png-image>))
   "Copy an IMAGE and invert its colors.  Return the new image."
   (let* ((image-clone (png-image-clone image))
          (pixel-count (png-image-pixels image)))

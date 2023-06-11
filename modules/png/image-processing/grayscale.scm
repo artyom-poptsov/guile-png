@@ -29,7 +29,7 @@
   #:use-module (png image)
   #:use-module (png graphics pixel)
   #:use-module (png core chunk plte)
-  #:export (png-image-filter-grayscale))
+  #:export (png-image-grayscale))
 
 
 
@@ -54,9 +54,9 @@
 
 
 
-(define* (png-image-filter-grayscale image
-                                     #:key
-                                     (method 'weighted))
+(define* (png-image-grayscale image
+                              #:key
+                              (method 'weighted))
   "Copy an IMAGE and apply 'grayscale' effect on the copy.  Return the new
 image.
 

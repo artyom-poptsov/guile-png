@@ -30,12 +30,12 @@
   #:use-module (png graphics pixel)
   #:use-module (png core chunk plte)
   #:use-module (png image-processing grayscale)
-  #:export (png-image-filter-solarize))
+  #:export (png-image-solarize))
 
 
 
-(define-method (png-image-filter-solarize (image     <png-image>)
-                                          (threshold <number>))
+(define-method (png-image-solarize (image     <png-image>)
+                                   (threshold <number>))
   "Copy an IMAGE and apply 'solarize' effect on the copy.  Return the new
 image."
   (let ((image-clone (png-image-clone image))
