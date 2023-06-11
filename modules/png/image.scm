@@ -53,6 +53,7 @@
             png-image-interlace-method
             png-image-palette
             png-image-color-type
+            png-image-color-type-set!
             png-image-pixel-size
             png-image-pixels
             png-image-data
@@ -247,7 +248,8 @@ set to #t, the procedure returns data in uncompressed form."
   (color-type
    #:init-value   0
    #:init-keyword #:color-type
-   #:getter       png-image-color-type)
+   #:getter       png-image-color-type
+   #:setter       png-image-color-type-set!)
 
   ;; Compression method is a single-byte integer that indicates the method
   ;; used to compress the image data.  At present, only compression method 0
