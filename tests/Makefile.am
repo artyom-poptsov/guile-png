@@ -48,7 +48,8 @@ AM_SCM_LOG_FLAGS = \
 
 EXTRA_DIST = \
 	${SCM_TESTS}	\
-	example-rainbow.png
+	example-rainbow.png \
+	meditate.png
 
 CLEANFILES = \
 	*.log
