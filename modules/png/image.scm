@@ -322,12 +322,17 @@ set to #t, the procedure returns data in uncompressed form."
 
 
 (define-method (%display (image <png-image>) (port <port>))
-  (let ((ihdr (png-image-header image)))
-    (format port "#<png-image ~ax~a ~a bit ~a>"
-            (png-chunk:IHDR-width ihdr)
-            (png-chunk:IHDR-height ihdr)
-            (png-chunk:IHDR-bit-depth ihdr)
-            (object-address/hex-string image))))
+  (format port "#<png-image ~ax~a ~a bit ~a>"
+          (png-image-width image)
+          (png-image-height image)
+          (png-image-bit-depth image)
+          (object-address/hex-string image)))
+
+(define-method (display (image <png-image>) (port <port>))
+  (%display image port))
+
+(define-method (write (image <png-image>) (port <port>))
+  (%display image port))
 
 
 
