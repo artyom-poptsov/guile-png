@@ -1,0 +1,54 @@
+;;; invert-colors.scm -- "Color inversion" filter implementation.
+
+;; Copyright (C) 2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; This module contains the implementation of "Color inversion" filter.
+
+
+;;; Code:
+
+(define-module (png image-processing invert-colors)
+  #:use-module (oop goops)
+  #:use-module (rnrs bytevectors)
+  #:use-module (png image)
+  #:use-module (png graphics pixel)
+  #:use-module (png core chunk plte)
+  #:export (png-image-filter-invert-colors))
+
+
+
+(define-method (png-image-filter-invert-colors (image <png-image>))
+  "Copy an IMAGE and invert its colors.  Return the new image."
+  (let* ((image-clone (png-image-clone image))
+         (pixel-count (png-image-pixels image)))
+    (let loop ((index 0))
+      (if (= index pixel-count)
+          image-clone
+          (begin
+            (let* ((pixel (png-image-pixel-ref image index))
+                   (red   (bytevector-u8-ref pixel 0))
+                   (green (bytevector-u8-ref pixel 1))
+                   (blue  (bytevector-u8-ref pixel 2)))
+              (bytevector-u8-set! pixel 0 (- 255 red))
+              (bytevector-u8-set! pixel 1 (- 255 green))
+              (bytevector-u8-set! pixel 2 (- 255 blue))
+              (png-image-pixel-set! image-clone index pixel)
+              (loop (+ index 1))))))))
+
+;;; invert-colors.scm ends here.

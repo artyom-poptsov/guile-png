@@ -1,10 +1,10 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
-## Guile-INI is free software: you can redistribute it and/or
+## Guile-PNG is free software: you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
 ## published by the Free Software Foundation, either version 3 of the
 ## License, or (at your option) any later version.
@@ -19,24 +19,18 @@
 
 include $(top_srcdir)/build-aux/am/guilec
 
-SUBDIRS = \
-	core	\
-	fsm	\
-	graphics	\
-	image-processing
-
 SOURCES = \
-	chunk-decoder.scm	\
-	image.scm		\
-	image-processing.scm	\
-	graphics.scm
+	grayscale.scm	\
+	invert-colors.scm	\
+	solarize.scm
 
-moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png
+GOBJECTS = $(SOURCES:%.scm=%.go)
+
+moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png/image-processing
 nobase_dist_mod_DATA = \
-	$(SOURCES) \
-	$(EXTRA_DIST)
+	$(SOURCES)
 
-ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png
+ccachedir=$(libdir)/guile/$(GUILE_EFFECTIVE_VERSION)/site-ccache/png/image-processing
 nobase_nodist_ccache_DATA = $(GOBJECTS)
 
 # Make sure source files are installed first, so that the mtime of
@@ -59,7 +53,6 @@ clean-go:
 	-$(RM) $(GOBJECTS)
 
 .PHONY: clean-go
-
 
 CLEANFILES = \
 	$(GOBJECTS)

@@ -83,6 +83,7 @@ AC_CONFIG_FILES([
         modules/png/core/chunk/Makefile
         modules/png/fsm/Makefile
         modules/png/graphics/Makefile
+        modules/png/image-processing/Makefile
         tests/Makefile
         doc/Makefile
 ])
