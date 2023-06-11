@@ -37,18 +37,33 @@
   "Copy an IMAGE and invert its colors.  Return the new image."
   (let* ((image-clone (png-image-clone image))
          (pixel-count (png-image-pixels image)))
-    (let loop ((index 0))
-      (if (= index pixel-count)
-          image-clone
-          (begin
-            (let* ((pixel (png-image-pixel-ref image index))
-                   (red   (bytevector-u8-ref pixel 0))
-                   (green (bytevector-u8-ref pixel 1))
-                   (blue  (bytevector-u8-ref pixel 2)))
-              (bytevector-u8-set! pixel 0 (- 255 red))
-              (bytevector-u8-set! pixel 1 (- 255 green))
-              (bytevector-u8-set! pixel 2 (- 255 blue))
-              (png-image-pixel-set! image-clone index pixel)
-              (loop (+ index 1))))))))
+    (if (= (png-image-color-type image) 3)
+        (let* ((palette       (png-image-palette image-clone))
+               (palette-count (vector-length palette)))
+          (let loop ((index 0))
+            (if (= index palette-count)
+                image-clone
+                (begin
+                  (let* ((color (vector-ref palette index))
+                         (red   (bytevector-u8-ref color 0))
+                         (green (bytevector-u8-ref color 1))
+                         (blue  (bytevector-u8-ref color 2)))
+                    (bytevector-u8-set! color 0 (- 255 red))
+                    (bytevector-u8-set! color 1 (- 255 green))
+                    (bytevector-u8-set! color 2 (- 255 blue))
+                    (loop (+ index 1)))))))
+        (let loop ((index 0))
+          (if (= index pixel-count)
+              image-clone
+              (begin
+                (let* ((pixel (png-image-pixel-ref image index))
+                       (red   (bytevector-u8-ref pixel 0))
+                       (green (bytevector-u8-ref pixel 1))
+                       (blue  (bytevector-u8-ref pixel 2)))
+                  (bytevector-u8-set! pixel 0 (- 255 red))
+                  (bytevector-u8-set! pixel 1 (- 255 green))
+                  (bytevector-u8-set! pixel 2 (- 255 blue))
+                  (png-image-pixel-set! image-clone index pixel)
+                  (loop (+ index 1)))))))))
 
 ;;; invert-colors.scm ends here.
