@@ -8,6 +8,11 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   notice and this notice are preserved.
 
 * Unreleased
+** Make image processing procedures names shorter                :API_CHANGE:
+*** =png-image-filter-grayscale=: Rename to =png-image-grayscale=
+*** =png-image-filter-invert-colors=: Rename to =png-image-invert-colors=
+*** =png-image-filter-solarize=: Rename to =png-image-solarize=
+** Image processing procedures now handle indexed colors properly
 ** Add "tRNS" and "iTXt" chunks decoders
 
 * Changes in version 0.5.0 (2023-05-29)
