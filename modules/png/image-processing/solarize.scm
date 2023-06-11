@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (png image-processing)
+(define-module (png image-processing solarize)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
