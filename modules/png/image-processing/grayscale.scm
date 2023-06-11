@@ -93,6 +93,7 @@ A METHOD is a symbol that is expected to be either 'weighted' (default) or
                        (blue  (bytevector-u8-ref pixel 2))
                        (grayscale-value (pixel-converter red green blue))
                        (new-pixel (make-bytevector 1 grayscale-value)))
+                  (png-image-color-type-set! image-clone 0)
                   (png-image-pixel-set! image-clone index new-pixel)
                   (loop (+ index 1)))))))))
 
