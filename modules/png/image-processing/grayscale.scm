@@ -32,6 +32,28 @@
   #:export (png-image-filter-grayscale))
 
 
+
+(define (%make-pixel-converter image method)
+  (case method
+    ((weighted)
+     (lambda (red green blue)
+       (inexact->exact
+        (round
+         (+ (* red 0.299)
+            (* green 0.587)
+            (* blue 0.114))))))
+    ((average)
+     (lambda (red green blue)
+       (inexact->exact
+        (round
+         (+ (/ red 3) (/ green 3) (/ blue 3))))))
+    (else
+     (error "Unknown grayscale conversion method"
+            image
+            method))))
+
+
+
 (define* (png-image-filter-grayscale image
                                      #:key
                                      (method 'weighted))
@@ -42,23 +64,7 @@ A METHOD is a symbol that is expected to be either 'weighted' (default) or
 'average'."
   (let ((image-clone (png-image-clone image))
         (pixel-count (png-image-pixels image))
-        (pixel-converter (case method
-                           ((weighted)
-                            (lambda (red green blue)
-                              (inexact->exact
-                               (round
-                                (+ (* red 0.299)
-                                   (* green 0.587)
-                                   (* blue 0.114))))))
-                           ((average)
-                            (lambda (red green blue)
-                              (inexact->exact
-                               (round
-                                (+ (/ red 3) (/ green 3) (/ blue 3))))))
-                           (else
-                            (error "Unknown grayscale conversion method"
-                                   image
-                                   method)))))
+        (pixel-converter (%make-pixel-converter image method)))
     (if (= (png-image-color-type image) 3)
         (let* ((palette       (png-image-palette image-clone))
                (palette-count (vector-length palette)))
