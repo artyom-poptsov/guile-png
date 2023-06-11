@@ -71,7 +71,7 @@ of pixels."
          (offset      (* x bpp)))
     (when (>= x pixel-count)
       (error "Pixel reference is outside the data" x pixel-count))
-    (when (>= bpp (bytevector-length pixel))
+    (when (> bpp (bytevector-length pixel))
       (error "Bytes per pixel value mismatch" pixel bpp))
     (let loop ((index 0))
       (unless (= index bpp)
