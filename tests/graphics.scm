@@ -3,6 +3,7 @@
              (rnrs bytevectors)
              (oop goops)
              (png)
+             (png fsm context)
              (png image)
              (png graphics)
              (png fsm context))
