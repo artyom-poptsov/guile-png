@@ -22,7 +22,8 @@ SCM_TESTS = \
 	common.scm	\
 	chunks.scm \
 	image.scm	\
-	graphics.scm
+	graphics.scm	\
+	image-processing.scm
 
 TESTS = ${SCM_TESTS}
 

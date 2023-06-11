@@ -1,0 +1,8 @@
+=meditate.png= is a scaled-down version of an image taken from
+<https://www.gnu.org/graphics/meditate.html>
+
+Copyright © 2001 Free Software Foundation, Inc. (original image and poster)
+
+These images are available under the GNU General Public License, version 3 or
+any later version, or the GNU Free Documentation License, version 1.1 or any
+later version.
