@@ -23,16 +23,8 @@
 
 ;;; Code:
 
-(define-module (png image-processing))
-
-;; This macro is taken from Guile-JSON.
-(define-syntax re-export-modules
-  (syntax-rules ()
-    ((_ (mod ...) ...)
-     (begin
-       (module-use! (module-public-interface (current-module))
-                    (resolve-interface '(mod ...)))
-       ...))))
+(define-module (png image-processing)
+  #:use-module (png core common))
 
 (re-export-modules (png image-processing grayscale)
                    (png image-processing invert-colors)

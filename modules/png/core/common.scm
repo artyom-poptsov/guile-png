@@ -1,6 +1,6 @@
 ;;; common.scm -- Common Guile-PNG procedures.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +34,8 @@
             int32->bytevector
             bytevector-copy/part
             bytevector-split
-            constructor-argument))
+            constructor-argument
+            re-export-modules))
 
 
 (define (object-address/hex-string object)
@@ -92,5 +93,16 @@ bytevectors."
 (define (constructor-argument keyword initargs)
   (and (memq keyword initargs)
        (cadr (memq keyword initargs))))
+
+
+
+;; This macro is taken from Guile-JSON.
+(define-syntax re-export-modules
+  (syntax-rules ()
+    ((_ (mod ...) ...)
+     (begin
+       (module-use! (module-public-interface (current-module))
+                    (resolve-interface '(mod ...)))
+       ...))))
 
 ;;; common.scm ends here.

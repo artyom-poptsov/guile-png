@@ -1,6 +1,6 @@
 ;;; graphics.scm -- PNG graphic primitives.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,16 +23,8 @@
 
 ;;; Code:
 
-(define-module (png graphics))
-
-;; This macro is taken from Guile-JSON.
-(define-syntax re-export-modules
-  (syntax-rules ()
-    ((_ (mod ...) ...)
-     (begin
-       (module-use! (module-public-interface (current-module))
-                    (resolve-interface '(mod ...)))
-       ...))))
+(define-module (png graphics)
+  #:use-module (png core common))
 
 (re-export-modules (png graphics graphic)
                    (png graphics point)
