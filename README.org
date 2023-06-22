@@ -29,6 +29,9 @@ $ guix build -f guix.scm
 $ guix package -f guix.scm
 #+END_EXAMPLE
 
+*** macOS
+Guile-PNG can be installed from [[https://github.com/aconchillo/homebrew-guile][Guile Homebrew Tap]].
+
 *** Manual
  #+BEGIN_EXAMPLE shell
 $ git clone https://github.com/artyom-poptsov/guile-png.git
