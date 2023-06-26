@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2017 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2017-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -21,7 +21,8 @@ info_TEXINFOS = guile-png.texi
 
 guile_png_TEXINFOS = \
 	guile-png.texi	\
-	fdl.texi
+	fdl.texi	\
+	indices.texi
 
 ## Silent rules.
 AM_V_HELP2MAN = $(AM_V_HELP2MAN_$(V))
