@@ -54,7 +54,7 @@
 
   ;; <number>
   (grayscale
-   #:init-keyword #:greyscale
+   #:init-keyword #:grayscale
    #:init-value   0
    #:getter       png-chunk:bKGD-grayscale)
 
@@ -121,7 +121,7 @@
          #:data               data
          #:crc                crc
          #:color-type        color-type
-         #:greyscale          (vector->int16 data)))
+         #:grayscale          (vector->int16 data)))
       ((2 6)
        (make <png-chunk:bKGD>
          #:length             length
@@ -184,7 +184,7 @@
     #:data   (png-chunk-data   chunk)
     #:crc    (png-chunk-crc    chunk)
     #:color-type (png-chunk:bKGD-color-type chunk)
-    #:greyscale  (png-chunk:bKGD-grayscale chunk)
+    #:grayscale  (png-chunk:bKGD-grayscale chunk)
     #:red        (png-chunk:bKGD-red chunk)
     #:green      (png-chunk:bKGD-green chunk)
     #:blue       (png-chunk:bKGD-blue chunk)
