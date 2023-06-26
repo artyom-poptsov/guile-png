@@ -885,6 +885,7 @@ Encode an IEND @var{chunk} into a plain @code{<png-chunk>}.
 @end deffn
 
 @subsection PLTE
+
 PNG image palette (PLTE) chunk.  The chunk contains from 1 to 256 palette
 entries, each a three-byte series of the form:
 
@@ -951,6 +952,66 @@ Decode a PLTE chunk from a plain PNG @var{chunk}.
 @deffn {Method} png-chunk-encode (chunk <png-chunk:PLTE>)
 Convert a PLTE @var{chunk} to a plain @code{<png-chunk>} instance.
 @end deffn
+
+@subsection bKGD
+
+The @url{https://www.rfc-editor.org/rfc/rfc2083#page-19, bKGD} chunk specifies
+a default background color to present the image against.  Note that viewers
+are not bound to honor this chunk; a viewer can choose to use a different
+background.
+
+@deftp {Class} <png-chunk:bKGD> @
+       [#:color-type=0] @
+       [#:grayscale=0] @
+       [#:red=0] @
+       [#:green=0] @
+       [#:blue=0] @
+       [#:palette-index=0]
+
+bKGD chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:color-type (type <number>)
+@item #:grayscale (value <number>)
+@item #:red (value <number>)
+@item #:green (value <number>)
+@item #:blue (value <number>)
+@item #:palette-index (value <number>)
+Palette index of the color to be used as background.
+@end table
+@end deftp
+
+@deffn  {Method} png-chunk:bKGD-color-type (chunk <png-chunk:bKGD>)
+@deffnx {Method} png-chunk:bKGD-grayscale (chunk <png-chunk:bKGD>)
+@deffnx {Method} png-chunk:bKGD-red (chunk <png-chunk:bKGD>)
+@deffnx {Method} png-chunk:bKGD-green (chunk <png-chunk:bKGD>)
+@deffnx {Method} png-chunk:bKGD-blue (chunk <png-chunk:bKGD>)
+@deffnx {Method} png-chunk:bKGD-palette-index (chunk <png-chunk:bKGD>)
+
+@code{<png-chunk:bKGD>} slot accessors.
+
+@end deffn
+
+@deffn {Method} png-chunk-decode-bKGD @
+       (chunk <png-chunk>) @
+       (ihdr  <png-chunk>)
+
+Convert a PNG @var{chunk} data to a bKGD chunk instance.
+
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:bKGD>)
+
+Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
+
+@end deffn
+
+@subsection cHRM
+
+@code{(png core chunk chrm)} module contains
+@url{https://www.rfc-editor.org/rfc/rfc2083#page-20, cHRM} (Primary
+chromaticities and white point) chunk.
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
