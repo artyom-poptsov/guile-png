@@ -1019,6 +1019,47 @@ Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
 @url{https://www.rfc-editor.org/rfc/rfc2083#page-20, cHRM} (Primary
 chromaticities and white point) chunk.
 
+@subsection gAMA
+
+PNG image gamma (gAMA).
+
+@deftp {Class} <png-chunk:gAMA>
+
+``gAMA'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:value (value <number>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-gAMA @
+       (chunk <png-chunk>)
+
+Convert a PNG @var{chunk} data to a ``gAMA'' chunk instance.
+
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:gAMA>)
+
+Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
+
+@end deffn
+
+@subsection hIST
+
+@deftp {Class} <png-chunk:hIST>
+
+``hIST'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:values (value <list>)
+@end table
+
+@end deftp
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
