@@ -1060,6 +1060,38 @@ Constructor parameters:
 
 @end deftp
 
+@subsection iCCP
+
+@url{https://en.wikipedia.org/wiki/ICC_profile, ICC profile} is a set of data
+that characterizes a color input or output device, or a color space, according
+to standards promulgated by the International Color Consortium (ICC).
+
+@deftp {Class} <png-chunk:iCCP>
+
+``iCCP chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:profile-name (name <string>)
+@item #:compression-method
+@item #:profile
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-iCCP (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:iCCP>}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:iCCP>)
+Encode an iCCP @var{chunk}, return an instance of @code{<png-chunk>}.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk:iCCP>)
+Make a full clone of an iCCP @var{chunk} instance, return the copy of the
+chunk.
+@end deffn
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
