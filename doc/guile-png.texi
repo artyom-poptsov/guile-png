@@ -79,77 +79,7 @@ that provides API for Portable Network Graphics
 @url{https://tools.ietf.org/html/rfc2083, RFC 2083} format (also known as
 ``PNG'') parsing.
 
-@node Installation
-@chapter Installation
-
-Guile-PNG sources are available form GitHub at
-@url{https://github.com/artyom-poptsov/guile-png}.  This section
-describes Guile-PNG requirements and installation process.
-
-Guile-PNG depends on the following packages:
-@itemize
-@item @url{https://www.gnu.org/software/guile/, GNU Guile}, 2.2 or later
-@item @url{https://github.com/artyom-poptsov/guile-smc, Guile-SMC}, 0.6
-@end itemize
-
-@section GNU Guix
-
-@subsection Stable version
-@example
-$ guix install guile-png
-@end example
-
-@subsection Development version
-@example
-$ guix build -f ./guix.scm
-$ guix package -f ./guix.scm
-@end example
-
-@section macOS
-Guile-PNG is available in @url{https://github.com/aconchillo/homebrew-guile,
-Guile Homebrew Tap}.
-
-@section Manual Installation
-
-To build the latest version of Guile-PNG from the sources, you need to
-download the sources from GitHub or clone them using Git@footnote{A good
-introduction to Git is free Pro Git book, which is available online at
-@url{https://git-scm.com/book/en/v2}}.
-
-Cloning can be done as follows:
-
-@example
-$ git clone git@@github.com:artyom-poptsov/guile-png.git
-@end example
-
-Next, you should configure the sources:
-
-@example
-$ cd guile-png/
-$ autoreconf -vif
-$ ./configure
-@end example
-
-And finally build and install the library:
-
-@example
-$ make
-$ make install
-@end example
-
-For a basic explanation of the installation of the package, see the
-@file{INSTALL} file.
-
-Please @strong{note} that you will need
-@url{https://www.gnu.org/software/automake/, Automake} version 1.12 or
-later to run self-tests with @command{make check} (but the library
-itself can be built with older Automake version such as 1.11).
-
-@strong{important} You probably want to call @command{configure} with
-the @option{--with-guilesitedir} option so that this package is
-installed in Guile's default path.  But, if you don't know where your
-Guile site directory is, run @command{configure} without the option,
-and it will give you a suggestion.
+@include guile-png-installation.texi
 
 @node API Reference
 @chapter API Reference

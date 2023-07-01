@@ -20,6 +20,7 @@
 info_TEXINFOS = guile-png.texi
 
 guile_png_TEXINFOS = \
+	guile-png-installation.texi \
 	guile-png.texi	\
 	fdl.texi	\
 	indices.texi
