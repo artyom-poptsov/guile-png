@@ -1019,6 +1019,24 @@ Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
 @url{https://www.rfc-editor.org/rfc/rfc2083#page-20, cHRM} (Primary
 chromaticities and white point) chunk.
 
+@deftp {Class} <png-chunk:cHRM>
+
+``cHRM'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:white-point-x (value <number>)
+@item #:white-point-y (value <number>)
+@item #:red-x (value <number>)
+@item #:red-y (value <number>)
+@item #:green-x (value <number>)
+@item #:green-y (value <number>)
+@item #:blue-x (value <number>)
+@item #:blue-y (value <number>)
+@end table
+
+@end deftp
+
 @subsection gAMA
 
 PNG image gamma (gAMA).
@@ -1068,7 +1086,7 @@ to standards promulgated by the International Color Consortium (ICC).
 
 @deftp {Class} <png-chunk:iCCP>
 
-``iCCP chunk implementation.
+``iCCP'' chunk implementation.
 
 Constructor parameters:
 @table @asis
@@ -1089,6 +1107,186 @@ Encode an iCCP @var{chunk}, return an instance of @code{<png-chunk>}.
 
 @deffn {Method} png-chunk-clone (chunk <png-chunk:iCCP>)
 Make a full clone of an iCCP @var{chunk} instance, return the copy of the
+chunk.
+@end deffn
+
+@subsection pHYs
+
+The pHYs chunk specifies the intended pixel size or aspect ratio for
+display of the image.  It contains:
+
+@table @asis
+@item Pixels per unit, X axis
+4 bytes (unsigned integer)
+@item Pixels per unit, Y axis
+4 bytes (unsigned integer)
+@item Unit specifier
+1 byte
+@end table
+
+The following values are legal for the unit specifier:
+@table @asis
+@item 0
+unit is unknown
+@item 1
+unit is the meter
+@end table
+
+When the unit specifier is 0, the pHYs chunk defines pixel aspect ratio only;
+the actual size of the pixels remains unspecified.
+
+@deftp {Class} <png-chunk:pHYs>
+
+``pHYs'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:pixels-per-unit-x-axis (value <number>)
+@item #:pixels-per-unit-y-axis (value <number>)
+@item #:unit-specifier (value <number>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-pHYs (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:pHYs>}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:pHYs>)
+Encode an ``pHYs'' @var{chunk}, return an instance of @code{<png-chunk>}.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk:pHYs>)
+Make a full clone of an ``pHYs'' @var{chunk} instance, return the copy of the
+chunk.
+@end deffn
+
+@subsection tEXt, tEXT
+
+PNG image textual data.
+
+@deftp {Class} <png-chunk:tEXt>
+
+``tEXt'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:keyword (value <string>)
+@item #:text (value <string>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk:tEXt-keyword-description (chunk <png-chunk:tEXt>)
+Get the description of a @var{chunk} keyword as a string.
+@end deffn
+
+@deffn {Method} png-chunk-decode-tEXt (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:tEXt>}.
+@end deffn
+
+@deftp {Class} <png-chunk:tEXT>
+
+``tEXT'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:keyword (value <string>)
+@item #:text (value <string>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-tEXT (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:tEXT>}.
+@end deffn
+
+@subsection tIME
+
+@deftp {Class} <png-chunk:tIME>
+
+``tIME'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:year (value <number>)
+@item #:month (value <number>)
+@item #:day (value <number>)
+@item #:hour (value <number>)
+@item #:minute (value <number>)
+@item #:second (value <number>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-tIME (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:tIME>}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:tIME>)
+Encode an ``tIME'' @var{chunk}, return an instance of @code{<png-chunk>}.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk:tIME>)
+Make a full clone of an ``tIME'' @var{chunk} instance, return the copy of the
+chunk.
+@end deffn
+
+@subsection tRNS
+
+PNG image transparency (tRNS).
+
+@deftp {Class} <png-chunk:tRNS>
+
+``tRNS'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:color-type (value <number>)
+Required parameter.
+@item #:value (value <number>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-tRNS (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:tRNS>}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:tRNS>)
+Encode an ``tRNS'' @var{chunk}, return an instance of @code{<png-chunk>}.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk:tRNS>)
+Make a full clone of an ``tRNS'' @var{chunk} instance, return the copy of the
+chunk.
+@end deffn
+
+@subsection zTXt
+
+@deftp {Class} <png-chunk:zTXt>
+
+``zTXt'' chunk implementation.
+
+Constructor parameters:
+@table @asis
+@item #:keyword (value <string>)
+@item #:compression-method (value <number>)
+@item #:text (value <string>)
+@end table
+
+@end deftp
+
+@deffn {Method} png-chunk-decode-zTXt (chunk <png-chunk>)
+Decode a plain @var{chunk}, return an instance of @code{<png-chunk:zTXt>}.
+@end deffn
+
+@deffn {Method} png-chunk-encode (chunk <png-chunk:zTXt>)
+Encode an ``zTXt'' @var{chunk}, return an instance of @code{<png-chunk>}.
+@end deffn
+
+@deffn {Method} png-chunk-clone (chunk <png-chunk:zTXt>)
+Make a full clone of an ``zTXt'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
