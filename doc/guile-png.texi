@@ -651,6 +651,7 @@ or @code{average}.
 @end deffn
 
 @section PNG Chunks
+@cindex Chunk
 
 A PNG file consists of a PNG signature followed by a series of ``chunks''.
 @code{(png core chunk)} describes a generic PNG chunk.
