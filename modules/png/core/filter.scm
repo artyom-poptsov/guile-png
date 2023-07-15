@@ -1,6 +1,6 @@
 ;;; filter.scm -- PNG filters.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
             <png-filter:average>
 
             png-filter-remove!
+            png-filter-apply!
 
             paeth-predictor))
 
@@ -100,6 +101,22 @@ SCANLINE-INDEX."
                       input-scanline-begin
                       output
                       output-scanline-begin
+                      scanline-length)))
+
+(define-method (png-filter-apply! (filter         <png-filter:none>)
+                                  (input          <bytevector>)
+                                  (output         <bytevector>)
+                                  (scanline-index <number>))
+  "Apply the 'None' filter (RFC 2083, 6.2) to a scanline INPUT with the
+specified SCANLINE-INDEX."
+  (let* ((scanline-length (png-filter-scanline-length filter))
+         (input-scanline-begin  (* scanline-length scanline-index))
+         (output-scanline-begin (* (+ scanline-length 1) scanline-index)))
+    (bytevector-u8-set! output output-scanline-begin 0)
+    (bytevector-copy! input
+                      input-scanline-begin
+                      output
+                      (+ output-scanline-begin 1)
                       scanline-length)))
 
 
