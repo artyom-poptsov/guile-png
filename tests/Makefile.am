@@ -21,6 +21,7 @@ SCM_TESTS = \
 	crc.scm		\
 	common.scm	\
 	chunks.scm \
+	filter.scm	\
 	image.scm	\
 	graphics.scm	\
 	image-processing.scm

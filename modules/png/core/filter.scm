@@ -30,6 +30,7 @@
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)
+  #:use-module (srfi srfi-1)
   #:export (<png-filter>
             <png-filter:none>
             <png-filter:sub>
@@ -40,7 +41,29 @@
             png-filter-remove!
             png-filter-apply!
 
+            %png-filter-algorithms
+            png-filter-algorithm-type->name
+            png-filter-algorithm-name->type
+
             paeth-predictor))
+
+
+;; PNG filtering algorithm types according to RFC 2083, "6. Filter
+;; Algorithms".
+;;
+;; <https://www.rfc-editor.org/rfc/rfc2083#section-6>
+(define %png-filter-algorithms
+  '((0 . NONE)
+    (1 . SUB)
+    (2 . UP)
+    (3 . AVERAGE)
+    (4 . PAETH)))
+
+(define-method (png-filter-algorithm-type->name (type <number>))
+  (assoc-ref %png-filter-algorithms type))
+
+(define-method (png-filter-algorithm-name->type (name <symbol>))
+  (car (find (lambda (elem) (equal? (cdr elem) name)) %png-filter-algorithms)))
 
 
 ;; This class represents a PNG filter as described in RFC 2083.
