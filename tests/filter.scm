@@ -20,6 +20,27 @@
   (png-filter-algorithm-name->type 'NONE))
 
 
+(define %test-image-data
+  #vu8(255 255 255 255
+       0   0   0   0
+       255 255 255 255
+       0   0   0   0))
+
+(test-equal "png-filter-apply!: <png-filter:none>"
+  #vu8(0 255 255 255 255
+       0 0   0   0   0
+       0 255 255 255 255
+       0 0   0   0   0)
+  (let ((filter (make <png-filter:none>
+                  #:scanline-length 4
+                  #:bytes-per-pixel 1))
+        (result (make-bytevector (+ (bytevector-length %test-image-data) 4))))
+    (let loop ((index 0))
+      (if (= index 4)
+          result
+          (begin
+            (png-filter-apply! filter %test-image-data result index)
+            (loop (+ index 1)))))))
 
 (test-equal "png-filter-apply!: <png-filter:up>"
   #vu8(2 255 255 255 255
