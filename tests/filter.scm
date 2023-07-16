@@ -47,19 +47,15 @@
        2 1   1   1   1
        2 255 255 255 255
        2 1   1   1   1)
-  (let* ((data #vu8(255 255 255 255
-                    0   0   0   0
-                    255 255 255 255
-                    0   0   0   0))
-         (filter (make <png-filter:up>
+  (let ((filter (make <png-filter:up>
                    #:scanline-length 4
                    #:bytes-per-pixel 1))
-         (result (make-bytevector (+ (bytevector-length data) 4))))
+        (result (make-bytevector (+ (bytevector-length %test-image-data) 4))))
     (let loop ((index 0))
       (if (= index 4)
           result
           (begin
-            (png-filter-apply! filter data result index)
+            (png-filter-apply! filter %test-image-data result index)
             (loop (+ index 1)))))))
 
 
