@@ -4,7 +4,7 @@
              (png core crc))
 
 
-(define %test-name "chunks")
+(define %test-name "crc")
 
 (test-begin %test-name)
 
