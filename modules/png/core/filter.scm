@@ -38,6 +38,8 @@
             <png-filter:up>
             <png-filter:average>
 
+            png-filter-type
+
             png-filter-remove!
             png-filter-apply!
 
