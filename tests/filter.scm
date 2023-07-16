@@ -42,6 +42,22 @@
             (png-filter-apply! filter %test-image-data result index)
             (loop (+ index 1)))))))
 
+(test-equal "png-filter-apply!: <png-filter:sub>"
+  #vu8(1 255 0 0 0
+       1 0   0 0 0
+       1 255 0 0 0
+       1 0   0 0 0)
+  (let ((filter (make <png-filter:sub>
+                  #:scanline-length 4
+                  #:bytes-per-pixel 1))
+        (result (make-bytevector (+ (bytevector-length %test-image-data) 4))))
+    (let loop ((index 0))
+      (if (= index 4)
+          result
+          (begin
+            (png-filter-apply! filter %test-image-data result index)
+            (loop (+ index 1)))))))
+
 (test-equal "png-filter-apply!: <png-filter:up>"
   #vu8(2 255 255 255 255
        2 1   1   1   1

@@ -212,13 +212,13 @@ SCANLINE-INDEX."
       (unless (= index scanline-length)
         (let* ((left  (if (< (- index bytes-per-pixel) 0)
                           0
-                          (bytevector-u8-ref output
-                                             (+ output-scanline-begin
+                          (bytevector-u8-ref input
+                                             (+ input-scanline-begin
                                                 (- index bytes-per-pixel)))))
                (raw-x (bytevector-u8-ref input
                                          (+ input-scanline-begin index))))
           (bytevector-u8-set! output
-                              (+ output-scanline-begin index)
+                              (+ output-scanline-begin index 1)
                               (modulo (- raw-x left)
                                       256)))
         (loop (+ index 1))))))
