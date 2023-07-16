@@ -68,6 +68,15 @@
 
 ;; This class represents a PNG filter as described in RFC 2083.
 (define-class <png-filter> ()
+  ;; PNG filtering algorithm type.
+  ;;
+  ;; <number>
+  (type
+   #:init-value   #f
+   #:init-keyword #:type
+   #:getter       png-filter-type
+   #:setter       png-filter-type-set!)
+
   ;; The length of the scanline of a PNG image in bytes.  This should be
   ;; calculated as follows:
   ;;
@@ -103,6 +112,10 @@
 
 
 (define-class <png-filter:none> (<png-filter>))
+
+(define-method (initialize (png-filter <png-filter:none>) initargs)
+  (next-method)
+  (png-filter-type-set! png-filter 0))
 
 (define-method (%display (filter <png-filter:none>) (port <port>))
   (format port
@@ -144,6 +157,10 @@ specified SCANLINE-INDEX."
 
 
 (define-class <png-filter:sub> (<png-filter>))
+
+(define-method (initialize (png-filter <png-filter:sub>) initargs)
+  (next-method)
+  (png-filter-type-set! png-filter 1))
 
 (define-method (%display (filter <png-filter:sub>) (port <port>))
   (format port
@@ -208,6 +225,10 @@ SCANLINE-INDEX."
 
 (define-class <png-filter:up> (<png-filter>))
 
+(define-method (initialize (png-filter <png-filter:up>) initargs)
+  (next-method)
+  (png-filter-type-set! png-filter 2))
+
 (define-method (%display (filter <png-filter:up>) (port <port>))
   (format port
           "#<png-filter:up scanline-length: ~ab bytes-per-pixel: ~ab ~a>"
@@ -244,6 +265,10 @@ SCANLINE-INDEX."
 
 
 (define-class <png-filter:average> (<png-filter>))
+
+(define-method (initialize (png-filter <png-filter:average>) initargs)
+  (next-method)
+  (png-filter-type-set! png-filter 3))
 
 (define-method (%display (filter <png-filter:average>) (port <port>))
   (format port
@@ -285,6 +310,10 @@ SCANLINE-INDEX."
 
 
 (define-class <png-filter:paeth> (<png-filter>))
+
+(define-method (initialize (png-filter <png-filter:paeth>) initargs)
+  (next-method)
+  (png-filter-type-set! png-filter 4))
 
 (define-method (%display (filter <png-filter:paeth>) (port <port>))
   (format port
