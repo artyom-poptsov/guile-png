@@ -155,6 +155,32 @@ SCANLINE-INDEX."
                                       256)))
         (loop (+ index 1))))))
 
+(define-method (png-filter-apply! (filter         <png-filter:sub>)
+                                  (input          <bytevector>)
+                                  (output         <bytevector>)
+                                  (scanline-index <number>))
+  "Apply the 'Sub' filter (RFC 2083, 6.3) to a scanline with the specified
+SCANLINE-INDEX."
+  (let* ((scanline-length       (png-filter-scanline-length filter))
+         (bytes-per-pixel       (png-filter-bytes-per-pixel filter))
+         (input-scanline-begin  (* scanline-index scanline-length))
+         (output-scanline-begin (* scanline-index (+ scanline-length 1))))
+    (bytevector-u8-set! output output-scanline-begin 1)
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((left  (if (< (- index bytes-per-pixel) 0)
+                          0
+                          (bytevector-u8-ref output
+                                             (+ output-scanline-begin
+                                                (- index bytes-per-pixel)))))
+               (raw-x (bytevector-u8-ref input
+                                         (+ input-scanline-begin index))))
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index)
+                              (modulo (- raw-x left)
+                                      256)))
+        (loop (+ index 1))))))
+
 
 
 (define-class <png-filter:up> (<png-filter>))
