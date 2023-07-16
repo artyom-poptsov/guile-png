@@ -150,7 +150,7 @@ specified SCANLINE-INDEX."
   (let* ((scanline-length (png-filter-scanline-length filter))
          (input-scanline-begin  (* scanline-length scanline-index))
          (output-scanline-begin (* (+ scanline-length 1) scanline-index)))
-    (bytevector-u8-set! output output-scanline-begin 0)
+    (bytevector-u8-set! output output-scanline-begin (png-filter-type filter))
     (bytevector-copy! input
                       input-scanline-begin
                       output
@@ -207,7 +207,7 @@ SCANLINE-INDEX."
          (bytes-per-pixel       (png-filter-bytes-per-pixel filter))
          (input-scanline-begin  (* scanline-index scanline-length))
          (output-scanline-begin (* scanline-index (+ scanline-length 1))))
-    (bytevector-u8-set! output output-scanline-begin 1)
+    (bytevector-u8-set! output output-scanline-begin (png-filter-type filter))
     (let loop ((index 0))
       (unless (= index scanline-length)
         (let* ((left  (if (< (- index bytes-per-pixel) 0)
