@@ -1,5 +1,6 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
+             (rnrs bytevectors)
              (oop goops)
              (png core filter))
 
@@ -17,6 +18,28 @@
 (test-equal "png-filter-algorithm-name->type"
   0
   (png-filter-algorithm-name->type 'NONE))
+
+
+
+(test-equal "png-filter-apply!: <png-filter:up>"
+  #vu8(2 255 255 255 255
+       2 1   1   1   1
+       2 255 255 255 255
+       2 1   1   1   1)
+  (let* ((data #vu8(255 255 255 255
+                    0   0   0   0
+                    255 255 255 255
+                    0   0   0   0))
+         (filter (make <png-filter:up>
+                   #:scanline-length 4
+                   #:bytes-per-pixel 1))
+         (result (make-bytevector (+ (bytevector-length data) 4))))
+    (let loop ((index 0))
+      (if (= index 4)
+          result
+          (begin
+            (png-filter-apply! filter data result index)
+            (loop (+ index 1)))))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
