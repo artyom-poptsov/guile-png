@@ -74,6 +74,22 @@
             (png-filter-apply! filter %test-image-data result index)
             (loop (+ index 1)))))))
 
+(test-equal "png-filter-apply!: <png-filter:average>"
+  #vu8(3 255 128 128 128
+       3 129 129 129 129
+       3 255 128 128 128
+       3 129 129 129 129)
+  (let ((filter (make <png-filter:average>
+                  #:scanline-length 4
+                  #:bytes-per-pixel 1))
+        (result (make-bytevector (+ (bytevector-length %test-image-data) 4))))
+    (let loop ((index 0))
+      (if (= index 4)
+          result
+          (begin
+            (png-filter-apply! filter %test-image-data result index)
+            (loop (+ index 1)))))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 

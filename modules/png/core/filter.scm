@@ -336,6 +336,37 @@ SCANLINE-INDEX."
                                       256)))
         (loop (+ index 1))))))
 
+(define-method (png-filter-apply! (filter         <png-filter:average>)
+                                  (input          <bytevector>)
+                                  (output         <bytevector>)
+                                  (scanline-index <number>))
+  "Apply the 'Average' filter (RFC 2083, 6.4) to a scanline with the specified
+SCANLINE-INDEX."
+  (let* ((scanline-length         (png-filter-scanline-length filter))
+         (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
+         (input-scanline-begin    (* scanline-length scanline-index))
+         (output-scanline-begin   (* (+ scanline-length 1) scanline-index))
+         (previous-scanline-begin (* (- scanline-index 1) scanline-length)))
+    (bytevector-u8-set! output output-scanline-begin (png-filter-type filter))
+    (let loop ((index 0))
+      (unless (= index scanline-length)
+        (let* ((raw-x   (bytevector-u8-ref input (+ input-scanline-begin index)))
+               (left-x  (if (< (- index bytes-per-pixel) 0)
+                            0
+                            (bytevector-u8-ref input
+                                               (+ input-scanline-begin
+                                                  (- index bytes-per-pixel)))))
+               (prior-x (if (zero? scanline-index)
+                            0
+                            (bytevector-u8-ref input
+                                               (+ previous-scanline-begin
+                                                  index)))))
+          (bytevector-u8-set! output
+                              (+ output-scanline-begin index 1)
+                              (modulo (- raw-x (floor (/ (+ left-x prior-x) 2)))
+                                      256)))
+        (loop (+ index 1))))))
+
 
 
 (define-class <png-filter:paeth> (<png-filter>))
