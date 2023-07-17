@@ -40,6 +40,7 @@
 
             png-filter-type
 
+            png-filter-remove
             png-filter-remove!
             png-filter-apply!
 
@@ -473,5 +474,56 @@ SCANLINE-INDEX."
                               (modulo (+ raw paeth)
                                       256)))
         (loop (+ index 1))))))
+
+
+
+(define* (png-filter-remove image-data
+                            #:key
+                            scanline-length
+                            bytes-per-pixel
+                            image-height
+                            image-width)
+  (let* ((filter-none    (make <png-filter:none>
+                           #:scanline-length scanline-length
+                           #:bytes-per-pixel bytes-per-pixel))
+         (filter-sub     (make <png-filter:sub>
+                           #:scanline-length scanline-length
+                           #:bytes-per-pixel bytes-per-pixel))
+         (filter-up      (make <png-filter:up>
+                           #:scanline-length scanline-length
+                           #:bytes-per-pixel bytes-per-pixel))
+         (filter-average (make <png-filter:average>
+                           #:scanline-length scanline-length
+                           #:bytes-per-pixel bytes-per-pixel))
+         (filter-paeth   (make <png-filter:paeth>
+                           #:scanline-length scanline-length
+                           #:bytes-per-pixel bytes-per-pixel))
+         (result-length  (* image-width image-height bytes-per-pixel))
+         (result         (make-bytevector result-length 0)))
+
+      (define (remove-filter! row-index)
+        (let* ((input-scanline-begin (* row-index (+ scanline-length 1)))
+               (filter-type          (bytevector-u8-ref image-data
+                                                        input-scanline-begin)))
+          (case filter-type
+            ((0)
+             (png-filter-remove! filter-none image-data result row-index))
+            ((1)
+             (png-filter-remove! filter-sub image-data result row-index))
+            ((2)
+             (png-filter-remove! filter-up image-data result row-index))
+            ((3)
+             (png-filter-remove! filter-average image-data result row-index))
+            ((4)
+             (png-filter-remove! filter-paeth image-data result row-index))
+            (else
+             (error "Unsupported filter type" filter-type row-index)))))
+
+      (let loop-over-rows ((row-index 0))
+        (if (= row-index image-height)
+            result
+            (begin
+              (remove-filter! row-index)
+              (loop-over-rows (+ row-index 1)))))))
 
 ;;; filter.scm ends here.

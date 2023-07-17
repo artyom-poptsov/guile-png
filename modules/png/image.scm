@@ -385,61 +385,13 @@ set to #t, the procedure returns data in uncompressed form."
 new bytevector with image data with filter type bytes removed."
   (let* ((width             (png-image-width image))
          (height            (png-image-height image))
-         (image-data-length (bytevector-length uncompressed-data))
          (color-type        (png-image-color-type image))
-         (pixel-size        (png-image-color-type->pixel-size color-type))
-         (scanline-length   (* width pixel-size))
-         (result-length     (* width height pixel-size))
-         (result            (make-bytevector result-length 0))
-         (filter-none       (make <png-filter:none>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size))
-         (filter-sub        (make <png-filter:sub>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size))
-         (filter-up         (make <png-filter:up>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size))
-         (filter-average    (make <png-filter:average>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size))
-         (filter-paeth      (make <png-filter:paeth>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size)))
-
-    ;; (format (current-error-port) "image size:      ~ax~a~%" width height)
-    ;; (format (current-error-port) "image color type: ~a~%" (png-chunk:IHDR-color-type ihdr ))
-    ;; (format (current-error-port) "image bit depth: ~a~%" (png-chunk:IHDR-bit-depth ihdr ))
-    ;; (format (current-error-port) "image filter:    ~a~%" (png-chunk:IHDR-filter-method ihdr ))
-
-    (define (remove-filter! row-index)
-      (let* ((input-scanline-begin (* row-index (+ scanline-length 1)))
-             (filter-type          (bytevector-u8-ref uncompressed-data
-                                                      input-scanline-begin)))
-        (case filter-type
-          ((0)
-           (png-filter-remove! filter-none uncompressed-data result row-index))
-          ((1)
-           ;; (format (current-error-port) "~a: sub~%" row-index)
-           (png-filter-remove! filter-sub uncompressed-data result row-index))
-          ((2)
-           ;; (format (current-error-port) "~a: up~%" row-index)
-           (png-filter-remove! filter-up uncompressed-data result row-index))
-          ((3)
-           ;; (format (current-error-port) "~a: average~%" row-index)
-           (png-filter-remove! filter-average uncompressed-data result row-index))
-          ((4)
-           ;; (format (current-error-port) "~a: paeth~%" row-index)
-           (png-filter-remove! filter-paeth uncompressed-data result row-index))
-          (else
-           (error "Unsupported filter type" filter-type image)))))
-
-    (let loop-over-rows ((row-index 0))
-      (if (= row-index height)
-          result
-          (begin
-            (remove-filter! row-index)
-            (loop-over-rows (+ row-index 1)))))))
+         (bytes-per-pixel   (png-image-color-type->pixel-size color-type)))
+    (png-filter-remove uncompressed-data
+                       #:scanline-length (* width bytes-per-pixel)
+                       #:bytes-per-pixel bytes-per-pixel
+                       #:image-height    height
+                       #:image-width     width)))
 
 (define-method (png-image-data/apply-filter (image <png-image>))
   (let* ((image-data        (png-image-data image))
