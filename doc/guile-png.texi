@@ -1221,6 +1221,167 @@ Make a full clone of an ``zTXt'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@section Filter Algorithms
+
+@code{(png core filter)} contains implementation of PNG filter algorithms as
+described in @url{https://www.rfc-editor.org/rfc/rfc2083#section-6, RFC 2083,
+section 6 ("Filter Algorithms")}.
+
+Filter algorithms can be applied to image data before compression; the purpose
+of these filters is to prepare image data for optimum compression.
+
+Available filters:
+@table @asis
+@item 0
+None
+@item 1
+Sub
+@item 2
+Up
+@item 3
+Average
+@item 4
+Paeth
+@end table
+
+@deffn {Method} png-filter-algorithm-type->name (type <number>)
+Get the filter algorithm name by its @var{type} number.
+@end deffn
+
+@deffn {Method} png-filter-algorithm-name->type (name <symbol>)
+Get the filter algorithm type number by its @var{name}.
+@end deffn
+
+@subsection Generic Filter
+
+@deftp {Class} <png-filter>
+This class represents a PNG filter as described in RFC 2083.
+@end deftp
+
+@deffn {Method} png-filter-type (filter <png-filter>)
+Get the @var{filter} type.
+@end deffn
+
+@deffn {Method} png-filter-scanline-length (filter <png-filter>)
+Get the @var{filter} scanline length.
+@end deffn
+
+@deffn {Method} png-filter-bytes-per-pixel (filter <png-filter>)
+Get the @var{filter} bytes per pixel value.
+@end deffn
+
+@subsection ``None'' Filter
+
+@deftp {Class} <png-filter:none>
+This class represents a ``None'' filter.
+@end deftp
+
+@deffn {Method} png-filter-remove! (filter         <png-filter:none>) @
+                                   (input          <bytevector>) @
+                                   (output         <bytevector>) @
+                                   (scanline-index <number>)
+Remove the ``None'' filter from a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@deffn {Method} png-filter-apply! (filter         <png-filter:none>) @
+                                  (input          <bytevector>) @
+                                  (output         <bytevector>) @
+                                  (scanline-index <number>)
+Apply the ``None'' filter to a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@subsection ``Sub'' Filter
+
+@deftp {Class} <png-filter:sub>
+This class represents a ``Sub'' filter.
+@end deftp
+
+@deffn {Method} png-filter-remove! (filter         <png-filter:sub>) @
+                                   (input          <bytevector>) @
+                                   (output         <bytevector>) @
+                                   (scanline-index <number>)
+Remove the ``Sub'' filter from a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@deffn {Method} png-filter-apply! (filter         <png-filter:sub>) @
+                                  (input          <bytevector>) @
+                                  (output         <bytevector>) @
+                                  (scanline-index <number>)
+Apply the ``Sub'' filter to a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@subsection ``Up'' Filter
+
+@deftp {Class} <png-filter:up>
+This class represents a ``Up'' filter.
+@end deftp
+
+@deffn {Method} png-filter-remove! (filter         <png-filter:up>) @
+                                   (input          <bytevector>) @
+                                   (output         <bytevector>) @
+                                   (scanline-index <number>)
+Remove the ``Up'' filter from a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@deffn {Method} png-filter-apply! (filter         <png-filter:up>) @
+                                  (input          <bytevector>) @
+                                  (output         <bytevector>) @
+                                  (scanline-index <number>)
+Apply the ``Up'' filter to a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@subsection ``Average'' Filter
+
+@deftp {Class} <png-filter:average>
+This class represents a ``Average'' filter.
+@end deftp
+
+@deffn {Method} png-filter-remove! (filter         <png-filter:average>) @
+                                   (input          <bytevector>) @
+                                   (output         <bytevector>) @
+                                   (scanline-index <number>)
+Remove the ``Average'' filter from a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@deffn {Method} png-filter-apply! (filter         <png-filter:average>) @
+                                  (input          <bytevector>) @
+                                  (output         <bytevector>) @
+                                  (scanline-index <number>)
+Apply the ``Average'' filter to a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+
+@subsection ``Paeth'' Filter
+
+@deftp {Class} <png-filter:paeth>
+This class represents a ``Paeth'' filter.
+@end deftp
+
+@deffn {Method} png-filter-remove! (filter         <png-filter:paeth>) @
+                                   (input          <bytevector>) @
+                                   (output         <bytevector>) @
+                                   (scanline-index <number>)
+Remove the ``Paeth'' filter from a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+@deffn {Method} png-filter-apply! (filter         <png-filter:paeth>) @
+                                  (input          <bytevector>) @
+                                  (output         <bytevector>) @
+                                  (scanline-index <number>)
+Apply the ``Paeth'' filter to a scanline with the specified
+@var{scanline-index}.
+@end deffn
+
+
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
