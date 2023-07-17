@@ -407,10 +407,10 @@ The original algorithm developed by Alan W. Paeth."
 SCANLINE-INDEX."
   (let* ((scanline-length         (png-filter-scanline-length filter))
          (bytes-per-pixel         (png-filter-bytes-per-pixel filter))
-         (input-scanline-begin    (* scanline-index (+ scanline-length 1)))
-         (output-scanline-begin   (* scanline-index scanline-length))
+         (input-scanline-begin    (* scanline-index scanline-length))
+         (output-scanline-begin   (* scanline-index (+ scanline-length 1)))
          (previous-scanline-begin (* (- scanline-index 1) scanline-length)))
-
+    (bytevector-u8-set! output output-scanline-begin (png-filter-type filter))
     (let loop ((index 0))
       (unless (= index scanline-length)
         (let* ((absolute-index (+ input-scanline-begin index))
@@ -421,20 +421,20 @@ SCANLINE-INDEX."
                                                         (- index 1)))))
                (above         (if (zero? scanline-index)
                                   0
-                                  (bytevector-u8-ref output
+                                  (bytevector-u8-ref input
                                                      (+ previous-scanline-begin
                                                         index))))
                (upper-left    (if (or (zero? scanline-index) (zero? index))
                                   0
-                                  (bytevector-u8-ref output
+                                  (bytevector-u8-ref input
                                                      (+ previous-scanline-begin
                                                         (- index 1)))))
-               (raw          (bytevector-u8-ref input absolute-index)))
+               (raw          (bytevector-u8-ref input absolute-index))
+               (paeth        (modulo (- raw (paeth-predictor left above upper-left))
+                                     256)))
           (bytevector-u8-set! output
-                              (+ output-scanline-begin index)
-                              (modulo (- raw
-                                         (paeth-predictor left above upper-left))
-                                      256)))
+                              (+ output-scanline-begin index 1)
+                              paeth))
         (loop (+ index 1))))))
 
 (define-method (png-filter-remove! (filter         <png-filter:paeth>)

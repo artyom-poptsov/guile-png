@@ -90,6 +90,22 @@
             (png-filter-apply! filter %test-image-data result index)
             (loop (+ index 1)))))))
 
+(test-equal "png-filter-apply!: <png-filter:paeth>"
+  #vu8(4 255 0 0 0
+       4 1   0 0 0
+       4 255 0 0 0
+       4 1   0 0 0)
+  (let ((filter (make <png-filter:paeth>
+                  #:scanline-length 4
+                  #:bytes-per-pixel 1))
+        (result (make-bytevector (+ (bytevector-length %test-image-data) 4))))
+    (let loop ((index 0))
+      (if (= index 4)
+          result
+          (begin
+            (png-filter-apply! filter %test-image-data result index)
+            (loop (+ index 1)))))))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
