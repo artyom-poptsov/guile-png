@@ -399,18 +399,13 @@ new bytevector with image data with filter type bytes removed."
          (height            (png-image-height image))
          (color-type        (png-image-color-type image))
          (pixel-size        (png-image-color-type->pixel-size color-type))
-         (scanline-length   (* width pixel-size))
-         (result            (make-bytevector (+ (* width height pixel-size) height) 0))
-         (filter-none       (make <png-filter:none>
-                              #:scanline-length scanline-length
-                              #:bytes-per-pixel pixel-size)))
-
-    (let loop-over-rows ((row-index 0))
-      (if (= row-index height)
-          result
-          (begin
-            (png-filter-apply! filter-none image-data result row-index)
-            (loop-over-rows (+ row-index 1)))))))
+         (scanline-length   (* width pixel-size)))
+    (png-filter-apply image-data
+                      #:scanline-length scanline-length
+                      #:bytes-per-pixel pixel-size
+                      #:color-type color-type
+                      #:image-height height
+                      #:image-width width)))
 
 (define-method (png-image-pretty-print-data (image <png-image>) (port <port>))
   (let* ((width             (png-image-width image))

@@ -42,6 +42,7 @@
 
             png-filter-remove
             png-filter-remove!
+            png-filter-apply
             png-filter-apply!
 
             %png-filter-algorithms
@@ -525,5 +526,103 @@ SCANLINE-INDEX."
             (begin
               (remove-filter! row-index)
               (loop-over-rows (+ row-index 1)))))))
+
+
+
+(define* (%scanline-sum image-data
+                        #:key
+                        scanline-length
+                        scanline-offset)
+  (let loop ((index 1)
+             (sum   0))
+    (if (= index scanline-length)
+        sum
+        (loop (+ index 1)
+              (+ sum (bytevector-u8-ref image-data
+                                        (+ scanline-offset index)))))))
+
+(define* (png-filter-apply image-data
+                           #:key
+                           scanline-length
+                           bytes-per-pixel
+                           color-type
+                           image-height
+                           image-width
+                           filter)
+  (let* ((result-length (* image-width image-height bytes-per-pixel))
+         (result        (make-bytevector result-length 0)))
+    (define (apply-filter! filter)
+      (if filter
+          (let loop-over-rows ((row-index 0))
+            (if (= row-index image-height)
+                result
+                (begin
+                  (png-filter-apply! filter image-data result row-index)
+                  (loop-over-rows (+ row-index 1)))))
+          (let* ((filter-none    (make <png-filter:none>
+                                   #:scanline-length scanline-length
+                                   #:bytes-per-pixel bytes-per-pixel))
+                 (filter-sub     (make <png-filter:sub>
+                                   #:scanline-length scanline-length
+                                   #:bytes-per-pixel bytes-per-pixel))
+                 (filter-up      (make <png-filter:up>
+                                   #:scanline-length scanline-length
+                                   #:bytes-per-pixel bytes-per-pixel))
+                 (filter-average (make <png-filter:average>
+                                   #:scanline-length scanline-length
+                                   #:bytes-per-pixel bytes-per-pixel))
+                 (filter-paeth   (make <png-filter:paeth>
+                                   #:scanline-length scanline-length
+                                   #:bytes-per-pixel bytes-per-pixel))
+                 (filters-list (list filter-sub
+                                     filter-up
+                                     filter-average
+                                     filter-paeth)))
+            (let loop-over-rows ((row-index 0))
+              (if (= row-index image-height)
+                  result
+                  (let ((scanline-offset (* row-index (+ scanline-length 1))))
+                    (png-filter-apply! filter-none
+                                       image-data
+                                       result
+                                       row-index)
+                    (let ((winner
+                           (let loop-over-filters ((filters filters-list)
+                                                   (smallest-sum
+                                                    (%scanline-sum result
+                                                                   #:scanline-length scanline-length
+                                                                   #:scanline-offset scanline-offset))
+                                                   (winner filter-none))
+                             (if (null? filters)
+                                 winner
+                                 (begin
+                                   (png-filter-apply! (car filters)
+                                                      image-data
+                                                      result
+                                                      row-index)
+                                   (let ((new-sum (%scanline-sum
+                                                   result
+                                                   #:scanline-length scanline-length
+                                                   #:scanline-offset scanline-offset)))
+                                     (if (< new-sum smallest-sum)
+                                         (loop-over-filters (cdr filters)
+                                                            new-sum
+                                                            (car filters))
+                                         (loop-over-filters (cdr filters)
+                                                            smallest-sum
+                                                            winner))))))))
+                      (png-filter-apply! winner
+                                         image-data
+                                         result
+                                         row-index)
+                      (loop-over-rows (+ row-index 1)))))))))
+
+    (if filter
+        (apply-filter! filter)
+        (if (equal? color-type 3)
+            (apply-filter! (make <png-filter:none>
+                             #:scanline-length scanline-length
+                             #:bytes-per-pixel bytes-per-pixel))
+            (apply-filter! #f)))))
 
 ;;; filter.scm ends here.
