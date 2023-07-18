@@ -8,5 +8,5 @@
 
 (define (main args)
   (let* ((png-image (png->scm))
-         (new-image (png-image-filter-invert-colors png-image)))
+         (new-image (png-image-invert-colors png-image)))
     (scm->png new-image)))
