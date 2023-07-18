@@ -549,7 +549,8 @@ SCANLINE-INDEX."
                            image-height
                            image-width
                            filter)
-  (let* ((result-length (* image-width image-height bytes-per-pixel))
+  (let* ((result-length (+ (* image-width image-height bytes-per-pixel)
+                           image-height))
          (result        (make-bytevector result-length 0)))
     (define (apply-filter! filter)
       (if filter
