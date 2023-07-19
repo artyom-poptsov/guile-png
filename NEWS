@@ -7,6 +7,16 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Changes in version 0.7.0 (2023-07-19)
+** Implement filter algorithms selection heuristics
+When an image is being saved select filtering algorithms for each image row (a
+"scanline") based on recommendations from RFC 2083 (see "9.6. Filter
+selection".)  Using the recommended heuristics allows to improve compression
+ratio and thus to reduce image the size.
+** =(png core chunk bkgd)=: Fix a typo
+Fix a typo in a <png-chunk:bKGD> slot name: replace "greyscale" with
+"grayscale".
+** Update the documentation
 * Changes in version 0.6.0 (2023-06-11)
 ** Make image processing procedures names shorter                :API_CHANGE:
 *** =png-image-filter-grayscale=: Rename to =png-image-grayscale=
