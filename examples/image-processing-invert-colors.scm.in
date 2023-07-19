@@ -1,4 +1,4 @@
-#!/usr/bin/guile \
+#!@GUILE@ \
 -L modules -e main -s
 !#
 
@@ -8,6 +8,5 @@
 
 (define (main args)
   (let* ((png-image (png->scm))
-         (threshold 100)
-         (new-image (png-image-solarize png-image threshold)))
+         (new-image (png-image-invert-colors png-image)))
     (scm->png new-image)))
