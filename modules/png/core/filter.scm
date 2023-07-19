@@ -415,23 +415,23 @@ SCANLINE-INDEX."
     (bytevector-u8-set! output output-scanline-begin (png-filter-type filter))
     (let loop ((index 0))
       (unless (= index scanline-length)
-        (let* ((absolute-index (+ input-scanline-begin index))
-               (left          (if (zero? index)
+        (let* ((left          (if (< (- index bytes-per-pixel) 0)
                                   0
                                   (bytevector-u8-ref input
                                                      (+ input-scanline-begin
-                                                        (- index 1)))))
+                                                        (- index bytes-per-pixel)))))
                (above         (if (zero? scanline-index)
                                   0
                                   (bytevector-u8-ref input
                                                      (+ previous-scanline-begin
                                                         index))))
-               (upper-left    (if (or (zero? scanline-index) (zero? index))
+               (upper-left    (if (or (zero? scanline-index)
+                                      (< (- index bytes-per-pixel) 0))
                                   0
                                   (bytevector-u8-ref input
                                                      (+ previous-scanline-begin
-                                                        (- index 1)))))
-               (raw          (bytevector-u8-ref input absolute-index))
+                                                        (- index bytes-per-pixel)))))
+               (raw          (bytevector-u8-ref input (+ input-scanline-begin index)))
                (paeth        (modulo (- raw (paeth-predictor left above upper-left))
                                      256)))
           (bytevector-u8-set! output
