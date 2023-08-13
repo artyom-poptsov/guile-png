@@ -62,7 +62,14 @@
  (arguments
   `(#:make-flags '("GUILE_AUTO_COMPILE=0"))) ;to prevent guild warnings
  (native-inputs
-  (list autoconf automake pkg-config texinfo texlive))
+  (list autoconf
+        automake
+        pkg-config
+        texinfo
+        texlive
+        ;; needed when cross-compiling.
+        guile-3.0
+        guile-lib))
  (inputs
   (list bash-minimal
         guile-3.0
