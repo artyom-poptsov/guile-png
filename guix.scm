@@ -69,7 +69,9 @@
         texlive
         ;; needed when cross-compiling.
         guile-3.0
-        guile-lib))
+        guile-lib
+        guile-zlib
+        guile-smc))
  (inputs
   (list bash-minimal
         guile-3.0
