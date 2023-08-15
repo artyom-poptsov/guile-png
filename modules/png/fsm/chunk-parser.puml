@@ -1,5 +1,9 @@
 @startuml
 
+legend
+event-source: event-source
+endlegend
+
 [*] ---> read_length
 
 read_length --> read_type: guard:length-read? -> action:store-length
