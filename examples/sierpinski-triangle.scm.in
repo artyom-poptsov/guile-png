@@ -1,0 +1,94 @@
+#!@GUILE@ \
+-L modules -e main -s
+!#
+
+(use-modules (oop goops)
+             (png)
+             (png image)
+             (png graphics))
+
+
+
+(define* (draw-triangle! image
+                         #:key
+                         (x 0)
+                         (y 0)
+                         (size 10)
+                         (color #(255 255 255 0)))
+  (let ((triangle (make <polygon>
+                    #:color color
+                    #:points (list
+                              (make <point>
+                                #:x x
+                                #:y y)
+                              (make <point>
+                                #:x (+ x size)
+                                #:y y)
+                              (make <point>
+                                #:x (+ x (floor/ size 2))
+                                #:y (- y size))))))
+    (format (current-error-port) "triangle position: ~S,~S; size: ~S~%"
+            x
+            y
+            size)
+    (draw! image triangle)))
+
+(define* (draw-sierpinski! image
+                           #:key
+                           (x 0)
+                           (y 0)
+                           (size 100)
+                           (steps 5)
+                           (color #(255 255 255 0)))
+  (unless (zero? steps)
+    (draw-triangle! image
+                    #:x x
+                    #:y y
+                    #:size size
+                    #:color color)
+    (draw-sierpinski! image
+                      #:x x
+                      #:y y
+                      #:size (floor/ size 2)
+                      #:steps (- steps 1)
+                      #:color color)
+    (draw-sierpinski! image
+                      #:x (+ x (floor/ size 2))
+                      #:y y
+                      #:size (floor/ size 2)
+                      #:steps (- steps 1)
+                      #:color color)
+    (draw-sierpinski! image
+                      #:x (+ x (floor/ size 4))
+                      #:y (- y (floor/ size 2))
+                      #:size (floor/ size 2)
+                      #:steps (- steps 1)
+                      #:color color)))
+
+(define (main args)
+  "Entry point."
+  (let* ((image (make <png-image>
+                  #:color-type 2
+                  #:bit-depth 8
+                  #:width  1000
+                  #:height 1000))
+         (size    (floor/ (png-image-width image) 2))
+         (initial-x (- (floor/ (png-image-width image) 2)
+                       (/ size 2)))
+         (initial-y (+ (floor/ (png-image-height image) 2)
+                       (floor/ size 2)))
+         (color   #vu8(255 255 255)))
+    (format (current-error-port) "initial size: ~S~%" size)
+    (format (current-error-port) "initial x:    ~S~%" initial-x)
+    (format (current-error-port) "initial y:    ~S~%" initial-y)
+    (draw-sierpinski! image
+                      #:x initial-x
+                      #:y initial-y
+                      #:size size
+                      #:steps 5
+                      #:color color)
+    (let ((port (open-output-file "sierpinski-triangle.png")))
+      (scm->png image port)
+      (close port))))
+
+;;; sierpinski-triangle.scm.in ends here.
