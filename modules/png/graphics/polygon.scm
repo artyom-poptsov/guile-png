@@ -1,6 +1,7 @@
 (define-module (png graphics polygon)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics graphic)
   #:use-module (png graphics line)
   #:use-module (png graphics multiline)
@@ -11,6 +12,19 @@
 (define-class <polygon> (<multiline>))
 
 (define polygon-points multiline-points)
+
+
+
+(define-method (%display (polygon <polygon>) (port <port>))
+  (format port "#<polygon points: ~a ~a>"
+          (length (polygon-points polygon))
+          (object-address/hex-string polygon)))
+
+(define-method (display (polygon <polygon>) (port <port>))
+  (%display polygon port))
+
+(define-method (write (polygon <polygon>) (port <port>))
+  (%display polygon port))
 
 
 
