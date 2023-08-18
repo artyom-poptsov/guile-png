@@ -164,7 +164,7 @@
                                     (- y 1)))
                             (begin
                               (png-image-pixel-set! image x y color)
-                              (loop (+ fraction a (/ 1 a) (- 1))
+                              (loop (+ fraction (/ 1 a) (- 1))
                                     (- x 1)
                                     (- y 1))))))
                     ;; Octant 5
