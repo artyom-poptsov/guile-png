@@ -19,11 +19,17 @@
    #:getter       point-y))
 
 
-(define-method (display (point <point>) (port <port>))
+(define-method (%display (point <point>) (port <port>))
   (format port "#<point x: ~a y: ~a ~a>"
           (point-x point)
           (point-y point)
           (object-address/hex-string point)))
+
+(define-method (display (point <point>) (port <port>))
+  (%display point port))
+
+(define-method (write (point <point>) (port <port>))
+  (%display point port))
 
 
 
