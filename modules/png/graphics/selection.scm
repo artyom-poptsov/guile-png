@@ -25,6 +25,7 @@
 ;;; Code:
 
 (define-module (png graphics selection)
+  #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png core common)
   #:use-module (png graphics point)
@@ -35,6 +36,8 @@
             selection-image
             selection-position
             selection-dimension
+
+            selection-crop
 
             png-image-select))
 
@@ -120,5 +123,44 @@ IMAGE."
       #:image     image
       #:position  position
       #:dimension dimension)))
+
+
+
+(define-method (selection-crop (selection <selection>))
+  "Crop a part of an image to the SELECTION part.  Return a new image."
+  (let* ((img        (selection-image selection))
+         (img-width  (png-image-width img))
+         (img-height (png-image-height img))
+         (pixel-size (png-image-pixel-size img))
+         (pos        (selection-position selection))
+         (dim        (selection-dimension selection))
+         (data       (png-image-data img))
+         (result     (make-bytevector (* (* (dimension-width dim)
+                                            (dimension-height dim))
+                                         pixel-size)))
+         (image-copy (png-image-clone img)))
+    (png-image-data-set! image-copy result)
+    (png-image-width-set! image-copy (dimension-width dim))
+    (png-image-height-set! image-copy (dimension-height dim))
+    (format (current-error-port) "result: ~S~%" (bytevector-length result))
+    (for-each (lambda (row-index)
+                (let ((offset (* row-index
+                                 (dimension-width dim)
+                                 pixel-size))
+                      (source-offset (+ (* (+ (point-y pos)
+                                              row-index)
+                                           img-width
+                                           pixel-size)
+                                        (* (point-x pos)
+                                           pixel-size)))
+                      (source-length (* (dimension-width dim)
+                                        pixel-size)))
+                  (bytevector-copy/part! data
+                                         result
+                                         #:source-offset source-offset
+                                         #:source-length source-length
+                                         #:target-offset offset)))
+              (iota (dimension-height dim)))
+    image-copy))
 
 ;;; selection.scm ends here.
