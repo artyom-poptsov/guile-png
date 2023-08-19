@@ -46,7 +46,9 @@
             png-image-chunks-query
             png-image-clone
             png-image-width
+            png-image-width-set!
             png-image-height
+            png-image-height-set!
             png-image-bit-depth
             png-image-compression-method
             png-image-filter-method
@@ -57,6 +59,7 @@
             png-image-pixel-size
             png-image-pixels
             png-image-data
+            png-image-data-set!
             png-image->png
             png-image-compress
             png-image-pretty-print-data
@@ -225,13 +228,15 @@ set to #t, the procedure returns data in uncompressed form."
   (width
    #:init-value   0
    #:init-keyword #:width
-   #:getter       png-image-width)
+   #:getter       png-image-width
+   #:setter       png-image-width-set!)
 
   ;; <number>
   (height
    #:init-value   0
    #:init-keyword #:height
-   #:getter       png-image-height)
+   #:getter       png-image-height
+   #:setter       png-image-height-set!)
 
   ;; <number>
   (bit-depth
