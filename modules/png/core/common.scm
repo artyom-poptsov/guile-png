@@ -33,6 +33,7 @@
             int16->bytevector
             int32->bytevector
             bytevector-copy/part
+            bytevector-copy/part!
             bytevector-split
             constructor-argument
             re-export-modules))
@@ -70,6 +71,14 @@
   (let ((result (make-bytevector len)))
     (bytevector-copy! bv source-start result 0 len)
     result))
+
+(define* (bytevector-copy/part! bv
+                                result
+                                #:key
+                                (source-offset 0)
+                                (source-length (bytevector-length bv))
+                                (target-offset 0))
+  (bytevector-copy! bv source-offset result target-offset source-length))
 
 (define-method (bytevector-split (bv <bytevector>) (chunk-size <number>))
   "Split a bytevector BV into parts of CHUNK-SIZE.  Return a list of
