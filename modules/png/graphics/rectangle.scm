@@ -1,6 +1,7 @@
 (define-module (png graphics rectangle)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics graphic)
   #:use-module (png graphics point)
   #:use-module (png graphics line)
@@ -34,6 +35,21 @@
    #:init-keyword #:height
    #:init-value   0
    #:getter       rectangle-height))
+
+
+
+(define-method (%display (rectangle <rectangle>) (port <port>))
+  (format port "#<rectangle position: ~a width: ~a height: ~a ~a>"
+          (rectangle-position rectangle)
+          (rectangle-width rectangle)
+          (rectangle-height rectangle)
+          (object-address/hex-string rectangle)))
+
+(define-method (display (rectangle <rectangle>) (port <port>))
+  (%display rectangle port))
+
+(define-method (write (rectangle <rectangle>) (port <port>))
+  (%display rectangle port))
 
 
 (define-method (draw! (image <png-image>) (rectangle <rectangle>))

@@ -86,6 +86,18 @@
         (loop bv1 bv2 (+ index 1))))))
 
 
+;; Rectangle.
+
+(test-assert "<rectangle>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <rectangle>
+         #:position (make <point> #:x 100 #:y 200)
+         #:width    50
+         #:height   100)))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
