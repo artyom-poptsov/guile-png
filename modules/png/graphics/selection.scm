@@ -3,11 +3,14 @@
   #:use-module (png core common)
   #:use-module (png graphics point)
   #:use-module (png graphics dimension)
+  #:use-module (png image)
   #:export (<selection>
             selection?
             selection-image
             selection-position
-            selection-dimension))
+            selection-dimension
+
+            image-select))
 
 
 
@@ -49,5 +52,47 @@
 
 (define-method (write (selection <selection>) (port <port>))
   (%display selection port))
+
+
+
+(define-method (image-select (image <png-image>)
+                             (position <point>)
+                             (dimension <dimension>))
+  "Select a part of an IMAGE with the specified POSITION and DIMENSION.  Return
+a new selection object.  Throw an error when the selected area is outside an
+IMAGE."
+  (let ((img-width  (png-image-width image))
+        (img-height (png-image-height image)))
+
+    (when (or (< (point-x position) 0)
+              (>= (point-x position) img-width))
+      (error "Selection X position is outside an image"
+             image
+             position))
+
+    (when (or (< (point-y position) 0)
+              (>= (point-y position) img-height))
+      (error "Selection Y position is outside an image"
+             image
+             position))
+
+    (when (>= (+ (point-x position) (dimension-width dimension))
+              img-width)
+      (error "Selection width is outside the image dimensions"
+             image
+             selection
+             dimension))
+
+    (when (>= (+ (point-y position) (dimension-height dimension))
+              img-height)
+      (error "Selection height is outside the image dimensions"
+             image
+             selection
+             dimension))
+
+    (make <selection>
+      #:image     image
+      #:position  position
+      #:dimension dimension)))
 
 ;;; selection.scm ends here.

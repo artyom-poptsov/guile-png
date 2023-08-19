@@ -53,6 +53,110 @@
                        #:width  20
                        #:height 20))))))
 
+(test-assert "<selection>: image-select"
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 10
+                    #:y 20)
+                  (make <dimension>
+                    #:width  10
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: X outside image 1"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 101
+                    #:y 20)
+                  (make <dimension>
+                    #:width  10
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: X outside image 2"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x -1
+                    #:y 20)
+                  (make <dimension>
+                    #:width  10
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: Y outside image 1"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 10
+                    #:y 200)
+                  (make <dimension>
+                    #:width  10
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: Y outside image 2"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 10
+                    #:y -200)
+                  (make <dimension>
+                    #:width  10
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: with outside image"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 10
+                    #:y 20)
+                  (make <dimension>
+                    #:width  1000
+                    #:height 10))))
+
+(test-error "<selection>: image-select: error: height outside image"
+  #t
+  (let ((image (make <png-image>
+                 #:width  100
+                 #:height 100
+                 #:bit-depth 8
+                 #:color-type 2)))
+    (image-select image
+                  (make <point>
+                    #:x 10
+                    #:y 20)
+                  (make <dimension>
+                    #:width  10
+                    #:height 1000))))
+
 
 
 (test-assert "rainbow 10x7"
