@@ -142,7 +142,6 @@ IMAGE."
     (png-image-data-set! image-copy result)
     (png-image-width-set! image-copy (dimension-width size))
     (png-image-height-set! image-copy (dimension-height size))
-    (format (current-error-port) "result: ~S~%" (bytevector-length result))
     (for-each (lambda (row-index)
                 (let ((offset (* row-index
                                  (dimension-width size)
