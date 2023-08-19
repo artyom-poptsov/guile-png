@@ -80,14 +80,14 @@ IMAGE."
               img-width)
       (error "Selection width is outside the image dimensions"
              image
-             selection
+             position
              dimension))
 
     (when (>= (+ (point-y position) (dimension-height dimension))
               img-height)
       (error "Selection height is outside the image dimensions"
              image
-             selection
+             position
              dimension))
 
     (make <selection>
