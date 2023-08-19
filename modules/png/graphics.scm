@@ -27,6 +27,7 @@
   #:use-module (png core common))
 
 (re-export-modules (png graphics dimension)
+                   (png graphics selection)
                    (png graphics graphic)
                    (png graphics point)
                    (png graphics line)

@@ -30,7 +30,8 @@ SOURCES = \
 	rectangle.scm	\
 	filled-rectangle.scm	\
 	ellipse.scm	\
-	circle.scm
+	circle.scm	\
+	selection.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

@@ -34,6 +34,26 @@
          #:height   100)))))
 
 
+;; Selection.
+
+(test-assert "<selection>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <selection>
+         #:image (make <png-image>
+                   #:width  100
+                   #:height 100
+                   #:bit-depth 8
+                   #:color-type 2)
+         #:position (make <point>
+                      #:x 10
+                      #:y 20)
+         #:dimension (make <dimension>
+                       #:width  20
+                       #:height 20))))))
+
+
 
 (test-assert "rainbow 10x7"
   (let ((image  (make <png-image>
