@@ -1,6 +1,7 @@
 (define-module (png graphics multiline)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics graphic)
   #:use-module (png graphics point)
   #:use-module (png graphics line)
@@ -23,6 +24,20 @@
     (when (or (not points) (< (length points) 2))
       (error "Multiline must have at least two points" initargs))
     (slot-set! multiline 'points points)))
+
+
+;; Class printers.
+
+(define-method (%display (multiline <multiline>) (port <port>))
+  (format port "#<multiline points: ~a ~a>"
+          (length (multiline-points multiline))
+          (object-address/hex-string multiline)))
+
+(define-method (display (multiline <multiline>) (port <port>))
+  (%display multiline port))
+
+(define-method (write (multiline <multiline>) (port <port>))
+  (%display multiline port))
 
 
 
