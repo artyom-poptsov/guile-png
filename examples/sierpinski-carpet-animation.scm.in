@@ -1,0 +1,114 @@
+#!@GUILE@ \
+-L modules -e main -s
+!#
+
+;; Usage:
+;;   ./sierpinski-carpet-animation.scm <image-size> <output-directory>
+;;
+;; Usage example:
+;;   ./sierpinski-carpet-animation.scm 500 out
+;;   cd <output-directory>
+;;   convert -delay 1 -loop 0 *.png sierpinski-carpet-animation.gif
+
+(use-modules (oop goops)
+             (png)
+             (png image)
+             (png graphics))
+
+
+
+(define* (draw-centered-square! image
+                                #:key
+                                (x 0)
+                                (y 9)
+                                (size 100)
+                                (color #(255 255 255 0)))
+  "Generate a square on an IMAGE centered on X,Y."
+  (draw! image
+         (make <filled-rectangle>
+           #:position (make <point>
+                        #:x (- x (floor/ size 2))
+                        #:y (- y (floor/ size 2)))
+           #:width    size
+           #:height   size
+           #:color    color)))
+
+(define* (draw-sierpinski-carpet! image
+                                  #:key
+                                  (x 0)
+                                  (y 0)
+                                  (size 100)
+                                  (steps 3)
+                                  (color #(255 255 255 0)))
+  (unless (zero? steps)
+    (draw-centered-square! image
+                           #:x x
+                           #:y y
+                           #:size size
+                           #:color color)
+    (let ((positions `((,(- x size) . ,y)             ; Left.
+                       (,(- x size) . ,(- y size))    ; Top left.
+                       (,x          . ,(- y size))    ; Top.
+                       (,(+ x size) . ,(- y size))    ; Top right.
+                       (,(+ x size) . ,y)             ; Right.
+                       (,(+ x size) . ,(+ y size))    ; Bottom right.
+                       (,x          . ,(+ y size))    ; Bottom.
+                       (,(- x size) . ,(+ y size))))) ; Bottom left.
+
+      (for-each (lambda (pos)
+                  (draw-sierpinski-carpet! image
+                                           #:x (car pos)
+                                           #:y (cdr pos)
+                                           #:steps (- steps 1)
+                                           #:size (floor/ size 3)
+                                           #:color color))
+                positions))))
+
+
+(define (main args)
+  "Entry point."
+  (let ((orig-size (string->number (list-ref args 1)))
+        (count     400)
+        (output-directory (list-ref args 2)))
+    (for-each (lambda (n img-size)
+                (format (current-error-port) "~4,'0d/~4,'0d~%" n count)
+                (let* ((image (make <png-image>
+                                #:color-type 2
+                                #:bit-depth 8
+                                #:width  img-size
+                                #:height img-size))
+                       (size    (floor/ (png-image-width image) 3))
+                       (initial-x (floor/ (png-image-width image) 2))
+                       (initial-y (floor/ (png-image-height image) 2)))
+                  (let loop ((sz size)
+                             (n  0))
+                    (when (>= sz 4)
+                      (draw-sierpinski-carpet! image
+                                               #:x initial-x
+                                               #:y initial-y
+                                               #:size sz
+                                               #:steps 3
+                                               #:color (if (zero? (modulo n 2))
+                                                           #vu8(255 255 255)
+                                                           #vu8(0 0 0)))
+                      (loop (floor/ sz 3)
+                            (+ n 1))))
+                  (let ((selection (png-image-select image
+                                                     (make <point>
+                                                       #:x (floor/ (- img-size orig-size) 2)
+                                                       #:y (floor/ (- img-size orig-size) 2))
+                                                     (make <dimension>
+                                                       #:width orig-size
+                                                       #:height orig-size)))
+                        (port (open-output-file (format #f
+                                                        "~a/sierpinski-carpet-animation-~5,'0d.png"
+                                                        output-directory
+                                                        n))))
+                    (scm->png (selection-crop selection) port)
+                    (close port))))
+              (iota count)
+              (iota count
+                    orig-size
+                    10))))
+
+;;; sierpinski-triangle.scm.in ends here.
