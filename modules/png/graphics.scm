@@ -26,7 +26,8 @@
 (define-module (png graphics)
   #:use-module (png core common))
 
-(re-export-modules (png graphics graphic)
+(re-export-modules (png graphics dimension)
+                   (png graphics graphic)
                    (png graphics point)
                    (png graphics line)
                    (png graphics multiline)

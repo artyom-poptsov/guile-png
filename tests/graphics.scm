@@ -22,6 +22,19 @@
 (configure-test-logging! %test-name)
 (test-begin %test-name)
 
+
+;; Dimension.
+
+(test-assert "<dimension>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <dimension>
+         #:width    50
+         #:height   100)))))
+
+
+
 (test-assert "rainbow 10x7"
   (let ((image  (make <png-image>
                    #:width 10
