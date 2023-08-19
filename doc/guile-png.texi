@@ -620,6 +620,30 @@ Get the radius of a @var{circle}.
 Get the diameter of a @var{circle}.
 @end deffn
 
+@subsection Dimension
+
+@code{(png graphics dimension)} contains a @code{<dimension>} class.
+
+@deftp {Class} <dimension> @
+                        [#:width=0] @
+                        [#:height=0]
+
+This class describes a dimension.
+
+Constructor parameters:
+@table @asis
+@item #:width (width <number>)
+Width of the dimension.
+@item #:height (height <number>)
+Height of the dimension.
+@end table
+
+@end deftp
+
+@deffn {Method} dimension? object
+Check if @var{object} is a @code{<dimension>} instance.
+@end deffn
+
 @section PNG Image Processing
 
 @code{(png image-processing)} provides high-level API for processing PNG
