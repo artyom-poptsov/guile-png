@@ -651,7 +651,7 @@ Check if @var{object} is a @code{<dimension>} instance.
 @deftp {Class} <selection> @
                         [#:image=#f] @
                         [#:position=(make <point>)] @
-                        [#:dimension=(make <dimension>)]
+                        [#:size=(make <dimension>)]
 
 This class describes a selected are for the specified @var{image}.
 
@@ -661,7 +661,7 @@ Constructor parameters:
 A PNG image.
 @item #:position (pos <point>)
 Position of the top left corner of the selection.
-@item #:dimension (dim <dimension>)
+@item #:size (size <dimension>)
 The size of the selection.
 @end table
 
@@ -679,13 +679,13 @@ The base image of a @var{selection}.
 The position of the selected area.
 @end deffn
 
-@deffn {Method} selection-dimension (selection <selection>)
+@deffn {Method} selection-size (selection <selection>)
 The size of the selected area.
 @end deffn
 
 @deffn {Method} png-image-select (image <png-image>) @
                                  (position <point>) @
-                                 (dimension <dimension>)
+                                 (size <dimension>)
 
 Create a new selection out of the specified @var{image}.
 

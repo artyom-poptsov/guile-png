@@ -35,7 +35,7 @@
             selection?
             selection-image
             selection-position
-            selection-dimension
+            selection-size
 
             selection-crop
 
@@ -57,10 +57,10 @@
    #:getter       selection-position)
 
   ;; <dimension>
-  (dimension
+  (size
    #:init-thunk   (lambda () (make <dimension>))
-   #:init-keyword #:dimension
-   #:getter       selection-dimension))
+   #:init-keyword #:size
+   #:getter       selection-size))
 
 
 
@@ -70,10 +70,10 @@
 
 
 (define-method (%display (selection <selection>) (port <port>))
-  (format port "#<selection image: ~a position: ~a dimension: ~a ~a>"
+  (format port "#<selection image: ~a position: ~a size: ~a ~a>"
           (selection-image selection)
           (selection-position selection)
-          (selection-dimension selection)
+          (selection-size selection)
           (object-address/hex-string selection)))
 
 (define-method (display (selection <selection>) (port <port>))
@@ -86,8 +86,8 @@
 
 (define-method (png-image-select (image <png-image>)
                                  (position <point>)
-                                 (dimension <dimension>))
-  "Select a part of an IMAGE with the specified POSITION and DIMENSION.  Return
+                                 (size <dimension>))
+  "Select a part of an IMAGE with the specified POSITION and SIZE.  Return
 a new selection object.  Throw an error when the selected area is outside an
 IMAGE."
   (let ((img-width  (png-image-width image))
@@ -105,24 +105,24 @@ IMAGE."
              image
              position))
 
-    (when (>= (+ (point-x position) (dimension-width dimension))
+    (when (>= (+ (point-x position) (dimension-width size))
               img-width)
       (error "Selection width is outside the image dimensions"
              image
              position
-             dimension))
+             size))
 
-    (when (>= (+ (point-y position) (dimension-height dimension))
+    (when (>= (+ (point-y position) (dimension-height size))
               img-height)
       (error "Selection height is outside the image dimensions"
              image
              position
-             dimension))
+             size))
 
     (make <selection>
-      #:image     image
-      #:position  position
-      #:dimension dimension)))
+      #:image    image
+      #:position position
+      #:size     size)))
 
 
 
@@ -133,19 +133,19 @@ IMAGE."
          (img-height (png-image-height img))
          (pixel-size (png-image-pixel-size img))
          (pos        (selection-position selection))
-         (dim        (selection-dimension selection))
+         (size       (selection-size selection))
          (data       (png-image-data img))
-         (result     (make-bytevector (* (* (dimension-width dim)
-                                            (dimension-height dim))
+         (result     (make-bytevector (* (* (dimension-width size)
+                                            (dimension-height size))
                                          pixel-size)))
          (image-copy (png-image-clone img)))
     (png-image-data-set! image-copy result)
-    (png-image-width-set! image-copy (dimension-width dim))
-    (png-image-height-set! image-copy (dimension-height dim))
+    (png-image-width-set! image-copy (dimension-width size))
+    (png-image-height-set! image-copy (dimension-height size))
     (format (current-error-port) "result: ~S~%" (bytevector-length result))
     (for-each (lambda (row-index)
                 (let ((offset (* row-index
-                                 (dimension-width dim)
+                                 (dimension-width size)
                                  pixel-size))
                       (source-offset (+ (* (+ (point-y pos)
                                               row-index)
@@ -153,14 +153,14 @@ IMAGE."
                                            pixel-size)
                                         (* (point-x pos)
                                            pixel-size)))
-                      (source-length (* (dimension-width dim)
+                      (source-length (* (dimension-width size)
                                         pixel-size)))
                   (bytevector-copy/part! data
                                          result
                                          #:source-offset source-offset
                                          #:source-length source-length
                                          #:target-offset offset)))
-              (iota (dimension-height dim)))
+              (iota (dimension-height size)))
     image-copy))
 
 ;;; selection.scm ends here.
