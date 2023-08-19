@@ -20,7 +20,8 @@ bin_SCRIPTS = \
 	image-processing-invert-colors.scm \
 	image-processing-solarize.scm \
 	print-chunks.scm \
-	sierpinski-triangle.scm
+	sierpinski-triangle.scm \
+	sierpinski-carpet.scm
 
 sssh_scm_SOURCES = sssh.scm.in
 ssshd_scm_SOURCES = ssshd.scm.in
@@ -29,7 +30,8 @@ SOURCES = \
 	image-processing-invert-colors.scm.in \
 	image-processing-solarize.scm.in \
 	print-chunks.scm.in \
-	sierpinski-triangle.scm.in
+	sierpinski-triangle.scm.in \
+	sierpinski-carpet.scm.in
 
 EXTRA_DIST = $(SOURCES)
 

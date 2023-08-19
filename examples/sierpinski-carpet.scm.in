@@ -1,0 +1,84 @@
+#!@GUILE@ \
+-L modules -e main -s
+!#
+
+(use-modules (oop goops)
+             (png)
+             (png image)
+             (png graphics))
+
+
+
+(define* (draw-centered-square! image
+                                #:key
+                                (x 0)
+                                (y 9)
+                                (size 100)
+                                (color #(255 255 255 0)))
+  "Generate a square on an IMAGE centered on X,Y."
+  (draw! image
+         (make <filled-rectangle>
+           #:position (make <point>
+                        #:x (- x (floor/ size 2))
+                        #:y (- y (floor/ size 2)))
+           #:width    size
+           #:height   size
+           #:color    color)))
+
+(define* (draw-sierpinski-carpet! image
+                                  #:key
+                                  (x 0)
+                                  (y 0)
+                                  (size 100)
+                                  (steps 3)
+                                  (color #(255 255 255 0)))
+  (unless (zero? steps)
+    (draw-centered-square! image
+                           #:x x
+                           #:y y
+                           #:size size
+                           #:color color)
+    (let ((positions `((,(- x size) . ,y)             ; Left.
+                       (,(- x size) . ,(- y size))    ; Top left.
+                       (,x          . ,(- y size))    ; Top.
+                       (,(+ x size) . ,(- y size))    ; Top right.
+                       (,(+ x size) . ,y)             ; Right.
+                       (,(+ x size) . ,(+ y size))    ; Bottom right.
+                       (,x          . ,(+ y size))    ; Bottom.
+                       (,(- x size) . ,(+ y size))))) ; Bottom left.
+
+      (for-each (lambda (pos)
+                  (draw-sierpinski-carpet! image
+                                           #:x (car pos)
+                                           #:y (cdr pos)
+                                           #:steps (- steps 1)
+                                           #:size (floor/ size 3)
+                                           #:color color))
+                positions))))
+
+
+(define (main args)
+  "Entry point."
+  (let* ((image (make <png-image>
+                  #:color-type 2
+                  #:bit-depth 8
+                  #:width  1000
+                  #:height 1000))
+         (size    (floor/ (png-image-width image) 3))
+         (initial-x (floor/ (png-image-width image) 2))
+         (initial-y (floor/ (png-image-height image) 2))
+         (color   #vu8(255 255 255)))
+    (format (current-error-port) "initial size: ~S~%" size)
+    (format (current-error-port) "initial x:    ~S~%" initial-x)
+    (format (current-error-port) "initial y:    ~S~%" initial-y)
+    (draw-sierpinski-carpet! image
+                             #:x initial-x
+                             #:y initial-y
+                             #:size size
+                             #:steps 4
+                             #:color color)
+    (let ((port (open-output-file "sierpinski-carpet.png")))
+      (scm->png image port)
+      (close port))))
+
+;;; sierpinski-triangle.scm.in ends here.
