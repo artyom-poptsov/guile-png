@@ -105,15 +105,15 @@ IMAGE."
              image
              position))
 
-    (when (>= (+ (point-x position) (dimension-width size))
+    (when (> (+ (point-x position) (dimension-width size))
               img-width)
       (error "Selection width is outside the image dimensions"
              image
              position
              size))
 
-    (when (>= (+ (point-y position) (dimension-height size))
-              img-height)
+    (when (> (+ (point-y position) (dimension-height size))
+             img-height)
       (error "Selection height is outside the image dimensions"
              image
              position
