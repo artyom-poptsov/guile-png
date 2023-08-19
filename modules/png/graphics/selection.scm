@@ -10,7 +10,7 @@
             selection-position
             selection-dimension
 
-            image-select))
+            png-image-select))
 
 
 
@@ -55,9 +55,9 @@
 
 
 
-(define-method (image-select (image <png-image>)
-                             (position <point>)
-                             (dimension <dimension>))
+(define-method (png-image-select (image <png-image>)
+                                 (position <point>)
+                                 (dimension <dimension>))
   "Select a part of an IMAGE with the specified POSITION and DIMENSION.  Return
 a new selection object.  Throw an error when the selected area is outside an
 IMAGE."
