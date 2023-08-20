@@ -1,6 +1,6 @@
 ;;; filled-rectangle.scm -- Filled rectangle implementation.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 (define-module (png graphics filled-rectangle)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics graphic)
   #:use-module (png graphics pixel)
   #:use-module (png graphics point)
@@ -41,6 +42,20 @@
 (define filled-rectangle-position rectangle-position)
 (define filled-rectangle-height   rectangle-height)
 (define filled-rectangle-width    rectangle-width)
+
+
+(define-method (%display (filled-rectangle <filled-rectangle>) (port <port>))
+  (format port "#<filled-rectangle position: ~a width: ~a height: ~a ~a>"
+          (filled-rectangle-position filled-rectangle)
+          (filled-rectangle-width filled-rectangle)
+          (filled-rectangle-height filled-rectangle)
+          (object-address/hex-string filled-rectangle)))
+
+(define-method (display (filled-rectangle <filled-rectangle>) (port <port>))
+  (%display filled-rectangle port))
+
+(define-method (write (filled-rectangle <filled-rectangle>) (port <port>))
+  (%display filled-rectangle port))
 
 
 (define-method (draw! (image <png-image>) (rectangle <filled-rectangle>))

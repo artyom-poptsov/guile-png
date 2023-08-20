@@ -245,6 +245,18 @@
          #:height   100)))))
 
 
+;; Filled rectangle.
+
+(test-assert "<filled-rectangle>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <filled-rectangle>
+         #:position (make <point> #:x 100 #:y 200)
+         #:width    50
+         #:height   100)))))
+
+
 ;; Multiline.
 
 (test-assert "<multiline>: display"
