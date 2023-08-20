@@ -96,15 +96,15 @@ context.scm:
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc context $(GUILE_SMC_CONTEXT_ARGS) > $@
 
-signature-parser.scm: context.go signature-context.go signature-parser.puml
+signature-parser.scm: context.scm signature-context.scm signature-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_SIGNATURE_PARSER_ARGS) signature-parser.puml > $@
 
-chunk-parser.scm: context.go signature-parser.scm chunk-context.go chunk-parser.puml
+chunk-parser.scm: context.scm signature-parser.scm chunk-context.scm chunk-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_CHUNK_PARSER_ARGS) chunk-parser.puml > $@
 
-png-parser.scm: context.go chunk-parser.go png-context.go png-parser.puml
+png-parser.scm: context.scm chunk-parser.scm png-context.scm png-parser.puml
 	@echo "  SMC      $@"
 	@$(GUILE_SMC_ENV) smc compile $(GUILE_SMC_PNG_PARSER_ARGS) png-parser.puml > $@
 
