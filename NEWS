@@ -7,10 +7,12 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.7.1 (2023-08-20)
 ** Fix Bresenham's Line generation algorithm                         :BUGFIX:
 Bresenham's Line generation algorithm would fail to draw properly some types
 of inclined lines.  Now that is fixed.
+** Fix the order of building Guile-PNG FSM modules                   :BUGFIX:
+The building process would fail during =make distcheck=.  Not that is fixed.
 ** New modules
 *** =(png graphics dimension)=
 =<dimension>= class represents a dimension with width and height as
