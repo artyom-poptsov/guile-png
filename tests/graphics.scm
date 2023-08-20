@@ -235,7 +235,7 @@
          #:height   100)))))
 
 
-;; Rectangle.
+;; Multiline.
 
 (test-assert "<multiline>: display"
   (with-output-to-string
@@ -245,6 +245,18 @@
          #:points (list (make <point> #:x 10 #:y 20)
                         (make <point> #:x 30 #:y 40)
                         (make <point> #:x 50 #:y 60)))))))
+
+
+;; Ellipse.
+
+(test-assert "<ellipse>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <ellipse>
+         #:center (make <point> #:x 10 #:y 20)
+         #:width  10
+         #:height 20)))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))

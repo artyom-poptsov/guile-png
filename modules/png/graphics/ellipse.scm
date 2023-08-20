@@ -1,6 +1,7 @@
 (define-module (png graphics ellipse)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics pixel)
   #:use-module (png graphics graphic)
   #:use-module (png graphics point)
@@ -28,6 +29,21 @@
    #:init-keyword #:height
    #:init-value   0
    #:getter       ellipse-height))
+
+
+(define-method (%display (ellipse <ellipse>) (port <port>))
+  (format port "#<ellipse center: ~a,~a size: ~ax~a ~a>"
+          (point-x (ellipse-center ellipse))
+          (point-y (ellipse-center ellipse))
+          (ellipse-width ellipse)
+          (ellipse-height ellipse)
+          (object-address/hex-string ellipse)))
+
+(define-method (display (ellipse <ellipse>) (port <port>))
+  (%display ellipse port))
+
+(define-method (write (ellipse <ellipse>) (port <port>))
+  (%display ellipse port))
 
 
 
