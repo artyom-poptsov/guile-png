@@ -24,9 +24,6 @@ bin_SCRIPTS = \
 	sierpinski-carpet.scm \
 	sierpinski-carpet-animation.scm
 
-sssh_scm_SOURCES = sssh.scm.in
-ssshd_scm_SOURCES = ssshd.scm.in
-
 SOURCES = \
 	image-processing-invert-colors.scm.in \
 	image-processing-solarize.scm.in \
