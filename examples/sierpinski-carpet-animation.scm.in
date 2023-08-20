@@ -2,13 +2,39 @@
 -L modules -e main -s
 !#
 
+;;; sierpinski-carpet-animation.scm.in -- Guile-PNG fractal drawing example.
+
+;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; A Scheme program that uses Guile-PNG to create a sequence of images that
+;; can be assembled into a "Sierpinski Carpet Zoom" animation.
+;;
 ;; Usage:
 ;;   ./sierpinski-carpet-animation.scm <image-size> <output-directory>
 ;;
 ;; Usage example:
 ;;   ./sierpinski-carpet-animation.scm 500 out
-;;   cd <output-directory>
+;;   cd out
 ;;   convert -delay 1 -loop 0 *.png sierpinski-carpet-animation.gif
+
+
+;;; Code:
 
 (use-modules (oop goops)
              (png)
@@ -111,4 +137,4 @@
                     orig-size
                     10))))
 
-;;; sierpinski-triangle.scm.in ends here.
+;;; sierpinski-triangle-animation.scm.in ends here.
