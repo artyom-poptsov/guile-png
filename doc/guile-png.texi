@@ -693,7 +693,8 @@ Create a new selection out of the specified @var{image}.
 
 @deffn {Method} selection-crop (selection <selection>)
 
-Crop a part of the base image using a @var{selection}.
+Crop a part of the base image using a @var{selection}.  Return a newly created
+@code{<png-image>}.
 
 @end deffn
 
