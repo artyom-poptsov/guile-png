@@ -35,6 +35,7 @@
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
   #:use-module (oop goops)
+  #:use-module (png core common)
   #:export (<graphic>
             graphic-color
             draw!))
@@ -44,6 +45,20 @@
    #:init-keyword #:color
    #:init-thunk   (lambda () (make-bytevector 4 0))
    #:getter       graphic-color))
+
+
+(define-method (%display (graphic <graphic>) (port <port>))
+  (format port "#<graphic color: ~a ~a>"
+          (graphic-color graphic)
+          (object-address/hex-string graphic)))
+
+(define-method (display (graphic <graphic>) (port <port>))
+  (%display graphic port))
+
+(define-method (write (graphic <graphic>) (port <port>))
+  (%display graphic port))
+
+
 
 (define-method (draw! (image <png-image>) (obj <graphic>))
   (error "Not implemented yet" image obj))

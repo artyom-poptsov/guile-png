@@ -223,6 +223,16 @@
         (loop bv1 bv2 (+ index 1))))))
 
 
+;; Graphic.
+
+(test-assert "<graphic>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <graphic>
+         #:color #vu8(255 255 255))))))
+
+
 ;; Rectangle.
 
 (test-assert "<rectangle>: display"
