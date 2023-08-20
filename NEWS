@@ -7,6 +7,26 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Fix Bresenham's Line generation algorithm                         :BUGFIX:
+Bresenham's Line generation algorithm would fail to draw properly some types
+of inclined lines.  Now that is fixed.
+** New modules
+*** =(png graphics dimension)=
+=<dimension>= class represents a dimension with width and height as
+properties.
+*** =(png graphics selection)=
+=<selection>= class represents a selected part of an image.  The selected part
+has only =selection-crop= method for now, that allows to get a part of the
+base image as a new image.
+** Add class printers for graphic objects
+Classes from =(png graphics)= are now have proper class printers.
+** Add new examples
+New examples added:
+- Sierpinski Triangle
+- Sierpinski Carpet
+- Sierpinski Carpet Animation
+
 * Changes in version 0.7.0 (2023-07-19)
 ** Implement filter algorithms selection heuristics
 When an image is being saved select filtering algorithms for each image row (a
