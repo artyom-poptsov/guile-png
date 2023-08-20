@@ -1,6 +1,7 @@
 (define-module (png graphics line)
   #:use-module (oop goops)
   #:use-module (png image)
+  #:use-module (png core common)
   #:use-module (png graphics pixel)
   #:use-module (png graphics graphic)
   #:use-module (png graphics point)
@@ -17,6 +18,19 @@
    #:init-keyword #:p2
    #:init-thunk   (lambda () (make <point>))
    #:getter       line-p2))
+
+
+(define-method (%display (line <line>) (port <port>))
+  (format port "#<line p1: ~a p2: ~a ~a>"
+          (line-p1 line)
+          (line-p2 line)
+          (object-address/hex-string line)))
+
+(define-method (display (line <line>) (port <port>))
+  (%display line port))
+
+(define-method (write (line <line>) (port <port>))
+  (%display line port))
 
 
 
