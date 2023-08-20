@@ -46,12 +46,18 @@
    #:init-value   0
    #:getter       circle-radius))
 
-(define-method (display (circle <circle>) (port <port>))
+(define-method (%display (circle <circle>) (port <port>))
   (format port "#<circle cx: ~a cy: ~a r: ~a ~a>"
           (point-x (ellipse-center circle))
           (point-y (ellipse-center circle))
           (circle-radius circle)
           (object-address/hex-string circle)))
+
+(define-method (display (ellipse <circle>) (port <port>))
+  (%display ellipse port))
+
+(define-method (write (ellipse <circle>) (port <port>))
+  (%display ellipse port))
 
 
 (define-method (initialize (circle <circle>) initargs)

@@ -281,6 +281,17 @@
          #:height 20)))))
 
 
+;; Circle.
+
+(test-assert "<circle>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <circle>
+         #:center (make <point> #:x 10 #:y 20)
+         #:radius 10)))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
