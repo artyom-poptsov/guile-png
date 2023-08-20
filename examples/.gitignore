@@ -1,3 +1,6 @@
+image-processing-invert-colors.scm
+image-processing-solarize.scm
+print-chunks.scm
 sierpinski-triangle.scm
 sierpinski-carpet.scm
 sierpinski-carpet-animation.scm
