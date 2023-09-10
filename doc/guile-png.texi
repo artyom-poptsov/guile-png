@@ -255,6 +255,15 @@ that can be drawn on a @code{<png-image>} instance.
 
 @code{(png graphics)} modulep re-exports all the graphical objects.
 
+@subsection Color Representation
+
+Colors are represented as R6RS bytevectors (@xref{Bytevectors,,, guile, The
+GNU Guile Reference Manual}).
+
+For example, an image in RGBA format (RGB color plus alpha channel) the
+``white'' color with 50% transparency would be represented as @code{#vu8(255
+255 255 127)}.
+
 @subsection Pixel-Level Graphics
 
 @code{(png graphics pixel)} module provides low-level API for working with PNG
