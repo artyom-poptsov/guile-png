@@ -311,7 +311,7 @@ an @var{image}. The return value is undefined.
 foundation for every graphical object that can be drawn on a
 @code{<png-image>} instance.
 
-@deftp {Class} <graphic> [#:color=#u8(0 0 0 0)]
+@deftp {Class} <graphic> [#:color=#vu8(0 0 0 0)]
 
 This class represents a generic graphical object.
 
@@ -335,7 +335,7 @@ drawn.
 @code{(png graphics point)} describes the simplest object that can be drawn on
 a @code{<png-image>} instance -- a single point.
 
-@deftp {Class} <point> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <point> [#:color=#vu8(0 0 0 0)] @
                        [#:x=0] @
                        [#:y=0]
 
@@ -359,7 +359,7 @@ The the Y coordinate of a @var{point}.
 
 @code{(png graphics line)} describes a line.
 
-@deftp {Class} <line> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <line> [#:color=#vu8(0 0 0 0)] @
                       [#:p1=(lambda () (make <point>))] @
                       [#:p2=(lambda () (make <point>))]
 
@@ -395,7 +395,7 @@ Get the ending point of a @var{line}.
 
 @code{(png graphics multiline)} contains a @code{<multiline>} class.
 
-@deftp {Class} <multiline> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <multiline> [#:color=#vu8(0 0 0 0)] @
                            [#:points='()]
 
 This class describes a line with multiple break points.
@@ -425,7 +425,7 @@ Get the points of a @var{multiline}.
 
 @code{(png graphics polygon)} contains a @code{<polygon>} class.
 
-@deftp {Class} <polygon> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <polygon> [#:color=#vu8(0 0 0 0)] @
                          [#:points='()]
 
 This class describes a polygon.
@@ -455,7 +455,7 @@ Get the points of a @var{polygon}.
 
 @code{(png graphics rectangle)} contains a @code{<rectangle>} class.
 
-@deftp {Class} <rectangle> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <rectangle> [#:color=#vu8(0 0 0 0)] @
                            [#:position=(lambda () (make <point>))] @
                            [#:width=0] @
                            [#:height=0]
@@ -500,7 +500,7 @@ Get the height of a @var{rectangle}.
 @code{(png graphics filled-rectangle)} contains a @code{<filled-rectangle>}
 class.
 
-@deftp {Class} <filled-rectangle> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <filled-rectangle> [#:color=#vu8(0 0 0 0)] @
                                   [#:position=(lambda () (make <point>))] @
                                   [#:width=0] @
                                   [#:height=0]
@@ -544,7 +544,7 @@ Get the height of a @var{rectangle}.
 
 @code{(png graphics ellipse)} contains an @code{<ellipse>} class.
 
-@deftp {Class} <ellipse> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <ellipse> [#:color=#vu8(0 0 0 0)] @
                          [#:center=(lambda () (make <point>))] @
                          [#:width=0] @
                          [#:height=0]
@@ -588,7 +588,7 @@ Get the height of an @var{ellipse}.
 
 @code{(png graphics circle)} contains a @code{<circle>} class.
 
-@deftp {Class} <circle> [#:color=#u8(0 0 0 0)] @
+@deftp {Class} <circle> [#:color=#vu8(0 0 0 0)] @
                         [#:center=(lambda () (make <point>))] @
                         [#:radius=0] @
                         [#:diameter=0]
