@@ -269,6 +269,23 @@ that can be drawn on a @code{<png-image>} instance.
 
 @code{(png graphics)} modulep re-exports all the graphical objects.
 
+@menu
+* Color Representation:: How does Guile-PNG represents colors?
+* Pixel-Level Graphics:: Procedures that operate on image pixels.
+* Graphic Objects::      Generic @code{<graphic>} type.
+* Point::                Single point on a image.
+* Line::                 A straight line.
+* Multiline::            A connected series of line segments.
+* Polygon::
+* Rectangle::
+* Filled Rectangle::
+* Ellipse::
+* Circle::
+* Dimension::
+* Selection::
+@end menu
+
+@node Color Representation
 @subsection Color Representation
 
 Colors are represented as R6RS bytevectors (@xref{Bytevectors,,, guile, The
@@ -278,6 +295,7 @@ For example, an image in RGBA format (RGB color plus alpha channel) the
 ``white'' color with 50% transparency would be represented as @code{#vu8(255
 255 255 127)}.
 
+@node Pixel-Level Graphics
 @subsection Pixel-Level Graphics
 
 @code{(png graphics pixel)} module provides low-level API for working with PNG
@@ -319,6 +337,7 @@ an @var{image}. The return value is undefined.
 
 @end deffn
 
+@node Graphic Objects
 @subsection Graphic Objects
 
 @code{(png graphics graphic)} contains @code{<graphic>} class which is the
@@ -344,6 +363,7 @@ This method throws an error because a generic @var{graphic} instance cannot be
 drawn.
 @end deffn
 
+@node Point
 @subsection Point
 
 @code{(png graphics point)} describes the simplest object that can be drawn on
@@ -369,6 +389,7 @@ The the X coordinate of a @var{point}.
 The the Y coordinate of a @var{point}.
 @end deffn
 
+@node Line
 @subsection Line
 
 @code{(png graphics line)} describes a line.
@@ -405,9 +426,13 @@ Get the starting point of a @var{line}.
 Get the ending point of a @var{line}.
 @end deffn
 
+@node Multiline
 @subsection Multiline
 
 @code{(png graphics multiline)} contains a @code{<multiline>} class.
+
+Multiline is a connected series of line segments (also known as ``Polygonal
+chain''.)
 
 @deftp {Class} <multiline> [#:color=#vu8(0 0 0 0)] @
                            [#:points='()]
@@ -435,6 +460,7 @@ Draw a @var{multiline} on an @var{image}.
 Get the points of a @var{multiline}.
 @end deffn
 
+@node Polygon
 @subsection Polygon
 
 @code{(png graphics polygon)} contains a @code{<polygon>} class.
@@ -465,6 +491,7 @@ Draw a @var{polygon} on an @var{image}.
 Get the points of a @var{polygon}.
 @end deffn
 
+@node Rectangle
 @subsection Rectangle
 
 @code{(png graphics rectangle)} contains a @code{<rectangle>} class.
@@ -509,6 +536,7 @@ Get the width of a @var{rectangle}.
 Get the height of a @var{rectangle}.
 @end deffn
 
+@node Filled Rectangle
 @subsection Filled Rectangle
 
 @code{(png graphics filled-rectangle)} contains a @code{<filled-rectangle>}
@@ -554,6 +582,7 @@ Get the width of a @var{rectangle}.
 Get the height of a @var{rectangle}.
 @end deffn
 
+@node Ellipse
 @subsection Ellipse
 
 @code{(png graphics ellipse)} contains an @code{<ellipse>} class.
@@ -598,6 +627,7 @@ Get the width of an @var{ellipse}.
 Get the height of an @var{ellipse}.
 @end deffn
 
+@node Circle
 @subsection Circle
 
 @code{(png graphics circle)} contains a @code{<circle>} class.
@@ -643,6 +673,7 @@ Get the radius of a @var{circle}.
 Get the diameter of a @var{circle}.
 @end deffn
 
+@node Dimension
 @subsection Dimension
 
 @code{(png graphics dimension)} contains a @code{<dimension>} class.
@@ -667,6 +698,7 @@ Height of the dimension.
 Check if @var{object} is a @code{<dimension>} instance.
 @end deffn
 
+@node Selection
 @subsection Selection
 
 @code{(png graphics selection)} contains a @code{<selection>} class.
