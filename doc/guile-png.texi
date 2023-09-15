@@ -751,6 +751,17 @@ Create a new selection out of the specified @var{image}.
 Crop a part of the base image using a @var{selection}.  Return a newly created
 @code{<png-image>}.
 
+@example lisp
+(define img-path "~/image.png")
+(define img (png->scm (open-input-file img)))
+(define selection (png-image-select img
+                                    (make <point> #:x 100 #:y 200)
+                                    (make <dimension> #:width 100 #:height 100)))
+(define port (open-output-file "/tmp/new-image.png"))
+(scm->png (selection-crop selection) port)
+(close port)
+@end example
+
 @end deffn
 
 @node PNG Image Processing
