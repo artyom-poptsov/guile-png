@@ -65,7 +65,7 @@
   (let ((radius   (and (memq #:radius initargs)
                        (cadr (memq #:radius initargs))))
         (diameter (and (memq #:diameter initargs)
-                       (cadr (memq #:radius initargs))))
+                       (cadr (memq #:diameter initargs))))
         (height   (and (memq #:height initargs)
                        (cadr (memq #:height initargs))))
         (width    (and (memq #:width initargs)
