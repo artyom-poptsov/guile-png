@@ -66,6 +66,14 @@
 
 (define %IHDR-chunk-length 13)
 
+(define %IHDR-chunk-width-offset              0)
+(define %IHDR-chunk-height-offset             4)
+(define %IHDR-chunk-bit-depth-offset          8)
+(define %IHDR-chunk-color-type-offset         9)
+(define %IHDR-chunk-compression-method-offset 10)
+(define %IHDR-chunk-filter-method-offset      11)
+(define %IHDR-chunk-interlace-method-offset   12)
+
 
 (define-class <png-chunk:IHDR> (<png-chunk>)
   ;; Image width in pixels.
@@ -182,25 +190,25 @@
 
 
 (define-method (data:width (data <bytevector>))
-  (vector->int32 (bytevector-copy/part data 0 4)))
+  (vector->int32 (bytevector-copy/part data %IHDR-chunk-width-offset 4)))
 
 (define-method (data:heigth (data <bytevector>))
-  (vector->int32 (bytevector-copy/part data 4 4)))
+  (vector->int32 (bytevector-copy/part data %IHDR-chunk-height-offset 4)))
 
 (define-method (data:bit-depth (data <bytevector>))
-  (bytevector-u8-ref data 8))
+  (bytevector-u8-ref data %IHDR-chunk-bit-depth-offset))
 
 (define-method (data:color-type (data <bytevector>))
-  (bytevector-u8-ref data 9))
+  (bytevector-u8-ref data %IHDR-chunk-color-type-offset))
 
 (define-method (data:compression-method (data <bytevector>))
-  (bytevector-u8-ref data 10))
+  (bytevector-u8-ref data %IHDR-chunk-compression-method-offset))
 
 (define-method (data:filter-method (data <bytevector>))
-  (bytevector-u8-ref data 11))
+  (bytevector-u8-ref data %IHDR-chunk-filter-method-offset))
 
 (define-method (data:interlace-method (data <bytevector>))
-  (bytevector-u8-ref data 12))
+  (bytevector-u8-ref data %IHDR-chunk-interlace-method-offset))
 
 
 ;; The methods below allow to get information about the image from the untyped
@@ -261,7 +269,7 @@
       #:interlace-method   (data:interlace-method data))))
 
 (define-method (png-chunk-encode (chunk <png-chunk:IHDR>))
-  (let* ((data               (make-bytevector 13 0))
+  (let* ((data               (make-bytevector %IHDR-chunk-length 0))
          (width              (int32->bytevector (png-chunk:IHDR-width chunk)))
          (height             (int32->bytevector (png-chunk:IHDR-height chunk)))
          (bit-depth          (png-chunk:IHDR-bit-depth chunk))
@@ -273,13 +281,19 @@
                           #:type   'IHDR
                           #:length %IHDR-chunk-length
                           #:data   data)))
-    (bytevector-copy! width  0 data 0 4)
-    (bytevector-copy! height 0 data 4 4)
-    (bytevector-u8-set! data 8 bit-depth)
-    (bytevector-u8-set! data 9 color-type)
-    (bytevector-u8-set! data 10 compression-method)
-    (bytevector-u8-set! data 11 filter-method)
-    (bytevector-u8-set! data 12 interlace-method)
+    (bytevector-copy! width  0 data %IHDR-chunk-width-offset 4)
+    (bytevector-copy! height 0 data %IHDR-chunk-height-offset 4)
+    (bytevector-u8-set! data %IHDR-chunk-bit-depth-offset bit-depth)
+    (bytevector-u8-set! data %IHDR-chunk-color-type-offset color-type)
+    (bytevector-u8-set! data
+                        %IHDR-chunk-compression-method-offset
+                        compression-method)
+    (bytevector-u8-set! data
+                        %IHDR-chunk-filter-method-offset
+                        filter-method)
+    (bytevector-u8-set! data
+                        %IHDR-chunk-interlace-method-offset
+                        interlace-method)
     (png-chunk-crc-update! encoded-chunk)
     encoded-chunk))
 
