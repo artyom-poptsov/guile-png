@@ -7,6 +7,11 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Fix ellipse drawing                                               :BUGFIX:
+Guile-PNG would fail to draw an ellipse at the specified position due to
+rational number calculation errors.  Now it is fixed.
+
 * Changes in version 0.7.1 (2023-08-20)
 ** Fix Bresenham's Line generation algorithm                         :BUGFIX:
 Bresenham's Line generation algorithm would fail to draw properly some types

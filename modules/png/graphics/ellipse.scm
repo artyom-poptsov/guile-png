@@ -51,8 +51,8 @@
   (let* ((center (ellipse-center ellipse))
          (width  (ellipse-width ellipse))
          (height (ellipse-height ellipse))
-         (rx     (/ width 2))
-         (ry     (/ height 2))
+         (rx     (inexact->exact (floor (/ width 2.0))))
+         (ry     (inexact->exact (floor (/ height 2.0))))
          (color  (graphic-color ellipse)))
 
     (define* (draw-region-2 #:key x y d2 dx dy)
