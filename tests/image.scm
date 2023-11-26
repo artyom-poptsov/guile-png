@@ -1,5 +1,6 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
+             (rnrs bytevectors)
              (oop goops)
              (png image)
              (png core chunk)
@@ -93,6 +94,16 @@
                    (png-image-chunks image-clone)))
          (not (eq? (png-image-data image)
                    (png-image-data image-clone))))))
+
+(test-equal "png-image-data/apply-filter"
+  (+ (* 100 100 3) 100) ; 100x100 size * 3b per pixel + 100b filtering info
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100)))
+    (bytevector-length (png-image-data/apply-filter image))))
+
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))

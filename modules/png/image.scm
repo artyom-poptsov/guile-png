@@ -59,6 +59,7 @@
             png-image-pixel-size
             png-image-pixels
             png-image-data
+            png-image-data/apply-filter
             png-image-data-set!
             png-image->png
             png-image-compress
