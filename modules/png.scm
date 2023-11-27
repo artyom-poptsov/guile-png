@@ -44,6 +44,9 @@
                    (debug-mode? #f)
                    (decompress? #t)
                    (remove-filter? #t))
+  "Read a PNG image from a @var{port}.  The result of the procedure is a
+@code{<png-image>} instance (or <png-compressed-image> instance, when
+@var{decompress?} is set to @code{#f}.)"
   (let ((fsm (make <png-parser>)))
     (log-use-stderr! debug-mode?)
     (let ((context (fsm-run! fsm (make <png-context>
@@ -58,6 +61,8 @@
 (define* (scm->png image
                    #:optional
                    (port (current-output-port)))
+  "Convert a PNG @var{image} to binary representation, write the image object
+to a @var{port}.  Return value is undefined."
   (png-image->png image port))
 
 ;;; png.scm ends here.
