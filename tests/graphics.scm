@@ -10,6 +10,7 @@
 
 (define %topdir (getenv "abs_top_srcdir"))
 (define %example-rainbow (format #f "~a/tests/example-rainbow.png" %topdir))
+(define %example-ellipse (format #f "~a/tests/example-ellipse.png" %topdir))
 
 (define %test-name "graphics")
 
@@ -279,6 +280,63 @@
          #:center (make <point> #:x 10 #:y 20)
          #:width  10
          #:height 20)))))
+
+(define (draw-axis! image)
+  (draw! image
+         (make <line>
+           #:color #vu8(255 0 0)
+           #:p1 (make <point>
+                  #:x 0
+                  #:y (/ (png-image-height image) 2))
+           #:p2 (make <point>
+                  #:x (- (png-image-width image) 1)
+                  #:y (/ (png-image-height image) 2))))
+  (draw! image
+         (make <line>
+           #:color #vu8(255 0 0)
+           #:p1 (make <point>
+                  #:x (/ (png-image-width image) 2)
+                  #:y 0)
+           #:p2 (make <point>
+                  #:x (/ (png-image-width image) 2)
+                  #:y (- (png-image-height image) 1)))))
+
+(test-assert "ellipse center: 50,50, size: 50x25"
+  (let ((image  (make <png-image>
+                   #:width      100
+                   #:height     100
+                   #:bit-depth  8
+                   #:color-type 2))
+        (test-image (png->scm (open-input-file %example-ellipse))))
+    (draw-axis! image)
+    (draw! image
+           (make <ellipse>
+             #:center (make <point> #:x 50 #:y 50)
+             #:width  50
+             #:height 25
+             #:color  #vu8(255 255 255)))
+
+    (let loop ((bv1 (png-image-data image))
+               (bv2 (png-image-data test-image))
+               (index 0))
+      (when (< index (bytevector-length bv1))
+        (unless (equal? (bytevector-u8-ref bv1 index)
+                        (bytevector-u8-ref bv2 index))
+          (let ((p (open-output-file (format #f
+                                             "~a/tests/graphics-ellipse-errors.log"
+                                             %topdir))))
+            (display "generated image:\n" p)
+            (png-image-pretty-print-data image p)
+            (display "test image:\n" p)
+            (png-image-pretty-print-data test-image p)
+            (close p))
+          (let ((p (open-output-file (format #f
+                                             "~a/tests/graphics-ellipse-test-10x7.png"
+                                             %topdir))))
+            (scm->png image p)
+            (close p))
+          (error "Bytevectors are not equal" bv1 bv2 index))
+        (loop bv1 bv2 (+ index 1))))))
 
 
 ;; Circle.
