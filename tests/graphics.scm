@@ -11,6 +11,7 @@
 (define %topdir (getenv "abs_top_srcdir"))
 (define %example-rainbow (format #f "~a/tests/example-rainbow.png" %topdir))
 (define %example-ellipse (format #f "~a/tests/example-ellipse.png" %topdir))
+(define %example-rectangle (format #f "~a/tests/example-rectangle.png" %topdir))
 
 (define %test-name "graphics")
 
@@ -332,6 +333,43 @@
             (close p))
           (let ((p (open-output-file (format #f
                                              "~a/tests/graphics-ellipse-test-10x7.png"
+                                             %topdir))))
+            (scm->png image p)
+            (close p))
+          (error "Bytevectors are not equal" bv1 bv2 index))
+        (loop bv1 bv2 (+ index 1))))))
+
+(test-assert "rectangle position: 25,25, size: 50x50"
+  (let ((image  (make <png-image>
+                   #:width      100
+                   #:height     100
+                   #:bit-depth  8
+                   #:color-type 2))
+        (test-image (png->scm (open-input-file %example-rectangle))))
+    (draw-axis! image)
+    (draw! image
+           (make <rectangle>
+             #:position (make <point> #:x 25 #:y 25)
+             #:width  50
+             #:height 50
+             #:color  #vu8(255 255 255)))
+
+    (let loop ((bv1   (png-image-data image))
+               (bv2   (png-image-data test-image))
+               (index 0))
+      (when (< index (bytevector-length bv1))
+        (unless (equal? (bytevector-u8-ref bv1 index)
+                        (bytevector-u8-ref bv2 index))
+          (let ((p (open-output-file (format #f
+                                             "~a/tests/graphics-rectangle-errors.log"
+                                             %topdir))))
+            (display "generated image:\n" p)
+            (png-image-pretty-print-data image p)
+            (display "test image:\n" p)
+            (png-image-pretty-print-data test-image p)
+            (close p))
+          (let ((p (open-output-file (format #f
+                                             "~a/tests/graphics-rectangle-test.png"
                                              %topdir))))
             (scm->png image p)
             (close p))

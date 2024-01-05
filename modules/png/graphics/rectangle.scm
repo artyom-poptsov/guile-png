@@ -59,33 +59,41 @@
          (color    (graphic-color rectangle))
          (lines    (list
                     (make <line>
+                      ;; Upper left.
                       #:p1 (make <point>
                              #:x (point-x position)
                              #:y (point-y position))
+                      ;; Upper right.
                       #:p2 (make <point>
-                             #:x (+ (point-x position) width)
+                             #:x (+ (point-x position) (- width 1))
                              #:y (point-y position))
                       #:color color)
                     (make <line>
+                      ;; Upper right.
                       #:p1 (make <point>
-                             #:x (+ (point-x position) width)
+                             #:x (+ (point-x position) (- width 1))
                              #:y (point-y position))
+                      ;; Bottom right.
                       #:p2 (make <point>
-                             #:x (+ (point-x position) width)
-                             #:y (+ (point-y position) height))
+                             #:x (+ (point-x position) (- width 1))
+                             #:y (+ (point-y position) (- height 1)))
                       #:color color)
                     (make <line>
+                      ;; Bottom right.
                       #:p1 (make <point>
-                             #:x (+ (point-x position) width)
-                             #:y (+ (point-y position) height))
+                             #:x (+ (point-x position) (- width 1))
+                             #:y (+ (point-y position) (- height 1)))
+                      ;; Bottom left.
                       #:p2 (make <point>
                              #:x (point-x position)
-                             #:y (+ (point-y position) height))
+                             #:y (+ (point-y position) (- height 1)))
                       #:color color)
                     (make <line>
+                      ;; Bottom left.
                       #:p1 (make <point>
                              #:x (point-x position)
-                             #:y (+ (point-y position) height))
+                             #:y (+ (point-y position) (- height 1)))
+                      ;; Upper left.
                       #:p2 (make <point>
                              #:x (point-x position)
                              #:y (point-y position))
