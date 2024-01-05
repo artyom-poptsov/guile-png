@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2023-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -22,7 +22,8 @@ include $(top_srcdir)/build-aux/am/guilec
 SOURCES = \
 	grayscale.scm	\
 	invert-colors.scm	\
-	solarize.scm
+	solarize.scm	\
+	blur.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

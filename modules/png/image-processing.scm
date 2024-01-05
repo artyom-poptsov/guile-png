@@ -1,6 +1,6 @@
 ;;; image-processing.scm -- Image processing procedures.
 
-;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 (re-export-modules (png image-processing grayscale)
                    (png image-processing invert-colors)
-                   (png image-processing solarize))
+                   (png image-processing solarize)
+                   (png image-processing blur))
 
 ;;; image-processing.scm ends here.
