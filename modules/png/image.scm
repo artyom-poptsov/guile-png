@@ -44,6 +44,7 @@
             <png-image>
             png-image-chunks
             png-image-chunks-query
+            png-image-chunks-insert!
             png-image-clone
             png-image-width
             png-image-width-set!
@@ -86,7 +87,8 @@
   (chunks
    #:init-value   '()
    #:init-keyword #:chunks
-   #:getter       png-image-chunks)
+   #:getter       png-image-chunks
+   #:setter       png-image-chunks-set!)
 
   ;; Image header.
   ;;
@@ -308,7 +310,8 @@ set to #t, the procedure returns data in uncompressed form."
   (chunks
    #:init-value   '()
    #:init-keyword #:chunks
-   #:getter       png-image-chunks))
+   #:getter       png-image-chunks
+   #:setter       png-image-chunks-set!))
 
 
 (define-method (initialize (image <png-image>) initargs)
@@ -352,6 +355,90 @@ set to #t, the procedure returns data in uncompressed form."
 (define-method (png-image-chunks-query (image <png-image>) (chunk <vector>))
   (png-image-chunks-query image (lambda (c)
                                   (equal? (png-chunk-type c) chunk))))
+
+(define-method (png-image-chunks-insert! (image <top>)
+                                         (where <symbol>)
+                                         (pred? <procedure>)
+                                         (new-chunk <png-chunk>))
+  "Insert a @var{new-chunk} into an @var{image} chunk list.  The procedure loops
+over chunk list; the position for the new chunk to be inserted is specified by
+two parameters: @var{pred?} predicate is used to check whether the current
+position is right, and @var{where} specifies, where the @var{new-chunk} must
+be placed.  @var{where} must be either @code{'before} or @code{after} symbol.
+
+The return values is the position where the @var{new-chunk} was inserted, or
+@code{#f} when the procedure found no place for the chunk.
+
+When @var{where} is specified as @code{after} but the chunk list for an
+@var{image} is empty, the procedure always returns @code{#f} and does not do
+anything.
+
+The @var{pred?} procedure is called as follows:
+
+@example lisp
+  (pred? idx chunk)
+@end example
+
+When the chunk list is empty, the \"chunk\" is @code{#f}.
+
+The procedure throws an error when @var{where} is a wrong symbol."
+  (let loop ((chunks (png-image-chunks image))
+             (idx 0)
+             (result '()))
+    (cond
+     ((pred? idx (if (null? chunks)
+                     #f
+                     (car chunks)))
+      (case where
+        ((before)
+         (png-image-chunks-set! image
+                                (append result (cons new-chunk chunks)))
+         idx)
+        ((after)
+         (if (null? chunks)
+             #f
+             (let ((new-chunks (append result (cons (car chunks)
+                                                    (cons new-chunk
+                                                          (cdr chunks))))))
+               (png-image-chunks-set! image new-chunks)
+               (+ idx 1))))
+        (else
+         (error "Unknown insert action (expecting 'before' or 'after')"
+                image
+                where))))
+     ((null? chunks)
+      #f)
+     (else
+      (loop (cdr chunks)
+            (+ idx 1)
+            (append result (list (car chunks))))))))
+
+(define-method (png-image-chunks-insert! (image <top>)
+                                         (where <symbol>)
+                                         (chunk-type <symbol>)
+                                         (new-chunk <png-chunk>))
+  "This version of the procedure allows to specify @var{chunk-type} directly so
+the @var{new-chunk} will be inserted after or before the chunk of the
+specified type (depending on @var{where} value.)"
+  (png-image-chunks-insert! image
+                            where
+                            (lambda (idx chunk)
+                              (and chunk
+                                   (equal? chunk-type (png-chunk-type chunk))))
+                            new-chunk))
+
+(define-method (png-image-chunks-insert! (image <top>)
+                                         (where <symbol>)
+                                         (position <number>)
+                                         (new-chunk <png-chunk>))
+  "This version of the procedure allows to specify the position of the
+@var{new-chunk} directly, so it will be inserted after or before the chunk of
+the specified type (depending on @var{where} value.)"
+  (png-image-chunks-insert! image
+                            where
+                            (lambda (idx chunk)
+                              (= idx position))
+                            new-chunk))
 
 
 
@@ -504,7 +591,9 @@ data."
                              #:key
                              (data-chunk-size #f))
   (let* ((data            (png-image-data image))
-         (compressed-data (compress (png-image-data/apply-filter image)))
+         (data/filtered   (png-image-data/apply-filter image))
+         ;; (d (format (current-error-port) "** data/filtered: ~a~%" data/filtered))
+         (compressed-data (compress data/filtered))
          (chunk-size      (or data-chunk-size
                               (png-image-data-chunk-size image)))
          (segments        (map (lambda (data)

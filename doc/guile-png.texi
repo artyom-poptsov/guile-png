@@ -180,6 +180,78 @@ specified @var{chunk-type} encoded as a byte vector.
 Return a list of PNG chunks.
 @end deffn
 
+@deffn {Method} png-image-chunks-insert! (image <top>) @
+                                         (where <symbol>) @
+                                         (pred? <procedure>) @
+                                         (new-chunk <png-chunk>)
+
+Insert a @var{new-chunk} into an @var{image} chunk list.  The procedure loops
+over chunk list; the position for the new chunk to be inserted is specified by
+two parameters: @var{pred?} predicate is used to check whether the current
+position is right, and @var{where} specifies, where the @var{new-chunk} must
+be placed.  @var{where} must be either @code{'before} or @code{after} symbol.
+
+The return values is the position where the @var{new-chunk} was inserted, or
+@code{#f} when the procedure found no place for the chunk.
+
+When @var{where} is specified as @code{'after} but the chunk list for an
+@var{image} is empty, the procedure always returns @code{#f} and does not do
+anything.
+
+The @var{pred?} procedure is called as follows:
+
+@example lisp
+  (pred? idx chunk)
+@end example
+
+When the chunk list is empty, the "chunk" is @code{#f}.
+
+The procedure throws an error when @var{where} is a wrong symbol.
+
+@end deffn
+
+@deffn {Method} png-image-chunks-insert! (image <top>) @
+                                         (where <symbol>) @
+                                         (chunk-type <symbol>) @
+                                         (new-chunk <png-chunk>)
+
+This version of the procedure allows to specify @var{chunk-type} directly so
+the @var{new-chunk} will be inserted after or before the chunk of the
+specified type (depending on @var{where} value.)
+
+Usage example:
+
+@example lisp
+(png-image-chunks-insert! image 'after 'tEXt
+                          (make <png-chunk:tEXt>
+                                #:keyword "Author"
+                                #:text    "Eva Lu Ator"))
+@end example
+
+@end deffn
+
+@deffn {Method} png-image-chunks-insert! (image <top>) @
+                                         (where <symbol>) @
+                                         (position <number>) @
+                                         (new-chunk <png-chunk>)
+
+This version of the procedure allows to specify the position of the
+@var{new-chunk} directly, so it will be inserted after or before the chunk of
+the specified type (depending on @var{where} value.)
+
+Usage example:
+
+@example lisp
+
+(png-image-chunks-insert! image 'before 0
+                          (make <png-chunk:tEXt>
+                                #:keyword "Title"
+                                #:text    "Test Image"))
+
+@end example
+
+@end deffn
+
 @deffn  {Method} png-image-data (image <png-compressed-image>) (uncompress? <boolean>)
 @deffnx {Method} png-image-data (image <png-compressed-image>)
 Get the PNG @var{image} data as a single byte vector.  When @var{uncompress?}

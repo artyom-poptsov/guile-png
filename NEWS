@@ -11,7 +11,10 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ** Fix ellipse drawing                                               :BUGFIX:
 Guile-PNG would fail to draw an ellipse at the specified position due to
 rational number calculation errors.  Now it is fixed.
-
+** =(png image)=: =png-image-chunks-insert!=: New methods
+There are now three variations of =png-image-chunks-insert!= that allow to
+insert a new chunk into an image chunk list.
+  
 * Changes in version 0.7.1 (2023-08-20)
 ** Fix Bresenham's Line generation algorithm                         :BUGFIX:
 Bresenham's Line generation algorithm would fail to draw properly some types

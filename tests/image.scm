@@ -5,7 +5,8 @@
              (png image)
              (png core chunk)
              (png core chunk ihdr)
-             (png core chunk iend))
+             (png core chunk iend)
+             (png core chunk text))
 
 
 (define %test-name "image")
@@ -104,6 +105,47 @@
                  #:height     100)))
     (bytevector-length (png-image-data/apply-filter image))))
 
+(test-equal "png-image-chunks-insert!: after 0 (chunk list is empty)"
+  #f
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100)))
+    (png-image-chunks-insert! image 'after 0
+                              (make <png-chunk:tEXt>
+                                #:keyword "Title"
+                                #:text    "Test Image"))))
+
+(test-equal "png-image-chunks-insert!: before 0"
+  'tEXt
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100)))
+    (png-image-chunks-insert! image 'before 0
+                              (make <png-chunk:tEXt>
+                                #:keyword "Title"
+                                #:text    "Test Image"))
+    (png-chunk-type (car (png-image-chunks image)))))
+
+(test-equal "png-image-chunks-insert!: after tEXt"
+  "Eva Lu Ator"
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100)))
+    (png-image-chunks-insert! image 'before 0
+                              (make <png-chunk:tEXt>
+                                #:keyword "Title"
+                                #:text    "Test Image"))
+    (png-image-chunks-insert! image 'after 'tEXt
+                              (make <png-chunk:tEXt>
+                                #:keyword "Author"
+                                #:text    "Eva Lu Ator"))
+    (png-chunk:tEXT-text (cadr (png-image-chunks image)))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
