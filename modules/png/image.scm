@@ -214,9 +214,12 @@ set to #t, the procedure returns data in uncompressed form."
 (define-method (png-image->bytevector (image <png-compressed-image>))
   "Convert an @var{image} to a bytevector.  Return the
  bytevector."
-  (call-with-bytevector-output-port
-   (lambda (p)
-     (png-image->png image p))))
+  (call-with-values
+      (lambda ()
+        (open-bytevector-output-port))
+    (lambda (p get-bytevector)
+      (png-image->png image p)
+      (get-bytevector))))
 
 
 
