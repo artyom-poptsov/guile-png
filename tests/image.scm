@@ -2,7 +2,6 @@
              (srfi srfi-26)
              (ice-9 iconv)
              (rnrs bytevectors)
-             (scheme base)
              (oop goops)
              (png image)
              (png core chunk)
