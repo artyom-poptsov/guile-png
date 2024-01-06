@@ -162,9 +162,10 @@
                                 #:length (bytevector-length data)
                                 #:type   'tESt
                                 #:data   data))
-    (let ((p (open-output-bytevector)))
-      (png-image->png image p)
-      (get-output-bytevector p))))
+
+    (call-with-output-string
+      (lambda (p)
+        (png-image->png image p)))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
