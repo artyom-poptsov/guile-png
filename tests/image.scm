@@ -1,6 +1,8 @@
 (use-modules (srfi srfi-64)
              (srfi srfi-26)
+             (ice-9 iconv)
              (rnrs bytevectors)
+             (scheme base)
              (oop goops)
              (png image)
              (png core chunk)
@@ -146,6 +148,23 @@
                                 #:keyword "Author"
                                 #:text    "Eva Lu Ator"))
     (png-chunk:tEXT-text (cadr (png-image-chunks image)))))
+
+(test-assert "png-image-chunks-insert!: unknown chunk"
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100))
+        (data (string->bytevector "test" "ASCII")))
+
+    (png-image-chunks-insert! image 'before 0
+                              (make <png-chunk>
+                                #:length (bytevector-length data)
+                                #:type   'tESt
+                                #:data   data))
+    (let ((p (open-output-bytevector)))
+      (png-image->png image p)
+      (get-output-bytevector p))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
