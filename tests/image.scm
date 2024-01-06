@@ -168,6 +168,16 @@
         (png-image->png image p)))))
 
 
+
+(test-assert "png-image->bytevector"
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      100
+                 #:height     100)))
+    (png-image->bytevector image)))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)

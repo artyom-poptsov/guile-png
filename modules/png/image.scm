@@ -1,6 +1,6 @@
 ;;; image.scm -- Guile-PNG Image procedures.
 
-;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 (define-module (png image)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
+  #:use-module (rnrs io ports)
   #:use-module (ice-9 binary-ports)     ; put-bytevector
   #:use-module (ice-9 format)
   #:use-module (zlib)
@@ -63,6 +64,7 @@
             png-image-data/apply-filter
             png-image-data-set!
             png-image->png
+            png-image->bytevector
             png-image-compress
             png-image-pretty-print-data
 
@@ -208,6 +210,13 @@ set to #t, the procedure returns data in uncompressed form."
   (for-each (lambda (chunk)
               (png-chunk->png chunk port))
             (png-image-chunks image)))
+
+(define-method (png-image->bytevector (image <png-compressed-image>))
+  "Convert an @var{image} to a bytevector.  Return the
+ bytevector."
+  (call-with-bytevector-output-port
+   (lambda (p)
+     (png-image->png image p))))
 
 
 
@@ -642,6 +651,11 @@ data."
 
 (define-method (png-image->png (image <png-image>))
   (png-image->png image (current-output-port)))
+
+(define-method (png-image->bytevector (image <png-image>))
+  "Compress an @var{image} and convert it to a bytevector.  Return the
+ bytevector."
+  (png-image->bytevector (png-image-compress image)))
 
 (define-method (png-image-clone (image <png-image>))
   "Copy a PNG IMAGE, return a new copy."
