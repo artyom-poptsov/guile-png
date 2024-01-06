@@ -1,5 +1,6 @@
 (define-module (png fsm chunk-context)
   #:use-module (ice-9 binary-ports)
+  #:use-module (ice-9 iconv)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
   #:use-module (png fsm context)
@@ -93,7 +94,15 @@
   (action:store ctx byte)
   (let ((chunk (context-result ctx))
         (data  (context-buffer ctx)))
-    (png-chunk-type-set! chunk (car (vector->chunk-type data)))
+    (let ((type (vector->chunk-type data)))
+      (if type
+          (png-chunk-type-set! chunk (car type))
+          (let ((type (string->symbol (bytevector->string data "ASCII"))))
+            (log-warning "action:store-type: Unknown chunk type: ~a (~a)"
+                         data
+                         type)
+            (png-chunk-type-set! chunk
+                                 type))))
     (%buffer-reset! ctx (png-chunk-length chunk)))
   ctx)
 

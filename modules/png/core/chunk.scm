@@ -3,6 +3,7 @@
 
 (define-module (png core chunk)
   #:use-module (oop goops)
+  #:use-module (ice-9 iconv)
   #:use-module (png core common)
   #:use-module (png core crc)
   #:use-module (srfi srfi-1)
@@ -161,7 +162,10 @@ the list."
 
 (define-method (chunk-type->vector (type <symbol>))
   "Convert a PNG chunk TYPE to a vector.  Return the vector."
-  (cadr (png-chunk-type-info type)))
+  (let ((info (png-chunk-type-info type)))
+    (if info
+        (cadr (png-chunk-type-info type))
+        (string->bytevector (symbol->string type) "ASCII"))))
 
 (define-method (png-chunk-type-info (chunk <png-chunk>))
   (png-chunk-type-info (png-chunk-type chunk)))
