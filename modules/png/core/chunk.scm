@@ -80,6 +80,13 @@
 
     ;; 2.3. Time stamp information.
     (tIME #vu8(116 73 77 69)  "Image last-modification time")
+
+    ;; Exif.
+    ;; <https://github.com/corkami/formats/blob/master/image/png.md>
+    (eXIf #vu8(101 88  73 102) "EXIF - registered July 2017")
+    (zxIf #vu8(122 120 73 102) "compressed EXIF")
+    (vpAg #vu8(118 112 65 103) "VirtualPage (deprecated)")
+    (caNv #vu8(99  97  78 118) "Canvas (superceding)")
     ))
 
 
