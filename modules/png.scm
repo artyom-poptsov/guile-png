@@ -1,6 +1,6 @@
 ;;; png.scm -- GNU Guile PNG parser.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 (define-module (png)
   #:use-module (oop goops)
+  #:use-module (rnrs io ports)
   #:use-module (png image)
   #:use-module (png fsm context)
   #:use-module (png fsm png-context)
@@ -34,6 +35,7 @@
   #:use-module (png core chunk)
   #:use-module (png chunk-decoder)
   #:export (png->scm
+            bytevector->png-image
             scm->png))
 
 
@@ -57,6 +59,18 @@
         (if decompress?
             (png-compressed-image-decompress image remove-filter?)
             image)))))
+
+(define* (bytevector->png-image bv
+                                #:key
+                                (decompress? #t)
+                                (debug-mode? #f)
+                                (remove-filter? #t))
+  "Convert a bytevector @var{bv} to a PNG image. return the new image."
+  (with-input-from-port (open-bytevector-input-port bv)
+    (lambda ()
+      (png->scm #:decompress? decompress?
+                #:debug-mode? debug-mode?
+                #:remove-filter? remove-filter?))))
 
 (define* (scm->png image
                    #:optional

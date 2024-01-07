@@ -3,6 +3,7 @@
              (ice-9 iconv)
              (rnrs bytevectors)
              (oop goops)
+             (png)
              (png image)
              (png core chunk)
              (png core chunk ihdr)
@@ -175,6 +176,14 @@
                  #:width      100
                  #:height     100)))
     (png-image->bytevector image)))
+
+(test-assert "bytevector->png-image"
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      10
+                 #:height     10)))
+    (bytevector->png-image (png-image->bytevector image))))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
