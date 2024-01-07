@@ -34,6 +34,7 @@
   #:use-module (png fsm png-parser)
   #:use-module (png core chunk)
   #:use-module (png chunk-decoder)
+  #:re-export (png-image->bytevector)
   #:export (png->scm
             bytevector->png-image
             scm->png))
