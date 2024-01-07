@@ -3,6 +3,7 @@
              (ice-9 iconv)
              (rnrs bytevectors)
              (oop goops)
+             (png fsm context)
              (png)
              (png image)
              (png core chunk)
@@ -10,8 +11,16 @@
              (png core chunk iend)
              (png core chunk text))
 
+
+
+(define-method (configure-test-logging! (test-suite-name <string>))
+  (smc-log-init! "file" `((file . ,(string-append test-suite-name "-smc.log")))))
+
+
 
 (define %test-name "image")
+
+(configure-test-logging! %test-name)
 
 
 (test-begin %test-name)
