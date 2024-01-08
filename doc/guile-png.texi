@@ -116,6 +116,18 @@ instance.
 
 @end deffn
 
+@deffn {Scheme Procedure} bytevector->png-image @
+               bv @
+               [#:decompress?=#t] @
+               [#:debug-mode?=#f] @
+               [#:remove-filter?=#t]
+
+Convert a bytevector @var{bv} to a PNG image, return the new image.  The
+procedure works basically as @code{png->scm} but reads the PNG image data from
+a bytevector.
+
+@end deffn
+
 @deffn {Scheme Procedure} scm->png image @
                                    [port=(current-output-port)]
 
