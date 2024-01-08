@@ -10,7 +10,7 @@
 @copying
 This manual documents Guile-PNG version @value{VERSION}.
 
-Copyright (C) 2022-2023 Artyom V. Poptsov
+Copyright (C) 2022-2024 Artyom V. Poptsov
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -71,6 +71,7 @@ Indices
 
 @contents
 
+@c -----------------------------------------------------------------------------
 @node Introduction
 @chapter Introduction
 
@@ -81,6 +82,7 @@ that provides API for Portable Network Graphics
 
 @include guile-png-installation.texi
 
+@c -----------------------------------------------------------------------------
 @node API Reference
 @chapter API Reference
 
@@ -97,6 +99,7 @@ Internals:
 * Filter Algorithms::    Image filter algorithms.
 @end menu
 
+@c -----------------------------------------------------------------------------
 @node PNG
 @section PNG
 
@@ -123,6 +126,7 @@ Return value is undefined.
 
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node PNG Image
 @section PNG Image
 
@@ -287,6 +291,7 @@ filters from the image; this is useful for debugging purposes
 (@var{remove-filter?} is set to @code{#t} by default.)
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection <png-image>
 
 @deftp {Class} <png-image> @
@@ -333,6 +338,7 @@ Convert an @var{image} to the PNG binary format, print the data to a
 Make an exact copy of an @var{image}, return the copy.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Graphics
 @section Graphics
 
@@ -357,6 +363,7 @@ that can be drawn on a @code{<png-image>} instance.
 * Selection::
 @end menu
 
+@c -----------------------------------------------------------------------------
 @node Color Representation
 @subsection Color Representation
 
@@ -409,6 +416,7 @@ an @var{image}. The return value is undefined.
 
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Graphic Objects
 @subsection Graphic Objects
 
@@ -435,6 +443,7 @@ This method throws an error because a generic @var{graphic} instance cannot be
 drawn.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Point
 @subsection Point
 
@@ -461,6 +470,7 @@ The the X coordinate of a @var{point}.
 The the Y coordinate of a @var{point}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Line
 @subsection Line
 
@@ -498,6 +508,7 @@ Get the starting point of a @var{line}.
 Get the ending point of a @var{line}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Multiline
 @subsection Multiline
 
@@ -532,6 +543,7 @@ Draw a @var{multiline} on an @var{image}.
 Get the points of a @var{multiline}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Polygon
 @subsection Polygon
 
@@ -563,6 +575,7 @@ Draw a @var{polygon} on an @var{image}.
 Get the points of a @var{polygon}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Rectangle
 @subsection Rectangle
 
@@ -608,6 +621,7 @@ Get the width of a @var{rectangle}.
 Get the height of a @var{rectangle}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Filled Rectangle
 @subsection Filled Rectangle
 
@@ -654,6 +668,7 @@ Get the width of a @var{rectangle}.
 Get the height of a @var{rectangle}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Ellipse
 @subsection Ellipse
 
@@ -699,6 +714,7 @@ Get the width of an @var{ellipse}.
 Get the height of an @var{ellipse}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Circle
 @subsection Circle
 
@@ -745,6 +761,7 @@ Get the radius of a @var{circle}.
 Get the diameter of a @var{circle}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Dimension
 @subsection Dimension
 
@@ -770,6 +787,7 @@ Height of the dimension.
 Check if @var{object} is a @code{<dimension>} instance.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Selection
 @subsection Selection
 
@@ -836,6 +854,7 @@ Crop a part of the base image using a @var{selection}.  Return a newly created
 
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node PNG Image Processing
 @section PNG Image Processing
 
@@ -1013,7 +1032,7 @@ Set the image interlace method for an IHDR @var{chunk}.
 @deffnx {Method} data:interlace-method (data <bytevector>)
 Those methods are the accessors for the specific parts of IHDR chunk data.
 @end deffn
-            
+
 @deffn {Method} png-chunk-decode-IHDR (chunk <png-chunk>)
 Decode an IHDR chunk from a plain PNG @var{chunk}.
 @end deffn
@@ -1022,6 +1041,7 @@ Decode an IHDR chunk from a plain PNG @var{chunk}.
 Encode an IHDR @var{chunk} into a plain @code{<png-chunk>}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection IEND
 PNG image final chunk (IEND).  The IEND chunk must appear last.
 
@@ -1039,6 +1059,7 @@ Decode an IEND chunk from a PNG @var{chunk}.
 Encode an IEND @var{chunk} into a plain @code{<png-chunk>}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection PLTE
 
 PNG image palette (PLTE) chunk.  The chunk contains from 1 to 256 palette
@@ -1108,6 +1129,7 @@ Decode a PLTE chunk from a plain PNG @var{chunk}.
 Convert a PLTE @var{chunk} to a plain @code{<png-chunk>} instance.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection bKGD
 
 The @url{https://www.rfc-editor.org/rfc/rfc2083#page-19, bKGD} chunk specifies
@@ -1162,6 +1184,7 @@ Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
 
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection cHRM
 
 @code{(png core chunk chrm)} module contains
@@ -1186,6 +1209,7 @@ Constructor parameters:
 
 @end deftp
 
+@c -----------------------------------------------------------------------------
 @subsection gAMA
 
 PNG image gamma (gAMA).
@@ -1214,6 +1238,7 @@ Encode an bKGD @var{chunk} into a plain @var{<png-chunk>} instance.
 
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection hIST
 
 @deftp {Class} <png-chunk:hIST>
@@ -1227,6 +1252,7 @@ Constructor parameters:
 
 @end deftp
 
+@c -----------------------------------------------------------------------------
 @subsection iCCP
 
 @url{https://en.wikipedia.org/wiki/ICC_profile, ICC profile} is a set of data
@@ -1259,6 +1285,7 @@ Make a full clone of an iCCP @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection pHYs
 
 The pHYs chunk specifies the intended pixel size or aspect ratio for
@@ -1310,6 +1337,7 @@ Make a full clone of an ``pHYs'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection tEXt, tEXT
 
 PNG image textual data.
@@ -1350,6 +1378,7 @@ Constructor parameters:
 Decode a plain @var{chunk}, return an instance of @code{<png-chunk:tEXT>}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection tIME
 
 @deftp {Class} <png-chunk:tIME>
@@ -1381,6 +1410,7 @@ Make a full clone of an ``tIME'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection tRNS
 
 PNG image transparency (tRNS).
@@ -1411,6 +1441,7 @@ Make a full clone of an ``tRNS'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection zTXt
 
 @deftp {Class} <png-chunk:zTXt>
@@ -1439,6 +1470,7 @@ Make a full clone of an ``zTXt'' @var{chunk} instance, return the copy of the
 chunk.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @node Filter Algorithms
 @section Filter Algorithms
 
@@ -1471,6 +1503,7 @@ Get the filter algorithm name by its @var{type} number.
 Get the filter algorithm type number by its @var{name}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection Generic Filter
 
 @deftp {Class} <png-filter>
@@ -1489,6 +1522,7 @@ Get the @var{filter} scanline length.
 Get the @var{filter} bytes per pixel value.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection ``None'' Filter
 
 @deftp {Class} <png-filter:none>
@@ -1511,6 +1545,7 @@ Apply the ``None'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection ``Sub'' Filter
 
 @deftp {Class} <png-filter:sub>
@@ -1533,6 +1568,7 @@ Apply the ``Sub'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection ``Up'' Filter
 
 @deftp {Class} <png-filter:up>
@@ -1555,6 +1591,7 @@ Apply the ``Up'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
 
+@c -----------------------------------------------------------------------------
 @subsection ``Average'' Filter
 
 @deftp {Class} <png-filter:average>
@@ -1577,7 +1614,7 @@ Apply the ``Average'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
 
-
+@c -----------------------------------------------------------------------------
 @subsection ``Paeth'' Filter
 
 @deftp {Class} <png-filter:paeth>
@@ -1600,7 +1637,7 @@ Apply the ``Paeth'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
 
-
+@c -----------------------------------------------------------------------------
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
 
