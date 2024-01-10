@@ -57,6 +57,8 @@
             png-image-interlace-method
             png-image-palette
             png-image-color-type
+            png-image-color-type->symbol
+            png-image-color-type/symbol
             png-image-color-type-set!
             png-image-pixel-size
             png-image-pixels
@@ -463,6 +465,19 @@ the specified type (depending on @var{where} value.)"
 
 (define-method (png-image-pixel-size (image <png-image>))
   (png-image-color-type->pixel-size (png-image-color-type image)))
+
+(define-method (png-image-color-type->symbol (color-type <number>))
+  "Convert a PNG image @var{color-type} to a symbol."
+  (case color-type
+    ((0) 'grayscale)
+    ((2) 'rgb)
+    ((3) 'indexed)
+    ((4) 'grayscale+alpha)
+    ((6) 'rgb+alpha)))
+
+(define-method (png-image-color-type/symbol (image <png-image>))
+  "Get the @var{image} color type as a symbol."
+  (png-image-color-type->symbol (png-image-color-type image)))
 
 (define-method (png-image-pixels (image <png-image>))
   (* (png-image-width image) (png-image-height image)))
