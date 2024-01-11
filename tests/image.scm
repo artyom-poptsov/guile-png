@@ -25,6 +25,18 @@
 
 (test-begin %test-name)
 
+
+
+(test-equal "png-image-color-type->symbol: 0 -> grayscale"
+  'grayscale
+  (png-image-color-type->symbol 0))
+
+(test-equal "png-image-color-type->symbol: #f"
+  #f
+  (png-image-color-type->symbol 99))
+
+
+
 (test-assert "png-compressed-image?"
   (let* ((ihdr  (make <png-chunk:IHDR>
                   #:type      'IHDR))
