@@ -60,6 +60,7 @@
             png-image-palette
             png-image-color-type
             png-image-color-type->symbol
+            symbol->png-image-color-type
             png-image-color-type/symbol
             png-image-color-type-set!
             png-image-pixel-size
@@ -484,6 +485,17 @@ the specified type (depending on @var{where} value.)"
 (define-method (png-image-color-type->symbol (color-type <number>))
   "Convert a PNG image @var{color-type} to a symbol."
   (hash-ref %color-types color-type))
+
+(define-method (symbol->png-image-color-type (color-type <symbol>))
+  "Lookup a corresponding color type code for a @var{color-type} symbol.  Return
+the code or #f if the code is not found."
+  (let loop ((lst (hash-map->list cons %color-types)))
+    (if (null? lst)
+        #f
+        (let ((elem (car lst)))
+          (if (equal? (cdr elem) color-type)
+              (car elem)
+              (loop (cdr lst)))))))
 
 (define-method (png-image-color-type/symbol (image <png-image>))
   "Get the @var{image} color type as a symbol."

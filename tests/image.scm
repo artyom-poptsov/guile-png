@@ -35,6 +35,10 @@
   #f
   (png-image-color-type->symbol 99))
 
+(test-equal "symbol->png-image-color-type: grayscale -> 0"
+  0
+  (symbol->png-image-color-type 'grayscale))
+
 
 
 (test-assert "png-compressed-image?"
