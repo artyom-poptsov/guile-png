@@ -26,10 +26,12 @@
 
 (define-module (png image)
   #:use-module (oop goops)
+  #:use-module (scheme documentation)
   #:use-module (rnrs bytevectors)
   #:use-module (rnrs io ports)
   #:use-module (ice-9 binary-ports)     ; put-bytevector
   #:use-module (ice-9 format)
+  #:use-module (ice-9 hash-table)
   #:use-module (zlib)
   #:use-module (png core common)
   #:use-module (png core filter)
@@ -82,6 +84,19 @@
 ;; <https://www.rfc-editor.org/rfc/rfc2083#page-77>
 (define %png-image-signature
   #vu8(137 80 78 71 13 10 26 10))
+
+
+
+(define-with-docs %color-types
+  "Hash table of possible PNG image color types.  Color type codes represent
+sums of the following values: 1 (palette used), 2 (color used), and 4 (alpha
+channel used)."
+  (alist->hash-table
+   '((0 . grayscale)
+     (2 . rgb)
+     (3 . indexed)
+     (4 . grayscale+alpha)
+     (6 . rgb+alpha))))
 
 
 
@@ -468,12 +483,7 @@ the specified type (depending on @var{where} value.)"
 
 (define-method (png-image-color-type->symbol (color-type <number>))
   "Convert a PNG image @var{color-type} to a symbol."
-  (case color-type
-    ((0) 'grayscale)
-    ((2) 'rgb)
-    ((3) 'indexed)
-    ((4) 'grayscale+alpha)
-    ((6) 'rgb+alpha)))
+  (hash-ref %color-types color-type))
 
 (define-method (png-image-color-type/symbol (image <png-image>))
   "Get the @var{image} color type as a symbol."
