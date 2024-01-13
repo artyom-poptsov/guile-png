@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2021-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-INI.
 ##
@@ -25,6 +25,7 @@ SUBDIRS = \
 SOURCES = \
 	crc.scm		\
 	filter.scm	\
+	color-type.scm	\
 	common.scm	\
 	chunk.scm
 

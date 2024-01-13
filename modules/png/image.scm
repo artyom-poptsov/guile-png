@@ -31,15 +31,17 @@
   #:use-module (rnrs io ports)
   #:use-module (ice-9 binary-ports)     ; put-bytevector
   #:use-module (ice-9 format)
-  #:use-module (ice-9 hash-table)
   #:use-module (zlib)
   #:use-module (png core common)
   #:use-module (png core filter)
+  #:use-module (png core color-type)
   #:use-module (png core chunk)
   #:use-module (png core chunk ihdr)
   #:use-module (png core chunk iend)
   #:use-module (png core chunk plte)
   #:use-module (png chunk-decoder)
+  #:re-export (png-image-color-type->symbol
+               symbol->png-image-color-type)
   #:export (<png-compressed-image>
             png-compressed-image?
             png-compressed-image-decompress
@@ -59,8 +61,6 @@
             png-image-interlace-method
             png-image-palette
             png-image-color-type
-            png-image-color-type->symbol
-            symbol->png-image-color-type
             png-image-color-type/symbol
             png-image-color-type-set!
             png-image-pixel-size
@@ -85,19 +85,6 @@
 ;; <https://www.rfc-editor.org/rfc/rfc2083#page-77>
 (define %png-image-signature
   #vu8(137 80 78 71 13 10 26 10))
-
-
-
-(define-with-docs %color-types
-  "Hash table of possible PNG image color types.  Color type codes represent
-sums of the following values: 1 (palette used), 2 (color used), and 4 (alpha
-channel used)."
-  (alist->hash-table
-   '((0 . grayscale)
-     (2 . rgb)
-     (3 . indexed)
-     (4 . grayscale+alpha)
-     (6 . rgb+alpha))))
 
 
 
@@ -481,21 +468,6 @@ the specified type (depending on @var{where} value.)"
 
 (define-method (png-image-pixel-size (image <png-image>))
   (png-image-color-type->pixel-size (png-image-color-type image)))
-
-(define-method (png-image-color-type->symbol (color-type <number>))
-  "Convert a PNG image @var{color-type} to a symbol."
-  (hash-ref %color-types color-type))
-
-(define-method (symbol->png-image-color-type (color-type <symbol>))
-  "Lookup a corresponding color type code for a @var{color-type} symbol.  Return
-the code or #f if the code is not found."
-  (let loop ((lst (hash-map->list cons %color-types)))
-    (if (null? lst)
-        #f
-        (let ((elem (car lst)))
-          (if (equal? (cdr elem) color-type)
-              (car elem)
-              (loop (cdr lst)))))))
 
 (define-method (png-image-color-type/symbol (image <png-image>))
   "Get the @var{image} color type as a symbol."
