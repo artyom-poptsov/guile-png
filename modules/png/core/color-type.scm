@@ -28,6 +28,7 @@
   #:use-module (oop goops)
   #:use-module (ice-9 hash-table)
   #:export (%color-types
+            %color-types/reverse-mapping
             png-image-color-type->symbol
             symbol->png-image-color-type))
 
@@ -44,6 +45,16 @@ channel used)."
      (4 . grayscale+alpha)
      (6 . rgb+alpha))))
 
+(define-with-docs %color-types/reverse-mapping
+  "Hash table of possible PNG image color types, that maps the color type
+name (as a symbol) to its code.  It is based on @code{%color-types}."
+  (alist->hash-table
+   (map (lambda (elem)
+          (cons (cdr elem) (car elem)))
+        (hash-map->list cons %color-types))))
+
+
+
 (define-method (png-image-color-type->symbol (color-type <number>))
   "Convert a PNG image @var{color-type} to a symbol."
   (hash-ref %color-types color-type))
@@ -51,12 +62,6 @@ channel used)."
 (define-method (symbol->png-image-color-type (color-type <symbol>))
   "Lookup a corresponding color type code for a @var{color-type} symbol.  Return
 the code or #f if the code is not found."
-  (let loop ((lst (hash-map->list cons %color-types)))
-    (if (null? lst)
-        #f
-        (let ((elem (car lst)))
-          (if (equal? (cdr elem) color-type)
-              (car elem)
-              (loop (cdr lst)))))))
+  (hash-ref %color-types/reverse-mapping color-type))
 
 ;;; color-type.scm ends here.
