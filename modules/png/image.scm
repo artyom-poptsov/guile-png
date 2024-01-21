@@ -135,10 +135,11 @@
 
 (define-method (%display (image <png-compressed-image>) (port <port>))
   (let ((ihdr (png-image-header image)))
-    (format port "#<png-compressed-image ~ax~a ~a bit ~a>"
+    (format port "#<png-compressed-image ~ax~a ~a bit color: ~a ~a>"
             (png-chunk:IHDR-width ihdr)
             (png-chunk:IHDR-height ihdr)
             (png-chunk:IHDR-bit-depth ihdr)
+            (png-image-color-type->symbol (png-image-color-type image))
             (object-address/hex-string image))))
 
 (define-method (display (image <png-compressed-image>) (port <port>))
@@ -348,10 +349,11 @@ set to #t, the procedure returns data in uncompressed form."
 
 
 (define-method (%display (image <png-image>) (port <port>))
-  (format port "#<png-image ~ax~a ~a bit ~a>"
+  (format port "#<png-image ~ax~a ~a bit color: ~a ~a>"
           (png-image-width image)
           (png-image-height image)
           (png-image-bit-depth image)
+          (png-image-color-type->symbol (png-image-color-type image))
           (object-address/hex-string image)))
 
 (define-method (display (image <png-image>) (port <port>))

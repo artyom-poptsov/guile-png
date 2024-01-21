@@ -16,6 +16,9 @@
 (define-method (configure-test-logging! (test-suite-name <string>))
   (smc-log-init! "file" `((file . ,(string-append test-suite-name "-smc.log")))))
 
+(define %topdir (getenv "abs_top_srcdir"))
+(define %example-rainbow (format #f "~a/tests/example-rainbow.png" %topdir))
+
 
 
 (define %test-name "image")
@@ -38,6 +41,25 @@
 (test-equal "symbol->png-image-color-type: grayscale -> 0"
   0
   (symbol->png-image-color-type 'grayscale))
+
+
+
+(test-assert "<png-compressed-image>: display"
+  (let ((image (png->scm (open-input-file %example-rainbow)
+                         #:decompress? #f)))
+    (with-output-to-string
+      (lambda ()
+        (display image)))))
+
+(test-assert "<png-image>: display"
+  (let ((image (make <png-image>
+                 #:color-type 2
+                 #:bit-depth  8
+                 #:width      10
+                 #:height     10)))
+    (with-output-to-string
+      (lambda ()
+        (display image)))))
 
 
 
