@@ -339,7 +339,18 @@ set to #t, the procedure returns data in uncompressed form."
       (png-image-data-set! image (make-bytevector (* (png-image-width image)
                                                      (png-image-height image)
                                                      3)
-                                                  0)))))
+                                                  0))))
+  (let ((color-type (constructor-argument #:color-type initargs)))
+    (cond
+      ((symbol? color-type)
+       (png-image-color-type-set! image
+                                  (symbol->png-image-color-type color-type)))
+      ((number? color-type)
+       (png-image-color-type-set! image color-type))
+      ((not color-type)
+       (error "#:color-type must be set" color-type))
+      (else
+       (error "#:color-type must be either a symbol or a number" color-type)))))
 
 
 (define (png-image? x)

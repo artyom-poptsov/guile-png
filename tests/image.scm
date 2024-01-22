@@ -137,8 +137,9 @@
                   #:type      'IHDR))
          (iend  (make <png-chunk:IEND>))
          (image (make <png-image>
-                  #:chunks    (list ihdr iend)
-                  #:data      #vu8(255 255 255 255)))
+                  #:color-type 2
+                  #:chunks     (list ihdr iend)
+                  #:data        #vu8(255 255 255 255)))
          (image-clone (png-image-clone image)))
     (and (not (eq? (png-image-chunks image)
                    (png-image-chunks image-clone)))
