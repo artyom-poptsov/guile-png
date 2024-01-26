@@ -20,6 +20,7 @@
 SCM_TESTS = \
 	crc.scm		\
 	common.scm	\
+	core-filter.scm	\
 	chunks.scm \
 	filter.scm	\
 	image.scm	\
