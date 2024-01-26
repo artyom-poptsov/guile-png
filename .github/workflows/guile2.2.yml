@@ -50,3 +50,6 @@ jobs:
 
       - name: Test
         run: make -j$(nproc) check
+
+      - name: Distcheck
+        run: make -j$(nproc) distcheck
