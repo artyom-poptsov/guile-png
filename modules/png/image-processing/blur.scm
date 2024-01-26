@@ -42,10 +42,15 @@
 
 
 (define-method (png-image-blur (image <png-image>))
-  "Copy an IMAGE and apply 'blur' effect on the copy, using 'averaging' method.
+  "Copy an @var{image} and apply 'blur' effect on the copy, using 'averaging'
+method.
+
 Return the new image.
 
-The filtering is done using a simple low-pass filter."
+The filtering is done using a simple low-pass filter.
+
+The filter will not be applied to an @var{image} if it has 'indexed' color
+type; an error will be issued instead."
   (define (kernel-ref y x)
     (vector-ref (vector-ref %blur-kernel y) x))
 
@@ -71,6 +76,10 @@ The filtering is done using a simple low-pass filter."
                       (loop (+ idx 1)))))
                 (j-loop (+ j 1))))
             (k-loop (+ k 1) result)))))
+
+  (when (equal? (png-image-color-type/symbol image) 'indexed)
+    (error "Unsupported 'indexed' color type for 'blur' operation"
+           image))
 
   (let* ((image-clone (png-image-clone image))
          (width       (png-image-width image-clone))

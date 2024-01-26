@@ -57,6 +57,9 @@
   (let ((image (png->scm (open-input-file %example-ellipse))))
     (png-image-blur image)))
 
+(test-error "blur: 'indexed' color type is unsupported yet"
+  (png-image-blur (make <png-image> #:color-type 'indexed)))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
