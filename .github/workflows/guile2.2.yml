@@ -53,3 +53,10 @@ jobs:
 
       - name: Distcheck
         run: make -j$(nproc) distcheck
+
+      - name: Upload the artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: guile-png
+          path: "guile-png-0.7.1.tar.gz"
