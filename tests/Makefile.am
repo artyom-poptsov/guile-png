@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2021-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -50,6 +50,8 @@ AM_SCM_LOG_FLAGS = \
 EXTRA_DIST = \
 	${SCM_TESTS}	\
 	example-rainbow.png \
+	example-rectangle.png \
+	example-ellipse.png \
 	meditate.png
 
 CLEANFILES = \
