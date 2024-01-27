@@ -23,6 +23,7 @@ SUBDIRS = \
 	. chunk
 
 SOURCES = \
+	error.scm	\
 	crc.scm		\
 	filter.scm	\
 	color-type.scm	\

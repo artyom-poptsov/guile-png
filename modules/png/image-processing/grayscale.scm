@@ -1,6 +1,6 @@
 ;;; grayscale.scm -- "Grayscale" filter implementation.
 
-;; Copyright (C) 2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2023, 2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
   #:use-module (png graphics pixel)
+  #:use-module (png core error)
   #:use-module (png core chunk plte)
   #:export (png-image-grayscale))
 
@@ -48,9 +49,9 @@
         (round
          (+ (/ red 3) (/ green 3) (/ blue 3))))))
     (else
-     (error "Unknown grayscale conversion method"
-            image
-            method))))
+     (png-error "Unknown grayscale conversion method"
+                image
+                method))))
 
 
 

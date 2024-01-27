@@ -29,6 +29,7 @@
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
   #:use-module (png graphics pixel)
+  #:use-module (png core error)
   #:use-module (png core chunk plte)
   #:export (png-image-blur))
 
@@ -78,8 +79,8 @@ type; an error will be issued instead."
             (k-loop (+ k 1) result)))))
 
   (when (equal? (png-image-color-type/symbol image) 'indexed)
-    (error "Unsupported 'indexed' color type for 'blur' operation"
-           image))
+    (png-error "Unsupported 'indexed' color type for 'blur' operation"
+               image))
 
   (let* ((image-clone (png-image-clone image))
          (width       (png-image-width image-clone))

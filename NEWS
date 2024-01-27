@@ -11,6 +11,8 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ** Fix ellipse drawing                                               :BUGFIX:
 Guile-PNG would fail to draw an ellipse at the specified position due to
 rational number calculation errors.  Now it is fixed.
+** Guile-PNG procedures now throw 'png-error'
+Guile-PNG procedures now throw 'png-error' instead of a generic errors.
 ** =(png image)=: =png-image-chunks-insert!=: New methods
 There are now three variations of =png-image-chunks-insert!= that allow to
 insert a new chunk into an image chunk list.

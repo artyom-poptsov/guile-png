@@ -33,6 +33,7 @@
   #:use-module (ice-9 format)
   #:use-module (zlib)
   #:use-module (png core common)
+  #:use-module (png core error)
   #:use-module (png core filter)
   #:use-module (png core color-type)
   #:use-module (png core chunk)
@@ -115,7 +116,7 @@
   (next-method)
   (let ((ihdr-chunks (png-image-chunks-query image 'IHDR)))
     (when (null? ihdr-chunks)
-      (error "IHDR chunk is mandatory"))
+      (png-error "IHDR chunk is mandatory"))
     (slot-set! image 'header (car ihdr-chunks)))
 
   (let ((plte-chunks (png-image-chunks-query image 'PLTE)))
@@ -348,9 +349,9 @@ set to #t, the procedure returns data in uncompressed form."
       ((number? color-type)
        (png-image-color-type-set! image color-type))
       ((not color-type)
-       (error "#:color-type must be set" color-type))
+       (png-error "#:color-type must be set" color-type))
       (else
-       (error "#:color-type must be either a symbol or a number" color-type)))))
+       (png-error "#:color-type must be either a symbol or a number" color-type)))))
 
 
 (define (png-image? x)
@@ -433,9 +434,9 @@ The procedure throws an error when @var{where} is a wrong symbol."
                (png-image-chunks-set! image new-chunks)
                (+ idx 1))))
         (else
-         (error "Unknown insert action (expecting 'before' or 'after')"
-                image
-                where))))
+         (png-error "Unknown insert action (expecting 'before' or 'after')"
+                    image
+                    where))))
      ((null? chunks)
       #f)
      (else

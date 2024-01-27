@@ -1,6 +1,6 @@
 ;;; filter.scm -- PNG filters.
 
-;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)
+  #:use-module (png core error)
   #:use-module (srfi srfi-1)
   #:export (<png-filter>
             <png-filter:none>
@@ -518,7 +519,7 @@ SCANLINE-INDEX."
             ((4)
              (png-filter-remove! filter-paeth image-data result row-index))
             (else
-             (error "Unsupported filter type" filter-type row-index)))))
+             (png-error "Unsupported filter type" filter-type row-index)))))
 
       (let loop-over-rows ((row-index 0))
         (if (= row-index image-height)
