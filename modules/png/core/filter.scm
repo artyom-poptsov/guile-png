@@ -33,11 +33,22 @@
   #:use-module (png core error)
   #:use-module (srfi srfi-1)
   #:export (<png-filter>
+            png-filter?
+
             <png-filter:none>
+            png-filter:none?
+
             <png-filter:sub>
+            png-filter:sub?
+
             <png-filter:paeth>
+            png-filter:paeth?
+
             <png-filter:up>
+            png-filter:up?
+
             <png-filter:average>
+            png-filter:average?
 
             png-filter-type
 
@@ -101,6 +112,12 @@
 
 
 
+(define (png-filter? x)
+  "Check if X is a @code{<png-filter>} instance."
+  (is-a? x <png-filter>))
+
+
+
 (define-method (%display (filter <png-filter>) (port <port>))
   (format port
           "#<png-filter scanline-length: ~ab bytes-per-pixel: ~ab ~a>"
@@ -117,6 +134,10 @@
 
 
 (define-class <png-filter:none> (<png-filter>))
+
+(define (png-filter:none? x)
+  "Check if X is @code{<png-filter:none>} instance."
+  (is-a? x <png-filter:none>))
 
 (define-method (initialize (png-filter <png-filter:none>) initargs)
   (next-method)
@@ -162,6 +183,10 @@ specified SCANLINE-INDEX."
 
 
 (define-class <png-filter:sub> (<png-filter>))
+
+(define (png-filter:sub? x)
+  "Check if X is @code{<png-filter:sub>} instance."
+  (is-a? x <png-filter:sub>))
 
 (define-method (initialize (png-filter <png-filter:sub>) initargs)
   (next-method)
@@ -230,6 +255,10 @@ SCANLINE-INDEX."
 
 (define-class <png-filter:up> (<png-filter>))
 
+(define (png-filter:up? x)
+  "Check if X is @code{<png-filter:up>} instance."
+  (is-a? x <png-filter:up>))
+
 (define-method (initialize (png-filter <png-filter:up>) initargs)
   (next-method)
   (png-filter-type-set! png-filter 2))
@@ -297,6 +326,10 @@ SCANLINE-INDEX."
 
 
 (define-class <png-filter:average> (<png-filter>))
+
+(define (png-filter:average? x)
+  "Check if X is @code{<png-filter:average>} instance."
+  (is-a? x <png-filter:average>))
 
 (define-method (initialize (png-filter <png-filter:average>) initargs)
   (next-method)
@@ -373,6 +406,10 @@ SCANLINE-INDEX."
 
 
 (define-class <png-filter:paeth> (<png-filter>))
+
+(define (png-filter:paeth? x)
+  "Check if X is @code{<png-filter:paeth>} instance."
+  (is-a? x <png-filter:paeth>))
 
 (define-method (initialize (png-filter <png-filter:paeth>) initargs)
   (next-method)
