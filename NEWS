@@ -7,16 +7,40 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.7.2 (2024-02-10)
 ** Fix ellipse drawing                                               :BUGFIX:
 Guile-PNG would fail to draw an ellipse at the specified position due to
 rational number calculation errors.  Now it is fixed.
+** Fix rectangle drawing                                             :BUGFIX:
+The rectangle drawn by this procedure would always be one pixel wider and
+higher than the actual shape size.  Now this should be fixed.
+** Fix circle constructor: handle "diameter" option properly         :BUGFIX:
+** Add "blur" image processing module
+The module contains =png-image-blur= procedure that produces a new blurred
+image from the given one.  Note that this procedure does not work with indexed
+colors for now.
+** Handle EXIF chunk types
+This includes: eXIf, zxIf, vpAg, caNv.
 ** Guile-PNG procedures now throw 'png-error'
 Guile-PNG procedures now throw 'png-error' instead of a generic errors.
-** =(png image)=: =png-image-chunks-insert!=: New methods
+** Changes in =(png image)=
+*** =png-image-chunks-insert!=: New method
 There are now three variations of =png-image-chunks-insert!= that allow to
 insert a new chunk into an image chunk list.
-  
+*** =png-image->bytevector=: New method
+This method allows to convert an PNG image to a bytevector.
+*** Now =#:color-type= can be passed as a symbol
+This improves human readability of the code.
+*** The output of "display" for an image now simpler
+** =(png)=: =bytevector->png-image=: New method
+This method allows to read a PNG image from a bytevector.
+** =(png core color-type)=: New module
+The module contains =png-image-color-type->symbol= and
+=symbol->png-image-color-type= methods.
+** =(png core filter)=: Add type predicates
+** Update and improve the documentation
+** Add new tests
+
 * Changes in version 0.7.1 (2023-08-20)
 ** Fix Bresenham's Line generation algorithm                         :BUGFIX:
 Bresenham's Line generation algorithm would fail to draw properly some types
