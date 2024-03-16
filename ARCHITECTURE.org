@@ -1,0 +1,68 @@
+#+TITLE: Guile-PNG Architecture
+#+STARTUP: content hidestars
+
+Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
+* Architecture
+The main goal of the project is to provide pure Scheme implementation of the
+PNG ([[https://www.rfc-editor.org/rfc/rfc2083][RFC 2083]]) format for GNU Guile.
+
+For the sake of the correctness the library should provide basic graphic
+primitives to draw and some basic image operations.
+
+** Code Map
+*** Overview
+All the GNU Guile modules are in =modules= directory.  The library provides the
+basic =png= module that contains the procedures for reading/writing PNG images.
+
+Guile-PNG uses OOP style in the form of GOOPS so most of the procedures
+operate on objects and/or return objects as the result.
+
+*** Finite-State Machines (FSMs)
+Guile-PNG compiles its Finite-State Machines (FSMs) for the PNG reader using
+[[https://github.com/artyom-poptsov/guile-smc][Guile-SMC]].  The source files for FSMs are stored in =(png fsm ...)= modules.
+
+=*.puml= files contain [[https://plantuml.com/][PlantUML]] description of the parser FSMs.
+
+=*.-context.scm= files are providing the FSMs with the needed callbacks.
+
+=context.scm= contains the callbacks and types provided by Guile-SMC.
+
+*** Core Procedures
+The core procedures for Guile-PNG are declared in =(png core ...)= modules.
+
+Those modules contain:
+- PNG chunk types and procedures.
+- Error handling procedures.
+- CRC procedures.
+- PNG filtering procedures.  Note that a "filter" in this context means an
+  algorithm that is applied to an image to improve the lossless compression
+  ratio.
+
+*** Graphics
+=(png graphics ...)= modules contain graphic types and primitives that allow
+to draw simple forms over PNG images.
+
+All those modules are re-exported in =(png graphics)= module.
+
+*** Image Processing
+=(png image-processing ...)= modules contain some image processing procedures.
+
+All those modules are re-exported in =(png image-processing)= module.
+
+*** Examples
+Examples are important as they provide a hint how the library can be used for
+real tasks.
+
+Guile-PNG examples are stored in =./examples= directory in the root of the
+repository.
+
+*** Tests
+Tests are in =tests= directory.  They are written using SRFI-61.
+
+When a new functionality is being added a new test case (or several test
+cases) should be written for it.
