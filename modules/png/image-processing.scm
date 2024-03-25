@@ -28,6 +28,7 @@
 
 (re-export-modules (png image-processing grayscale)
                    (png image-processing invert-colors)
+                   (png image-processing rotate)
                    (png image-processing solarize)
                    (png image-processing blur))
 

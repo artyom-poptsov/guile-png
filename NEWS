@@ -7,6 +7,12 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Implement image rotation methods
+The methods below can be found in =(png image-processing rotate)= module:
+- =png-image-rotate-90/cw=: 90 degrees clockwise rotation
+- =png-image-rotate-90/ccw=: 90 degrees counter-clockwise rotation
+
 * Changes in version 0.7.2 (2024-02-10)
 ** Fix ellipse drawing                                               :BUGFIX:
 Guile-PNG would fail to draw an ellipse at the specified position due to
