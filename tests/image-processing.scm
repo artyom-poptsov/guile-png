@@ -29,6 +29,8 @@
 (define %topdir (getenv "abs_top_srcdir"))
 (define %meditate (format #f "~a/tests/meditate.png" %topdir))
 (define %example-ellipse (format #f "~a/tests/example-ellipse.png" %topdir))
+(define %example-rainbow
+  (format #f "~a/tests/example-rainbow.png" %topdir))
 
 (define %test-name "image-processing")
 
@@ -59,6 +61,16 @@
 
 (test-error "blur: 'indexed' color type is unsupported yet"
   (png-image-blur (make <png-image> #:color-type 'indexed)))
+
+
+
+(test-assert "rotate: 90 degrees clockwise"
+  (let ((image (png->scm (open-input-file %example-rainbow))))
+    (png-image-rotate-90/cw image)))
+
+(test-assert "rotate: 90 degrees counter-clockwise"
+  (let ((image (png->scm (open-input-file %example-rainbow))))
+    (png-image-rotate-90/ccw image)))
 
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
