@@ -31,7 +31,8 @@
   #:use-module (png graphics pixel)
   #:use-module (png core error)
   #:export (png-image-rotate-90/ccw
-            png-image-rotate-90/cw))
+            png-image-rotate-90/cw
+            png-image-rotate-180))
 
 
 
@@ -79,6 +80,26 @@ image."
                 (png-image-pixel-set! image-clone
                                       layer-index
                                       (- new-height pixel-index 1)
+                                      (png-image-pixel-ref image
+                                                           pixel-index
+                                                           layer-index))
+                (pixel-loop (+ pixel-index 1))))
+            (layer-loop (+ layer-index 1)))))))
+
+(define-method (png-image-rotate-180 (image <png-image>))
+  "Rotate an @code{image} by 180 degrees.  Return a rotated new image."
+  (let* ((image-clone (png-image-clone image))
+         (width       (png-image-width image))
+         (height      (png-image-height image)))
+    (let layer-loop ((layer-index 0))
+      (if (= layer-index height)
+          image-clone
+          (begin
+            (let pixel-loop ((pixel-index 0))
+              (when (< pixel-index width)
+                (png-image-pixel-set! image-clone
+                                      (- width pixel-index 1)
+                                      (- height layer-index 1)
                                       (png-image-pixel-ref image
                                                            pixel-index
                                                            layer-index))

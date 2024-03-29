@@ -72,6 +72,10 @@
   (let ((image (png->scm (open-input-file %example-rainbow))))
     (png-image-rotate-90/ccw image)))
 
+(test-assert "rotate: 180"
+  (let ((image (png->scm (open-input-file %example-rainbow))))
+    (png-image-rotate-180 image)))
+
 
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
