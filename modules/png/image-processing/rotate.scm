@@ -35,31 +35,6 @@
 
 
 
-(define-method (png-image-rotate-90/ccw (image <png-image>))
-  "Rotate an IMAGE counter-clockwise by the specified ANGLE.  Return the new
-image."
-  (let* ((image-clone     (png-image-clone image))
-         (original-width  (png-image-width image))
-         (original-height (png-image-height image))
-         (new-width       original-height)
-         (new-height      original-width))
-    (png-image-width-set! image-clone new-width)
-    (png-image-height-set! image-clone new-height)
-    (let layer-loop ((layer-index 0))
-      (if (= layer-index original-height)
-          image-clone
-          (begin
-            (let pixel-loop ((pixel-index 0))
-              (when (< pixel-index original-width)
-                (png-image-pixel-set! image-clone
-                                      layer-index
-                                      (- new-height pixel-index 1)
-                                      (png-image-pixel-ref image
-                                                           pixel-index
-                                                           layer-index))
-                (pixel-loop (+ pixel-index 1))))
-            (layer-loop (+ layer-index 1)))))))
-
 (define-method (png-image-rotate-90/cw (image <png-image>))
   "Rotate an IMAGE clockwise by the specified ANGLE.  Return the new
 image."
@@ -79,6 +54,31 @@ image."
                 (png-image-pixel-set! image-clone
                                       (- new-width layer-index 1)
                                       pixel-index
+                                      (png-image-pixel-ref image
+                                                           pixel-index
+                                                           layer-index))
+                (pixel-loop (+ pixel-index 1))))
+            (layer-loop (+ layer-index 1)))))))
+
+(define-method (png-image-rotate-90/ccw (image <png-image>))
+  "Rotate an IMAGE counter-clockwise by the specified ANGLE.  Return the new
+image."
+  (let* ((image-clone     (png-image-clone image))
+         (original-width  (png-image-width image))
+         (original-height (png-image-height image))
+         (new-width       original-height)
+         (new-height      original-width))
+    (png-image-width-set! image-clone new-width)
+    (png-image-height-set! image-clone new-height)
+    (let layer-loop ((layer-index 0))
+      (if (= layer-index original-height)
+          image-clone
+          (begin
+            (let pixel-loop ((pixel-index 0))
+              (when (< pixel-index original-width)
+                (png-image-pixel-set! image-clone
+                                      layer-index
+                                      (- new-height pixel-index 1)
                                       (png-image-pixel-ref image
                                                            pixel-index
                                                            layer-index))
