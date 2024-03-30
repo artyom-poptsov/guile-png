@@ -30,7 +30,8 @@
   #:export (png-image-pixel-ref
             png-image-pixel-set!
             png-image-pixel-for-each
-            png-image-pixel-map))
+            png-image-pixel-map
+            png-image-pixel-fold))
 
 
 
@@ -141,5 +142,32 @@ The return value of the @var{proc} must be a new pixel.
                                   index
                                   (proc pixel #:index index #:x x #:y y))
             (loop (+ index 1)))))))
+
+(define-method (png-image-pixel-fold (image <png-image>)
+                                     (init  <top>)
+                                     (proc  <procedure>))
+  "Apply @var{proc} to the each pixel of an @var{image} to build a result,
+and return that result.
+
+Each @var{proc} call is
+@example lisp
+(proc pixel previous #:index index #:x x #:y y)
+@end example
+
+@code{previous} is the return from the previous @var{proc} call, or the given
+@var{init} for the first call.
+"
+  (let ((pixel-count (png-image-pixels image))
+        (width       (png-image-width image))
+        (height      (png-image-height image)))
+    (let loop ((index 0)
+               (result init))
+      (if (= index pixel-count)
+          result
+          (let ((pixel (png-image-pixel-ref image index))
+                (x     (truncate-remainder index width))
+                (y     (truncate-quotient index width)))
+            (loop (+ index 1)
+                  (proc pixel result #:index index #:x x #:y y)))))))
 
 ;;; pixel.scm ends here.
