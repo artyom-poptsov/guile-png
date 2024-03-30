@@ -7,13 +7,21 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.7.3 (2024-03-30)
 ** Implement image transformation methods
 The methods below can be found in =(png image-processing rotate)= module:
 - =png-image-rotate-90/cw=: 90 degrees clockwise rotation
 - =png-image-rotate-90/ccw=: 90 degrees counter-clockwise rotation
 - =png-image-flip-vertical=: Vertical flip.
 - =png-image-flip-horizontal=: Horizontal flip.
+** New high-level API for manipulating image pixels
+=(png graphics pixel)= now provides two high-level procedures for manipulating
+the image pixels:
+- =png-image-pixel-for-each=
+- =png-image-pixel-map=
+- =png-image-pixel-fold=
+** Update and improve the documentation
+** Add new tests
 
 * Changes in version 0.7.2 (2024-02-10)
 ** Fix ellipse drawing                                               :BUGFIX:
