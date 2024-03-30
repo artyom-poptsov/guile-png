@@ -85,17 +85,16 @@ A METHOD is a symbol that is expected to be either 'weighted' (default) or
           (slot-set! image-clone
                      'data
                      (make-bytevector pixel-count 0))
-          (let loop ((index 0))
-            (if (= index pixel-count)
-                image-clone
-                (let* ((pixel (png-image-pixel-ref image index))
-                       (red   (bytevector-u8-ref pixel 0))
-                       (green (bytevector-u8-ref pixel 1))
-                       (blue  (bytevector-u8-ref pixel 2))
-                       (grayscale-value (pixel-converter red green blue))
-                       (new-pixel (make-bytevector 1 grayscale-value)))
-                  (png-image-color-type-set! image-clone 0)
-                  (png-image-pixel-set! image-clone index new-pixel)
-                  (loop (+ index 1)))))))))
+          (png-image-color-type-set! image-clone 0)
+          (png-image-pixel-for-each
+           image
+           (lambda* (pixel #:key index #:allow-other-keys)
+             (let* ((red   (bytevector-u8-ref pixel 0))
+                    (green (bytevector-u8-ref pixel 1))
+                    (blue  (bytevector-u8-ref pixel 2))
+                    (grayscale-value (pixel-converter red green blue))
+                    (new-pixel (make-bytevector 1 grayscale-value)))
+               (png-image-pixel-set! image-clone index new-pixel))))
+          image-clone))))
 
 ;;; grayscale.scm ends here.
