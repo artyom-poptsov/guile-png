@@ -511,6 +511,34 @@ an @var{image}. The return value is undefined.
 
 @end deffn
 
+@deffn {Method} png-image-pixel-for-each (image <png-image>) @
+                                         (proc  <procedure>)
+
+Apply @var{proc} to the each pixel of a @var{image} copy.  Return value is
+undefined.
+
+The @var{proc} is called like follows:
+@example lisp
+(proc index pixel)
+@end example
+
+@end deffn
+
+@deffn {Method} png-image-pixel-map (image <png-image>) @
+                                    (proc  <procedure>)
+
+Apply @var{proc} to the each pixel of a @var{image} copy.  Return the new
+image.
+
+The @var{proc} is called like follows:
+@example lisp
+(proc index pixel)
+@end example
+
+The return value of the @var{proc} must be a new pixel.
+
+@end deffn
+
 @c -----------------------------------------------------------------------------
 @node Graphic Objects
 @subsection Graphic Objects

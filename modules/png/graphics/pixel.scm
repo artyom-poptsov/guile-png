@@ -1,6 +1,6 @@
 ;;; pixel.scm -- Low-level pixel manipulation.
 
-;; Copyright (C) 2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,9 @@
   #:use-module (rnrs bytevectors)
   #:use-module (png image)
   #:export (png-image-pixel-ref
-            png-image-pixel-set!))
+            png-image-pixel-set!
+            png-image-pixel-for-each
+            png-image-pixel-map))
 
 
 
@@ -89,5 +91,45 @@ of pixels."
                         (+ (* y (png-image-width image))
                            x)
                         pixel))
+
+
+;;; High-level procedures.
+(define-method (png-image-pixel-for-each (image <png-image>)
+                                         (proc  <procedure>))
+  "Apply @var{proc} to the each pixel of a @var{image} copy.  Return value is
+undefined.
+
+The @var{proc} is called like follows:
+@example lisp
+(proc index pixel)
+@end example
+"
+  (let ((pixel-count (png-image-pixels image)))
+    (let loop ((index 0))
+      (unless (= index pixel-count)
+        (let ((pixel (png-image-pixel-ref image index)))
+          (proc index pixel)
+          (loop (+ index 1)))))))
+
+(define-method (png-image-pixel-map (image <png-image>)
+                                    (proc  <procedure>))
+  "Apply @var{proc} to the each pixel of a @var{image} copy.  Return the new
+image.
+
+The @var{proc} is called like follows:
+@example lisp
+(proc index pixel)
+@end example
+
+The return value of the @var{proc} must be a new pixel.
+"
+  (let ((image-clone (png-image-clone image))
+        (pixel-count (png-image-pixels image)))
+    (let loop ((index 0))
+      (if (= index pixel-count)
+          image-clone
+          (let ((pixel (png-image-pixel-ref image index)))
+            (png-image-pixel-set! image-clone index (proc index pixel))
+            (loop (+ index 1)))))))
 
 ;;; pixel.scm ends here.
