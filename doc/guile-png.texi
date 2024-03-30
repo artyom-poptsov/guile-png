@@ -539,6 +539,23 @@ The return value of the @var{proc} must be a new pixel.
 
 @end deffn
 
+@deffn {Method} png-image-pixel-fold (image <png-image>) @
+                                     (init <top>) @
+                                     (proc  <procedure>)
+
+Apply @var{proc} to the each pixel of an @var{image} to build a result,
+and return that result.
+
+Each @var{proc} call is
+@example lisp
+(proc pixel previous #:index index #:x x #:y y)
+@end example
+
+@code{previous} is the return from the previous @var{proc} call, or the given
+@var{init} for the first call.
+
+@end deffn
+
 @c -----------------------------------------------------------------------------
 @node Graphic Objects
 @subsection Graphic Objects
