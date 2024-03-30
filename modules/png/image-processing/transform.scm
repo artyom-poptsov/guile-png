@@ -39,8 +39,7 @@
 
 
 (define-method (png-image-rotate-90/cw (image <png-image>))
-  "Rotate an IMAGE clockwise by the specified ANGLE.  Return the new
-image."
+  "Rotate an @var{image} clockwise.  Return the new image."
   (let* ((image-clone     (png-image-clone image))
          (original-width  (png-image-width image))
          (original-height (png-image-height image))
@@ -64,8 +63,7 @@ image."
             (layer-loop (+ layer-index 1)))))))
 
 (define-method (png-image-rotate-90/ccw (image <png-image>))
-  "Rotate an IMAGE counter-clockwise by the specified ANGLE.  Return the new
-image."
+  "Rotate an @var{image} counter-clockwise.  Return the new image."
   (let* ((image-clone     (png-image-clone image))
          (original-width  (png-image-width image))
          (original-height (png-image-height image))
@@ -89,7 +87,7 @@ image."
             (layer-loop (+ layer-index 1)))))))
 
 (define-method (png-image-rotate-180 (image <png-image>))
-  "Rotate an @code{image} by 180 degrees.  Return a rotated new image."
+  "Rotate an @var{image} by 180 degrees.  Return a rotated new image."
   (let* ((image-clone (png-image-clone image))
          (width       (png-image-width image))
          (height      (png-image-height image)))
