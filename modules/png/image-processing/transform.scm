@@ -1,4 +1,4 @@
-;;; rotate.scm -- Image rotation methods.
+;;; rotate.scm -- Image transformation methods.
 
 ;; Copyright (C) 2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
@@ -24,7 +24,7 @@
 ;;; Code:
 
 
-(define-module (png image-processing rotate)
+(define-module (png image-processing transform)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
   #:use-module (png image)

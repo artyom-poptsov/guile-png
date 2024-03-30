@@ -22,7 +22,7 @@ include $(top_srcdir)/build-aux/am/guilec
 SOURCES = \
 	grayscale.scm	\
 	invert-colors.scm	\
-	rotate.scm	\
+	transform.scm	\
 	solarize.scm	\
 	blur.scm
 
