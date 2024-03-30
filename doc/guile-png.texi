@@ -981,6 +981,40 @@ or @code{average}.
 
 @end deffn
 
+@deffn {Scheme Procedure} png-image-rotate-90/cw (image <png-image>)
+
+Copy an @var{image} and rotate the copy clockwise by 90 degrees.  Return the
+new image.
+
+@end deffn
+
+@deffn {Scheme Procedure} png-image-rotate-90/ccw (image <png-image>)
+
+Copy an @var{image} and rotate the copy counter-clockwise by 90 degrees.
+Return the new image.
+
+@end deffn
+
+@deffn {Scheme Procedure} png-image-rotate-180 (image <png-image>)
+
+Copy an @var{image} and rotate the copy by 180 degrees.  Return the new image.
+
+@end deffn
+
+@deffn {Scheme Procedure} png-image-flip-vertical (image <png-image>)
+
+Copy an @var{image} and do a vertical flip of the image copy.  Return the new
+image.
+
+@end deffn
+
+@deffn {Scheme Procedure} png-image-flip-horizontal (image <png-image>)
+
+Copy an @var{image} and do a horizontal flip of the image copy.  Return the new
+image.
+
+@end deffn
+
 @node PNG Chunks
 @section PNG Chunks
 @cindex Chunk
