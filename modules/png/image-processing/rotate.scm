@@ -18,7 +18,7 @@
 
 ;;; Commentary:
 
-;; This module contains the implementation of image rotation methods.
+;; This module contains the implementation of image transformation methods.
 
 
 ;;; Code:
@@ -32,7 +32,9 @@
   #:use-module (png core error)
   #:export (png-image-rotate-90/ccw
             png-image-rotate-90/cw
-            png-image-rotate-180))
+            png-image-rotate-180
+            png-image-flip-vertical
+            png-image-flip-horizontal))
 
 
 
@@ -100,6 +102,46 @@ image."
                 (png-image-pixel-set! image-clone
                                       (- width pixel-index 1)
                                       (- height layer-index 1)
+                                      (png-image-pixel-ref image
+                                                           pixel-index
+                                                           layer-index))
+                (pixel-loop (+ pixel-index 1))))
+            (layer-loop (+ layer-index 1)))))))
+
+(define-method (png-image-flip-vertical (image <png-image>))
+  "Do a vertical flip of an @var{image}.  Return a new flipped image."
+  (let* ((image-clone (png-image-clone image))
+         (width       (png-image-width image))
+         (height      (png-image-height image)))
+    (let layer-loop ((layer-index 0))
+      (if (= layer-index height)
+          image-clone
+          (begin
+            (let pixel-loop ((pixel-index 0))
+              (when (< pixel-index width)
+                (png-image-pixel-set! image-clone
+                                      pixel-index
+                                      (- height layer-index 1)
+                                      (png-image-pixel-ref image
+                                                           pixel-index
+                                                           layer-index))
+                (pixel-loop (+ pixel-index 1))))
+            (layer-loop (+ layer-index 1)))))))
+
+(define-method (png-image-flip-horizontal (image <png-image>))
+  "Do a horizontal flip of an @var{image}.  Return a new flipped image."
+  (let* ((image-clone (png-image-clone image))
+         (width       (png-image-width image))
+         (height      (png-image-height image)))
+    (let layer-loop ((layer-index 0))
+      (if (= layer-index height)
+          image-clone
+          (begin
+            (let pixel-loop ((pixel-index 0))
+              (when (< pixel-index width)
+                (png-image-pixel-set! image-clone
+                                      (- width pixel-index 1)
+                                      layer-index
                                       (png-image-pixel-ref image
                                                            pixel-index
                                                            layer-index))
