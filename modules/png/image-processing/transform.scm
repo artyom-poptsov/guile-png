@@ -148,4 +148,4 @@ image."
                 (pixel-loop (+ pixel-index 1))))
             (layer-loop (+ layer-index 1)))))))
 
-;;; rotate.scm ends here.
+;;; transform.scm ends here.
