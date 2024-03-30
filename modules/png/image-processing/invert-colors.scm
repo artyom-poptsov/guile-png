@@ -52,7 +52,7 @@
                   (bytevector-u8-set! color 2 (- 255 blue))
                   (loop (+ index 1)))))))
       (png-image-pixel-map image
-                           (lambda (index pixel)
+                           (lambda (pixel . rest)
                              (let ((red   (bytevector-u8-ref pixel 0))
                                    (green (bytevector-u8-ref pixel 1))
                                    (blue  (bytevector-u8-ref pixel 2)))

@@ -519,7 +519,7 @@ undefined.
 
 The @var{proc} is called like follows:
 @example lisp
-(proc index pixel)
+(proc pixel #:index index #:x x #:y y)
 @end example
 
 @end deffn
@@ -532,7 +532,7 @@ image.
 
 The @var{proc} is called like follows:
 @example lisp
-(proc index pixel)
+(proc pixel #:index index #:x x #:y y)
 @end example
 
 The return value of the @var{proc} must be a new pixel.

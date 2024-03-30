@@ -101,14 +101,18 @@ undefined.
 
 The @var{proc} is called like follows:
 @example lisp
-(proc index pixel)
+(proc pixel #:index index #:x x #:y y)
 @end example
 "
-  (let ((pixel-count (png-image-pixels image)))
+  (let ((pixel-count (png-image-pixels image))
+        (width       (png-image-width image))
+        (height      (png-image-height image)))
     (let loop ((index 0))
       (unless (= index pixel-count)
-        (let ((pixel (png-image-pixel-ref image index)))
-          (proc index pixel)
+        (let ((pixel (png-image-pixel-ref image index))
+              (x     (truncate-remainder index width))
+              (y     (truncate-quotient index width)))
+          (proc pixel #:index index #:x x #:y y)
           (loop (+ index 1)))))))
 
 (define-method (png-image-pixel-map (image <png-image>)
@@ -118,18 +122,24 @@ image.
 
 The @var{proc} is called like follows:
 @example lisp
-(proc index pixel)
+(proc pixel #:index index #:x x #:y y)
 @end example
 
 The return value of the @var{proc} must be a new pixel.
 "
   (let ((image-clone (png-image-clone image))
-        (pixel-count (png-image-pixels image)))
+        (pixel-count (png-image-pixels image))
+        (width       (png-image-width image))
+        (height      (png-image-height image)))
     (let loop ((index 0))
       (if (= index pixel-count)
           image-clone
-          (let ((pixel (png-image-pixel-ref image index)))
-            (png-image-pixel-set! image-clone index (proc index pixel))
+          (let ((pixel (png-image-pixel-ref image index))
+                (x     (truncate-remainder index width))
+                (y     (truncate-quotient index width)))
+            (png-image-pixel-set! image-clone
+                                  index
+                                  (proc pixel #:index index #:x x #:y y))
             (loop (+ index 1)))))))
 
 ;;; pixel.scm ends here.
