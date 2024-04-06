@@ -8,7 +8,10 @@
   #:export (<rectangle>
             rectangle-position
             rectangle-width
-            rectangle-height))
+            rectangle-height
+
+            <square>
+            square-size))
 
 
 (define-class <rectangle> (<graphic>)
@@ -36,6 +39,22 @@
    #:init-value   0
    #:getter       rectangle-height))
 
+(define-class <square> (<rectangle>))
+
+(define-method (square-size (square <square>))
+  (rectangle-width square))
+
+(define-method (initialize (square <square>) initargs)
+  (next-method)
+  (let ((size (and (memq #:size initargs)
+                   (cadr (memq #:size initargs)))))
+
+    (unless size
+      (error "Square size must be specified" initargs))
+
+    (slot-set! square 'width size)
+    (slot-set! square 'height size)))
+
 
 
 (define-method (%display (rectangle <rectangle>) (port <port>))
@@ -50,6 +69,18 @@
 
 (define-method (write (rectangle <rectangle>) (port <port>))
   (%display rectangle port))
+
+(define-method (%display (square <square>) (port <port>))
+  (format port "#<square position: ~a size: ~a ~a>"
+          (rectangle-position square)
+          (square-size square)
+          (object-address/hex-string square)))
+
+(define-method (display (square <square>) (port <port>))
+  (%display square port))
+
+(define-method (write (square <square>) (port <port>))
+  (%display square port))
 
 
 (define-method (draw! (image <png-image>) (rectangle <rectangle>))

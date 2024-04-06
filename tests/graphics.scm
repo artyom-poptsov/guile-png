@@ -246,6 +246,14 @@
          #:width    50
          #:height   100)))))
 
+(test-assert "<square>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <square>
+         #:position (make <point> #:x 100 #:y 200)
+         #:size    50)))))
+
 
 ;; Filled rectangle.
 
