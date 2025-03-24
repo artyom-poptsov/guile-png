@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_PNG_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2021-2024 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2021-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-PNG.
 
@@ -88,6 +88,10 @@ AC_CONFIG_FILES([
         tests/Makefile
         doc/Makefile
 ])
+
+AC_CONFIG_FILES(
+        [pre-inst-env:build-aux/pre-inst-env.in],
+        [chmod +x pre-inst-env])
 
 AC_CONFIG_LINKS([modules/png/fsm/chunk-parser.puml:modules/png/fsm/chunk-parser.puml])
 AC_CONFIG_LINKS([modules/png/fsm/signature-parser.puml:modules/png/fsm/signature-parser.puml])
