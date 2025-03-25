@@ -18,6 +18,10 @@ jobs:
           sudo apt install guile-2.2-dev texinfo gettext
           sudo apt install automake autoconf help2man texlive
 
+      - name: Select Guile 2.2
+        run: |
+          echo 1 | sudo update-alternatives --config guile
+
       - name: Install Guile-ZLIB
         run: |
           wget -O guile-zlib.tar.gz https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:c8686f5aaddec4650ceefa62b31df6e9eb40e085/raw/
