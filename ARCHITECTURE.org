@@ -54,6 +54,13 @@ All those modules are re-exported in =(png graphics)= module.
 
 All those modules are re-exported in =(png image-processing)= module.
 
+*** Command line Interface
+Guile-PNG includes =png= CLI command.  The source for the command is in
+=utils= directory.  The executable program is generated from the =png.in=
+input file.
+**** Command Line Interface Modules
+The modules that are required by =png= command are in the =(png cli)= module
+directory.
 *** Examples
 Examples are important as they provide a hint how the library can be used for
 real tasks.
