@@ -61,7 +61,7 @@ Options:
 
 (define (print-info lst)
   (for-each (lambda (e)
-              (format #t "** ~a: ~a~%" (car e) (cdr e)))
+              (format #t "*** ~a: ~a~%" (car e) (cdr e)))
             lst))
 
 (define (ihdr->list chunk)
