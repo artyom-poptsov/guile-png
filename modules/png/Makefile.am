@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2021-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2021-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -23,9 +23,11 @@ SUBDIRS = \
 	core	\
 	fsm	\
 	graphics	\
-	image-processing
+	image-processing \
+	cli
 
 SOURCES = \
+	version.scm		\
 	chunk-decoder.scm	\
 	image.scm		\
 	image-processing.scm	\
@@ -60,8 +62,14 @@ clean-go:
 
 .PHONY: clean-go
 
+version_substitute = \
+	sed -e 's,[@]VERSION[@],$(PACKAGE_VERSION),g'
+version.scm: version.scm.in
+	@echo "  GEN      $@"
+	@$(version_substitute) "$^" > "$@"
 
 CLEANFILES = \
-	$(GOBJECTS)
+	$(GOBJECTS) \
+	version.scm
 
 ### Makefile.am ends here.

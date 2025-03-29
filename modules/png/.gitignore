@@ -1,3 +1,4 @@
 fsm.scm
 fsm-chunk.scm
 fsm-signature.scm
+version.scm

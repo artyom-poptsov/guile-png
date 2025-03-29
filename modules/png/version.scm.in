@@ -1,0 +1,75 @@
+;;; version.scm -- Guile-PNG version.
+
+;; Copyright (C) 2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; The program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with the program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+;;; Commentary:
+
+;; This module contains procedures that allow to acquire information about the
+;; Guile-ICS version in the Semantic Versioning format. [1]
+;;
+;; Guile-ICS version consists of three parts:
+;;   MAJOR.MINOR.PATCH
+;;
+;; The procedures below allow to get any of the version part or the version as
+;; a whole.
+;;
+;; References:
+;; 1: https://semver.org/
+
+
+;;; Code:
+
+
+(define-module (png version)
+  #:export (png-version
+            png-version/string
+            png-version/major
+            png-version/minor
+            png-version/patch))
+
+
+(define %ics-version "@VERSION@")
+
+
+(define (png-version/string)
+  "Get the raw Guile-PNG version as a string."
+  %png-version)
+
+(define (png-version)
+  "Return the Guile-PNG version as a list of the following form:
+'(MAJOR MINOR PATCH)"
+  (map string->number (string-split %png-version #\.)))
+
+(define (png-version/major)
+  "Get the MAJOR part of the Guile-PNG version."
+  (list-ref (png-version) 0))
+
+(define (png-version/minor)
+  "Get the MINOR part of the Guile-PNG version."
+  (list-ref (png-version) 1))
+
+(define (png-version/patch)
+  "Get the PATCH part of the Guile-PNG version."
+  (list-ref (png-version) 2))
+
+;;;
+
+;; Local Variables:
+;; mode: Scheme
+;; End:
+
+;;; version.in ends here
