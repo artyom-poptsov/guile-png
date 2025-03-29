@@ -42,7 +42,7 @@
             png-version/patch))
 
 
-(define %ics-version "@VERSION@")
+(define %png-version "@VERSION@")
 
 
 (define (png-version/string)
