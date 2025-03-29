@@ -104,6 +104,9 @@ AC_CHECK_PROG(MAKEINFO_CHECK, makeinfo, yes)
 AS_IF([test x"$MAKEINFO_CHECK" != x"yes"],
             [ AC_MSG_ERROR([Please install texinfo before configuring])])
 
+dnl Manual pages.
+AM_MISSING_PROG([HELP2MAN], [help2man])
+
 # Generate a Makefile, based on the results.
 AC_OUTPUT
 

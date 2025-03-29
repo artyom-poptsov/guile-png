@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2017-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2017-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -25,6 +25,9 @@ guile_png_TEXINFOS = \
 	fdl.texi	\
 	indices.texi
 
+dist_man1_MANS =			\
+	png.1
+
 ## Silent rules.
 AM_V_HELP2MAN = $(AM_V_HELP2MAN_$(V))
 AM_V_HELP2MAN_ = $(AM_V_HELP2MAN_$(AM_DEFAULT_VERBOSITY))
@@ -36,5 +39,11 @@ gen_man =							\
 	$(HELP2MANFLAGS)
 
 HELP2MANFLAGS = --source=GNU --info-page=$(PACKAGE_TARNAME)
+
+png.1: $(abs_top_builddir)/utils/png
+	-$(AM_V_HELP2MAN)$(gen_man) --output="$@" "$<"
+
+CLEANFILES = \
+	png.1
 
 ## Makefile.am ends here

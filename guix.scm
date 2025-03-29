@@ -44,6 +44,7 @@
              (gnu packages guile)
              (gnu packages guile-xyz)
              (gnu packages bash)
+             (gnu packages man)
              (gnu packages pkg-config)
              (gnu packages texlive)
              (gnu packages texinfo))
@@ -52,59 +53,63 @@
 (define %source-dir (dirname (current-filename)))
 
 
-(package
- (name "guile-png")
- (version "git")
- (source (local-file %source-dir
-                     #:recursive? #t
-                     #:select? (git-predicate %source-dir)))
- (build-system gnu-build-system)
- (native-inputs
-  (list autoconf
-        automake
-        pkg-config
-        texinfo
-        texlive
-        ;; needed when cross-compiling.
-        guile-3.0
-        guile-lib
-        guile-zlib
-        guile-smc))
- (inputs
-  (list bash-minimal
-        guile-3.0
-        guile-lib
-        guile-zlib))
- (propagated-inputs
-  (list guile-smc))
- (arguments
-  (list #:make-flags #~(list "GUILE_AUTO_COMPILE=0") ;to prevent guild warnings
-        #:modules `(((guix build guile-build-system)
-                     #:select (target-guile-effective-version))
-                    ,@%default-gnu-modules)
-        #:imported-modules `((guix build guile-build-system)
-                             ,@%default-gnu-imported-modules)
-        #:phases #~(modify-phases %standard-phases
-                     (add-after 'install 'wrap-guilescript
-                       (lambda _
-                         (let* ((bin (string-append #$output "/bin"))
-                                (version (target-guile-effective-version))
-                                (scm (string-append "/share/guile/site/"
-                                                    version))
-                                (go (string-append "/lib/guile/"
-                                                   version
-                                                   "/site-ccache")))
-                           (wrap-program (string-append bin "/png")
-                             `("GUILE_LOAD_PATH" prefix
-                               (,(string-append #$output scm)))
-                             `("GUILE_LOAD_COMPILED_PATH" prefix
-                               (,(string-append #$output go))))))))))
- (home-page "https://github.com/artyom-poptsov/guile-png")
- (synopsis "Guile library for PNG format support")
- (description
-  "@code{guile-png} is a GNU Guile library for working with the
+(define guile-png
+  (package
+    (name "guile-png")
+    (version "git")
+    (source (local-file %source-dir
+                        #:recursive? #t
+                        #:select? (git-predicate %source-dir)))
+    (build-system gnu-build-system)
+    (native-inputs
+     (list autoconf
+           automake
+           pkg-config
+           texinfo
+           texlive
+           help2man
+           ;; needed when cross-compiling.
+           guile-3.0
+           guile-lib
+           guile-zlib
+           guile-smc))
+    (inputs
+     (list bash-minimal
+           guile-3.0
+           guile-lib
+           guile-zlib))
+    (propagated-inputs
+     (list guile-smc))
+    (arguments
+     (list #:make-flags #~(list "GUILE_AUTO_COMPILE=0") ;to prevent guild warnings
+           #:modules `(((guix build guile-build-system)
+                        #:select (target-guile-effective-version))
+                       ,@%default-gnu-modules)
+           #:imported-modules `((guix build guile-build-system)
+                                ,@%default-gnu-imported-modules)
+           #:phases #~(modify-phases %standard-phases
+                        (add-after 'install 'wrap-guilescript
+                          (lambda _
+                            (let* ((bin (string-append #$output "/bin"))
+                                   (version (target-guile-effective-version))
+                                   (scm (string-append "/share/guile/site/"
+                                                       version))
+                                   (go (string-append "/lib/guile/"
+                                                      version
+                                                      "/site-ccache")))
+                              (wrap-program (string-append bin "/png")
+                                `("GUILE_LOAD_PATH" prefix
+                                  (,(string-append #$output scm)))
+                                `("GUILE_LOAD_COMPILED_PATH" prefix
+                                  (,(string-append #$output go))))))))))
+    (home-page "https://github.com/artyom-poptsov/guile-png")
+    (synopsis "Guile library for PNG format support")
+    (description
+     "@code{guile-png} is a GNU Guile library for working with the
 @url{https://en.wikipedia.org/wiki/PNG, PNG format}.  This library provides
 API for reading PNG data.")
- (license gpl3))
+    (license gpl3)))
+
+guile-png
 
 ;;; guix.scm ends here.
