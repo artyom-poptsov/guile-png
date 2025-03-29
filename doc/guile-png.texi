@@ -10,7 +10,7 @@
 @copying
 This manual documents Guile-PNG version @value{VERSION}.
 
-Copyright (C) 2022-2024 Artyom V. Poptsov
+Copyright (C) 2022-2025 Artyom V. Poptsov
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -56,6 +56,7 @@ Documentation License.''
 * Introduction::
 * Installation::
 * API Reference::
+* Command-Line Interface::
 
 Appendices
 
@@ -1810,6 +1811,16 @@ Remove the ``Paeth'' filter from a scanline with the specified
 Apply the ``Paeth'' filter to a scanline with the specified
 @var{scanline-index}.
 @end deffn
+
+@c -----------------------------------------------------------------------------
+@node Command-Line Interface
+@chapter Command-Line Interface
+
+Guile-PNG comes with a tool named @command{png}.  The tool currently supports
+only @code{describe} action which prints out the PNG image data in
+@url{https://orgmode.org/, org-mode} format in a human-readable manner.
+
+See @command{png --help} for details.
 
 @c -----------------------------------------------------------------------------
 @node GNU Free Documentation License
