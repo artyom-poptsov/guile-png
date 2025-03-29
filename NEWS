@@ -7,10 +7,20 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-* Unreleased
+* Changes in version 0.8.0 (2025-03-29)
 ** Implement a CLI tool for printing PNG data
 The tool currently supports only =describe= action which prints out PNG image
 data in [[https://orgmode.org/][org-mode]] format in human-readable manner.
+
+A man-page for the tool is generated and installed along with Guile-PNG.
+** New =CODE_OF_CONDUCT.org= file
+The document is a copy of
+<https://www.contributor-covenant.org/version/2/1/code_of_conduct/> converted
+into org-mode format.
+** =(png version)=: New module
+The module contains information about the current Guile-PNG version.
+** Changes in =(png graphics rectangle)=
+*** =<square>=: New type
 
 * Changes in version 0.7.3 (2024-03-30)
 ** Implement image transformation methods
