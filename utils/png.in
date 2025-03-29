@@ -28,7 +28,8 @@
 (use-modules (ice-9 getopt-long)
              (png)
              (png cli common)
-             (png cli command-describe))
+             (png cli command-describe)
+             (png version))
 
 
 (define (print-version)
