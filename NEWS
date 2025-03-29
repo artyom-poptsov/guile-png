@@ -7,6 +7,11 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** Implement a CLI tool for printing PNG data
+The tool currently supports only =describe= action which prints out PNG image
+data in [[https://orgmode.org/][org-mode]] format in human-readable manner.
+
 * Changes in version 0.7.3 (2024-03-30)
 ** Implement image transformation methods
 The methods below can be found in =(png image-processing rotate)= module:
