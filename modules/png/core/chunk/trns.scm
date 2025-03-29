@@ -1,6 +1,6 @@
 ;;; trns.scm -- Image transparency.
 
-;; Copyright (C) 2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2023-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
   #:use-module (png core chunk ihdr)
   #:use-module (png core chunk plte)
   #:export (<png-chunk:tRNS>
+            png-chunk:tRNS-color-type
             png-chunk:tRNS-value
             png-chunk-decode-tRNS))
 
