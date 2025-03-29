@@ -33,6 +33,9 @@ SOURCES = \
 	image-processing.scm	\
 	graphics.scm
 
+EXTRA_DIST = \
+	version.scm.in
+
 moddir=$(datadir)/guile/site/$(GUILE_EFFECTIVE_VERSION)/png
 nobase_dist_mod_DATA = \
 	$(SOURCES) \
