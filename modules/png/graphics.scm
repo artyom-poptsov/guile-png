@@ -1,6 +1,6 @@
 ;;; graphics.scm -- PNG graphic primitives.
 
-;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
                    (png graphics point)
                    (png graphics line)
                    (png graphics multiline)
+                   (png graphics hexagon)
                    (png graphics polygon)
                    (png graphics rectangle)
                    (png graphics filled-rectangle)
