@@ -189,7 +189,7 @@
                         (if (< fraction 1)
                             (begin
                               (png-image-pixel-set! image x y color)
-                              (loop (+ fraction (- (- 1) a))
+                              (loop (+ fraction (/ (- 1) a))
                                     x
                                     (+ y 1)))
                             (begin
