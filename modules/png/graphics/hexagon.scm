@@ -83,31 +83,24 @@
                        (cadr (memq #:center initargs))
                        (make <point> #:x 0 #:y 0)))
          (radius (inexact->exact (floor (/ diameter 2.0))))
-         (ux     (- (point-x center) radius))
-         (uy     (- (point-y center) radius))
-         (a      (/ radius 2.0))
-         (c      (/ a (sin (* 30 (/ %pi 180.0)))))
-         (b      (* c (cos (* 30 (/ %pi 180.0)))))
-         (p1     (make <point>
-                   #:x (inexact->exact (floor ux))
-                   #:y (inexact->exact (floor (+ uy b)))))
-         (p2     (make <point>
-                   #:x (inexact->exact (floor (+ ux a)))
-                   #:y (inexact->exact (floor uy))))
-         (p3     (make <point>
-                   #:x (inexact->exact (floor (+ ux a c)))
-                   #:y (inexact->exact (floor uy))))
-         (p4     (make <point>
-                   #:x (inexact->exact (floor (+ ux (* 2 c))))
-                   #:y (inexact->exact (floor (+ uy b)))))
-         (p5     (make <point>
-                   #:x (inexact->exact (floor (+ ux a c)))
-                   #:y (inexact->exact (floor (+ uy (* 2 b))))))
-         (p6     (make <point>
-                   #:x (inexact->exact (floor (+ ux a)))
-                   #:y (inexact->exact (floor (+ uy (* 2 b))))))
-         (points (list p1 p2 p3 p4 p5 p6)))
+         (number-of-sides 6)
+         (increment (/ (* 2.0 %pi) number-of-sides))
+         (cx (point-x center))
+         (cy (point-y center))
+         (int (lambda (n) (inexact->exact (floor n))))
+         (points (let loop ((sides number-of-sides)
+                            (angle 0)
+                            (points '()))
+                   (if (zero? sides)
+                       points
+                       (loop (- sides 1)
+                             (+ angle increment)
+                             (cons (make <point>
+                                     #:x (int (+ (* radius (cos angle))
+                                                 cx))
+                                     #:y (int (+ (* radius (sin angle))
+                                                 cy)))
+                                   points))))))
     (slot-set! hexagon 'points points)))
-
 
 ;;; hexagon.scm ends here.
