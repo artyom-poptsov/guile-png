@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -27,6 +27,7 @@ SOURCES = \
 	line.scm	\
 	multiline.scm	\
 	polygon.scm	\
+	hexagon.scm	\
 	rectangle.scm	\
 	filled-rectangle.scm	\
 	ellipse.scm	\
