@@ -101,6 +101,7 @@
                                      #:y (int (+ (* radius (sin angle))
                                                  cy)))
                                    points))))))
+    (slot-set! hexagon 'center center)
     (slot-set! hexagon 'diameter diameter)
     (slot-set! hexagon 'points points)))
 
