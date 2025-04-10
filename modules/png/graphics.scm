@@ -35,6 +35,7 @@
                    (png graphics hexagon)
                    (png graphics polygon)
                    (png graphics rectangle)
+                   (png graphics regular-polygon)
                    (png graphics filled-rectangle)
                    (png graphics ellipse)
                    (png graphics circle))

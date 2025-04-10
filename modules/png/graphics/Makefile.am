@@ -29,6 +29,7 @@ SOURCES = \
 	polygon.scm	\
 	hexagon.scm	\
 	rectangle.scm	\
+	regular-polygon.scm \
 	filled-rectangle.scm	\
 	ellipse.scm	\
 	circle.scm	\

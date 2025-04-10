@@ -31,26 +31,18 @@
   #:use-module (png graphics point)
   #:use-module (png graphics line)
   #:use-module (png graphics polygon)
+  #:use-module (png graphics regular-polygon)
   #:export (<hexagon>
             hexagon-center
             hexagon-diameter
             hexagon-points))
 
 
-(define-class <hexagon> (<polygon>)
-  ;; <point>
-  (center
-   #:init-value   (make <point> #:x 0 #:y 0)
-   #:init-keyword #:center
-   #:getter       hexagon-center)
+(define-class <hexagon> (<regular-polygon>))
 
-   ;; <number>
-  (diameter
-   #:init-value #f
-   #:init-keyword #:diameter
-   #:getter       hexagon-diameter))
-
-(define hexagon-points polygon-points)
+(define hexagon-center regular-polygon-center)
+(define hexagon-points regular-polygon-points)
+(define hexagon-diameter regular-polygon-diameter)
 
 
 
@@ -68,41 +60,8 @@
 
 
 
-;; XXX: Probably we can get this constant from somewhere else?
-(define %pi 3.14159265)
-
 (define-method (initialize (hexagon <hexagon>) initargs)
-  (unless (memq #:diameter initargs)
-    (error "#:diameter is required" initargs))
-  (when (memq #:color initargs)
-    (slot-set! hexagon
-               'color
-               (cadr (memq #:color initargs))))
-  (let* ((diameter (cadr (memq #:diameter initargs)))
-         (center   (if (memq #:center initargs)
-                       (cadr (memq #:center initargs))
-                       (make <point> #:x 0 #:y 0)))
-         (radius (inexact->exact (floor (/ diameter 2.0))))
-         (number-of-sides 6)
-         (increment (/ (* 2.0 %pi) number-of-sides))
-         (cx (point-x center))
-         (cy (point-y center))
-         (int (lambda (n) (inexact->exact (floor n))))
-         (points (let loop ((sides number-of-sides)
-                            (angle 0)
-                            (points '()))
-                   (if (zero? sides)
-                       points
-                       (loop (- sides 1)
-                             (+ angle increment)
-                             (cons (make <point>
-                                     #:x (int (+ (* radius (cos angle))
-                                                 cx))
-                                     #:y (int (+ (* radius (sin angle))
-                                                 cy)))
-                                   points))))))
-    (slot-set! hexagon 'center center)
-    (slot-set! hexagon 'diameter diameter)
-    (slot-set! hexagon 'points points)))
+  (slot-set! hexagon 'sides 6)
+  (next-method))
 
 ;;; hexagon.scm ends here.
