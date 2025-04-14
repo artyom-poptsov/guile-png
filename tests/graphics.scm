@@ -396,6 +396,26 @@
          #:radius 10)))))
 
 
+;; Regular polygons.
+
+(test-assert "<regular-polygon>: display"
+  (with-output-to-string
+    (lambda ()
+      (display
+       (make <regular-polygon>
+         #:center   (make <point> #:x 10 #:y 20)
+         #:sides    6
+         #:diameter 10)))))
+
+(test-equal "<regular-polygon>: points"
+  6
+  (let ((p (make <regular-polygon>
+             #:center   (make <point> #:x 10 #:y 20)
+             #:sides    6
+             #:diameter 10)))
+    (length (regular-polygon-points p))))
+
+
 (define exit-status (test-runner-fail-count (test-runner-current)))
 
 (test-end %test-name)
