@@ -90,6 +90,7 @@
 
     ;; ImageMagick private chunks.
     (orNT #vu8(111 114 78 84) "ImageMagick: Image orientation")
+    (vpAg #vu8(118 112 65 103) "ImageMagick: Virtual page")
     ))
 
 

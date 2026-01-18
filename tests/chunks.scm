@@ -12,7 +12,8 @@
              (png core chunk phys)
              (png core chunk text)
              (png core chunk time)
-             (png core chunk ornt))
+             (png core chunk ornt)
+             (png core chunk vpag))
 
 
 (define %test-name "chunks")
@@ -248,6 +249,15 @@
                         #:type   'orNT
                         #:data   #vu8(1)
                         #:orientation 1)))
+    (png-chunk-encode chunk)))
+
+(test-assert "png-chunk-encode: vpAg"
+  (let ((chunk (make <png-chunk:vpAg>
+                 #:length 1
+                 #:type   'vpAg
+                 #:width 10
+                 #:height 20
+                 #:unit-specifier 0)))
     (png-chunk-encode chunk)))
 
 

@@ -34,7 +34,8 @@ SOURCES = \
 	gama.scm	\
 	hist.scm	\
 	trns.scm	\
-	ornt.scm
+	ornt.scm	\
+	vpag.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

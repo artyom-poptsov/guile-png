@@ -41,6 +41,7 @@
   #:use-module (png core chunk hist)
   #:use-module (png core chunk trns)
   #:use-module (png core chunk ornt)
+  #:use-module (png core chunk vpag)
   #:use-module (png image)
   #:export (png-chunk-decode))
 
@@ -64,6 +65,7 @@
     (gAMA . ,(make-converter png-chunk-decode-gAMA))
     (hIST . ,(make-converter png-chunk-decode-hIST))
     (orNT . ,(make-converter png-chunk-decode-orNT))
+    (vpAg . ,(make-converter png-chunk-decode-vpAg))
     (tRNS . ,(lambda (image chunk)
                (let ((ihdr-result (png-image-chunks-query image 'IHDR)))
                  (unless ihdr-result

@@ -42,6 +42,7 @@
   #:use-module (png core chunk trns)
   #:use-module (png core chunk text)
   #:use-module (png core chunk ornt)
+  #:use-module (png core chunk vpag)
   #:export (command-describe
             print-chunk))
 
@@ -131,6 +132,12 @@ Options:
   (list
    (cons 'orientation (png-chunk:orNT-orientation chunk))))
 
+(define (vpag->list chunk)
+  (list
+   (cons 'width  (png-chunk:vpAg-width chunk))
+   (cons 'height (png-chunk:vpAg-height chunk))
+   (cons 'unit-specifier (png-chunk:vpAg-unit-specifier chunk))))
+
 
 
 (define %converter-table
@@ -144,7 +151,8 @@ Options:
      (tIME . ,time->list)
      (tEXt . ,text->list)
      (tRNS . ,trns->list)
-     (orNT . ,ornt->list))))
+     (orNT . ,ornt->list)
+     (vpAg . ,vpag->list))))
 
 
 
