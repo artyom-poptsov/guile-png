@@ -11,7 +11,8 @@
              (png core chunk ztxt)
              (png core chunk phys)
              (png core chunk text)
-             (png core chunk time))
+             (png core chunk time)
+             (png core chunk ornt))
 
 
 (define %test-name "chunks")
@@ -238,6 +239,16 @@
     (png-chunk-crc-update! chunk)
     (let ((plte (png-chunk-decode-PLTE chunk)))
       (png-chunk:PLTE-palette-entries plte))))
+
+
+;; ImageMagick private chunks.
+(test-assert "png-chunk-encode: orNT"
+  (let ((chunk (make <png-chunk:orNT>
+                        #:length 1
+                        #:type   'orNT
+                        #:data   #vu8(1)
+                        #:orientation 1)))
+    (png-chunk-encode chunk)))
 
 
 ;; Chunk cloning.

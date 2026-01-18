@@ -1,6 +1,6 @@
 ## Makefile.am -- Config file for GNU Automake.
 ##
-## Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+## Copyright (C) 2022-2026 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ##
 ## This file is part of Guile-PNG.
 ##
@@ -33,7 +33,8 @@ SOURCES = \
 	phys.scm	\
 	gama.scm	\
 	hist.scm	\
-	trns.scm
+	trns.scm	\
+	ornt.scm
 
 GOBJECTS = $(SOURCES:%.scm=%.go)
 

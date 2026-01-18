@@ -41,6 +41,7 @@
   #:use-module (png core chunk time)
   #:use-module (png core chunk trns)
   #:use-module (png core chunk text)
+  #:use-module (png core chunk ornt)
   #:export (command-describe
             print-chunk))
 
@@ -126,6 +127,10 @@ Options:
    (cons 'color-type (png-chunk:tRNS-color-type chunk))
    (cons 'value      (png-chunk:tRNS-value chunk))))
 
+(define (ornt->list chunk)
+  (list
+   (cons 'orientation (png-chunk:orNT-orientation chunk))))
+
 
 
 (define %converter-table
@@ -138,7 +143,8 @@ Options:
      (pHYs . ,phys->list)
      (tIME . ,time->list)
      (tEXt . ,text->list)
-     (tRNS . ,trns->list))))
+     (tRNS . ,trns->list)
+     (orNT . ,ornt->list))))
 
 
 

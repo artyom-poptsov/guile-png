@@ -87,6 +87,9 @@
     (zxIf #vu8(122 120 73 102) "compressed EXIF")
     (vpAg #vu8(118 112 65 103) "VirtualPage (deprecated)")
     (caNv #vu8(99  97  78 118) "Canvas (superceding)")
+
+    ;; ImageMagick private chunks.
+    (orNT #vu8(111 114 78 84) "ImageMagick: Image orientation")
     ))
 
 
