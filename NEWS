@@ -7,6 +7,9 @@ Copyright (C) Artyom V. Poptsov <poptsov.artyom@gmail.com>
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+* Unreleased
+** CLI
+*** Bugfix: handle unknown chunk types in "describe" command
 * Changes in version 0.8.0 (2025-03-29)
 ** Implement a CLI tool for printing PNG data
 The tool currently supports only =describe= action which prints out PNG image

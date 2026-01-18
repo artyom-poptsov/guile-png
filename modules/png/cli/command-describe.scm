@@ -1,6 +1,6 @@
 ;;; command-describe.scm -- CLI for describing PNG content.
 
-;; Copyright (C) 2025 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2025-2026 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@
   #:use-module (png core chunk time)
   #:use-module (png core chunk trns)
   #:use-module (png core chunk text)
-  #:export (command-describe))
+  #:export (command-describe
+            print-chunk))
 
 (define (print-help)
   (display "\
@@ -146,26 +147,30 @@ Options:
          (converter (hash-ref %converter-table
                               type))
          (info (png-chunk-type-info type))
-         (bytes (list-ref info 1)))
-    (format #t "** ~a: ~a~%" type (list-ref info 2))
-    (format #t "   :PROPERTIES:~%")
-    (format #t "   :bytes:~a~%"
-            (fold (lambda (b prev)
-                    (string-append prev " " (number->string b)))
-                  ""
-                  (u8vector->list bytes)))
-    (format #t "   :critical?: ~a~%"
-            (if (logbit? 5 (u8vector-ref bytes 0))
-                "false"
-                "true"))
-    (format #t "   :private?: ~a~%"
-            (if (logbit? 5 (u8vector-ref bytes 1))
-                "true"
-                "false"))
-    (format #t "   :safe-to-copy?: ~a~%"
-            (if (logbit? 5 (u8vector-ref bytes 3))
-                "true"
-                "false"))
+         (bytes (and info (list-ref info 1))))
+    (if bytes
+        (begin
+          (format #t "** ~a: ~a~%" type (list-ref info 2))
+          (format #t "   :PROPERTIES:~%")
+          (format #t "   :bytes:~a~%"
+                  (fold (lambda (b prev)
+                          (string-append prev " " (number->string b)))
+                        ""
+                        (u8vector->list bytes)))
+          (format #t "   :critical?: ~a~%"
+                  (if (logbit? 5 (u8vector-ref bytes 0))
+                      "false"
+                      "true"))
+          (format #t "   :private?: ~a~%"
+                  (if (logbit? 5 (u8vector-ref bytes 1))
+                      "true"
+                      "false"))
+          (format #t "   :safe-to-copy?: ~a~%"
+                  (if (logbit? 5 (u8vector-ref bytes 3))
+                      "true"
+                      "false")))
+        (begin
+          (format #t "** ~a~%" type)))
     (unless (equal? type 'IDAT)
       (format #t "   :length: ~a~%" (png-chunk-length chunk))
       (format #t "   :crc: ~a~%" (png-chunk-crc chunk))
