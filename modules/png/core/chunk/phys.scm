@@ -37,6 +37,8 @@
 ;;; Code:
 
 (define-module (png core chunk phys)
+  #:use-module (ice-9 hash-table)
+  #:use-module (scheme documentation)
   #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:use-module (oop goops)
@@ -46,7 +48,11 @@
             png-chunk:pHYs-pixels-per-unit-x-axis
             png-chunk:pHYs-pixels-per-unit-y-axis
             png-chunk:pHYs-unit-specifier
-            png-chunk-decode-pHYs))
+            png-chunk-decode-pHYs
+            pHYs-unit-specifier->symbol
+            symbol->pHYs-unit-specifier
+            %pHYs-unit-specifiers
+            %pHYs-unit-specifiers-reverse-mapping))
 
 
 ;; pHYs chunk layout:
@@ -55,6 +61,28 @@
 ;;    Pixels per unit, Y axis: 4 bytes (unsigned integer)
 ;;    Unit specifier:          1 byte
 (define %pHYs-chunk-length 9)
+
+
+
+(define-with-docs %pHYs-unit-specifiers
+  "Unit specifier.  1 (METRE) is the default value.
+
+See <https://exiftool.org/TagNames/PNG.html#PhysicalPixel>"
+  (alist->hash-table
+   '((0 . UNKNOWN)
+     (1 . METRE))))
+
+(define-with-docs %pHYs-unit-specifiers-reverse-mapping
+  "Reverse mapping for @code{%pHYs-unit-specifiers}"
+  (alist->hash-table
+   (hash-map->list (lambda (key value) (cons value key))
+                   %pHYs-unit-specifiers)))
+
+(define-method (pHYs-unit-specifier->symbol (value <number>))
+  (hash-ref %pHYs-unit-specifiers value))
+
+(define-method (symbol->pHYs-unit-specifier (value <symbol>))
+  (hash-ref %pHYs-unit-specifiers-reverse-mapping value))
 
 
 
@@ -69,6 +97,10 @@
    #:init-keyword #:pixels-per-unit-y-axis
    #:getter       png-chunk:pHYs-pixels-per-unit-y-axis)
 
+  ;; Pixel units.
+  ;;
+  ;; See @code{%pHYs-unit-specifiers}.
+  ;;
   ;; <number>
   (unit-specifier
    #:init-keyword #:unit-specifier
@@ -82,14 +114,14 @@
 
 
 (define-method (%display (chunk <png-chunk:pHYs>) (port <port>))
-  (let ((type (png-chunk-type-info chunk)))
-    (format port "#<png-chunk:pHYs ~a: ~ax~a (unit: ~a) ~a>"
+  (let ((type (png-chunk-type-info chunk))
+        (unit-specifier (png-chunk:pHYs-unit-specifier chunk)))
+    (format port "#<png-chunk:pHYs ~a: ~ax~a unit: ~a (~a) ~a>"
             (list-ref type 2)
             (png-chunk:pHYs-pixels-per-unit-x-axis chunk)
             (png-chunk:pHYs-pixels-per-unit-y-axis chunk)
-            (if (zero? (png-chunk:pHYs-unit-specifier chunk))
-                "unknown"
-                "metre")
+            unit-specifier
+            (pHYs-unit-specifier->symbol unit-specifier)
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk:pHYs>) (port <port>))

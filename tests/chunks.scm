@@ -200,6 +200,14 @@
     (png-chunk-crc-update! chunk)
     (png-chunk-data (png-chunk-encode chunk))))
 
+(test-equal "pHYs-unit-specifier->symbol"
+  'METRE
+  (pHYs-unit-specifier->symbol 1))
+
+(test-equal "symbol->pHYs-unit-specifier"
+  1
+  (symbol->pHYs-unit-specifier 'METRE))
+
 (define %tEXt-data
   #vu8(102 111 111                      ; "foo"
          0                              ; NUL-separator
