@@ -27,6 +27,8 @@
 ;;; Code:
 
 (define-module (png core chunk ornt)
+  #:use-module (ice-9 hash-table)
+  #:use-module (scheme documentation)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
   #:use-module (rnrs bytevectors)
@@ -34,11 +36,44 @@
   #:use-module (png core chunk)
   #:export (<png-chunk:orNT>
             png-chunk-decode-orNT
-            png-chunk:orNT-orientation))
+            png-chunk:orNT-orientation
+
+            orNT-orientation->symbol
+            symbol->orNT-orientation
+
+            %orNT-orientation
+            %orNT-orientation/reverse-mapping))
 
 
+(define-with-docs %orNT-orientation
+  "Orientation."
+  (alist->hash-table
+   '((0 . UNDEFINED)
+     (1 . TOP-LEFT)
+     (2 . TOP-RIGHT)
+     (3 . BOTTOM-RIGHT)
+     (4 . BOTTOM-LEFT)
+     (5 . LEFT-TOP)
+     (6 . RIGHT-TOP)
+     (7 . RIGHT-BOTTOM)
+     (8 . LEFT-BOTTOM))))
 
+(define-with-docs %orNT-orientation/reverse-mapping
+  "Reverse mapping for @code{%orNT-orientation}."
+  (alist->hash-table
+   (hash-map->list (lambda (key value) (cons value key))
+                   %orNT-orientation)))
+
+(define-method (orNT-orientation->symbol (value <number>))
+  (hash-ref %orNT-orientation value))
+
+(define-method (symbol->orNT-orientation (value <symbol>))
+  (hash-ref %orNT-orientation/reverse-mapping value))
+
+
 (define-class <png-chunk:orNT> (<png-chunk>)
+  ;; See @code{%orNT-orientation}.
+  ;;
   ;; <number>
   (oriantation
    #:init-keyword #:orientation
@@ -49,10 +84,12 @@
   (slot-set! chunk 'type 'orNT))
 
 (define-method (%display (chunk <png-chunk:orNT>) (port <port>))
-  (let ((type (png-chunk-type-info chunk)))
-    (format port "#<png-chunk:orNT ~a orientation: ~a ~a>"
+  (let ((type (png-chunk-type-info chunk))
+        (orientation (png-chunk:orNT-orientation chunk)))
+    (format port "#<png-chunk:orNT ~a orientation: ~a (~a) ~a>"
             (list-ref type 2)
-            (png-chunk:orNT-orientation chunk)
+            orientation
+            (orNT-orientation->symbol orientation)
             (object-address/hex-string chunk))))
 
 (define-method (display (chunk <png-chunk:orNT>) (port <port>))
