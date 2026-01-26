@@ -1,6 +1,6 @@
 ;;; phys.scm -- pHYs (Physical pixel dimensions) chunk.
 
-;; Copyright (C) 2022-2023 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+;; Copyright (C) 2022-2026 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@
             pHYs-unit-specifier->symbol
             symbol->pHYs-unit-specifier
             %pHYs-unit-specifiers
-            %pHYs-unit-specifiers-reverse-mapping))
+            %pHYs-unit-specifiers/reverse-mapping))
 
 
 ;; pHYs chunk layout:
@@ -72,7 +72,7 @@ See <https://exiftool.org/TagNames/PNG.html#PhysicalPixel>"
    '((0 . UNKNOWN)
      (1 . METRE))))
 
-(define-with-docs %pHYs-unit-specifiers-reverse-mapping
+(define-with-docs %pHYs-unit-specifiers/reverse-mapping
   "Reverse mapping for @code{%pHYs-unit-specifiers}"
   (alist->hash-table
    (hash-map->list (lambda (key value) (cons value key))
@@ -82,7 +82,7 @@ See <https://exiftool.org/TagNames/PNG.html#PhysicalPixel>"
   (hash-ref %pHYs-unit-specifiers value))
 
 (define-method (symbol->pHYs-unit-specifier (value <symbol>))
-  (hash-ref %pHYs-unit-specifiers-reverse-mapping value))
+  (hash-ref %pHYs-unit-specifiers/reverse-mapping value))
 
 
 
