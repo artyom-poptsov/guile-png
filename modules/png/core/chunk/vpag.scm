@@ -28,6 +28,7 @@
 (define-module (png core chunk vpag)
   #:use-module (srfi srfi-43)
   #:use-module (oop goops)
+  #:use-module (scheme documentation)
   #:use-module (rnrs bytevectors)
   #:use-module (png core common)
   #:use-module (png core chunk)
@@ -36,6 +37,15 @@
             png-chunk:vpAg-width
             png-chunk:vpAg-height
             png-chunk:vpAg-unit-specifier))
+
+
+(define-with-docs %vpAg-chunk-length
+  "vpAg chunk layout:
+
+    width:          4 bytes (unsigned integer)
+    height:         4 bytes (unsigned integer)
+    unit-specifier: 1 byte (unsigned integer)"
+  9)
 
 
 
@@ -88,7 +98,7 @@
       #:type        type)))
 
 (define-method (png-chunk-encode (chunk <png-chunk:vpAg>))
-  (let* ((data (make-bytevector 9 0))
+  (let* ((data (make-bytevector %vpAg-chunk-length 0))
          (width  (png-chunk:vpAg-width chunk))
          (height (png-chunk:vpAg-height chunk))
          (unit-specifier (png-chunk:vpAg-unit-specifier chunk))
